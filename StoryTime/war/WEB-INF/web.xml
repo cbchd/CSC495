@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>StoryTime.html</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>StoryTimeService</servlet-name>
+  	<servlet-class>com.storytime.server.StoryTimeServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>StoryTimeService</servlet-name>
+  	<url-pattern>/storytime/StoryTimeService</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+		<servlet-name>EventService</servlet-name>
+		<servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>EventService</servlet-name>
+		<url-pattern>/storytime/gwteventservice</url-pattern>
+	</servlet-mapping>
+
+</web-app>

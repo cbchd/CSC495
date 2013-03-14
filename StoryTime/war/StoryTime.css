@@ -1,0 +1,130 @@
+/** Add css rules here for your application. */
+
+
+/** Example rules used by the template application (remove for your app) */
+
+.center{
+    width: 480px;
+	margin: auto;
+	vertical-align: middle;
+	background-image: url('home.jpg');
+}
+
+h1 {
+	color: #777777;
+	margin: 40px 0px 70px;
+	border-top: medium;
+	border-right: 1px;
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+.gwt-LoginExistingButton {
+ border-top: 1px solid #139ef5;
+   background: #0800e3;
+   background: -webkit-gradient(linear, left top, left bottom, from(#4a73d9), to(#0800e3));
+   background: -webkit-linear-gradient(top, #4a73d9, #0800e3);
+   background: -moz-linear-gradient(top, #4a73d9, #0800e3);
+   background: -ms-linear-gradient(top, #4a73d9, #0800e3);
+   background: -o-linear-gradient(top, #4a73d9, #0800e3);
+   padding: 5px 10px;
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #ffffff;
+   font-size: 14px;
+   font-family: Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.gwt-LoginExistingButton:hover {
+   border-top-color: #474dcf;
+   background: #474dcf;
+   color: #ffffff;
+   }
+.gwt-LoginExistingButton:active {
+   border-top-color: #0c2bc9;
+   background: #0c2bc9;
+   }
+   
+.gwt-LoginAsNewUserButton {
+ border-top: 1px solid #139ef5;
+   background: #0800e3;
+   background: -webkit-gradient(linear, left top, left bottom, from(#4a73d9), to(#0800e3));
+   background: -webkit-linear-gradient(top, #4a73d9, #0800e3);
+   background: -moz-linear-gradient(top, #4a73d9, #0800e3);
+   background: -ms-linear-gradient(top, #4a73d9, #0800e3);
+   background: -o-linear-gradient(top, #4a73d9, #0800e3);
+   padding: 5px 10px;
+   -webkit-border-radius: 8px;
+   -moz-border-radius: 8px;
+   border-radius: 8px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: #ffffff;
+   font-size: 14px;
+   font-family: Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.gwt-LoginAsNewUserButton:hover {
+   border-top-color: #474dcf;
+   background: #474dcf;
+   color: #ffffff;
+   }
+.gwt-LoginAsNewUserButton:active {
+   border-top-color: #0c2bc9;
+   background: #0c2bc9;
+   }
+.LoginPage {
+    width: auto;
+	margin: 0px auto;
+	background-color: #000000;
+	background-image: url('home.jpg');
+}
+.gwt-TextArea {
+    border:outset 2px #3218f5;
+    -moz-border-radius: 22px;
+    -webkit-border-radius: 22px;
+    border-radius: 22px;
+}
+.gwt-ListBox {
+box-shadow: 3px 3px 5px #0088ff;
+}
+.gwt-Label {
+	color: White;
+	margin: 3px;
+}
+.LoginPanel {
+	color: #000099;
+	background-color: cornflowerblue;
+}
