@@ -63,7 +63,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 	    addEvent(usersEvent.getDomain(), usersEvent);
 	    if (DEBUG)
 		System.out
-			.println("Server: Fired Upadate Lobby Users Event for user: "
+			.println("Server: Fired Update Lobby Users Event for user: "
 				+ username);
 	    return true;
 	} else {

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
-import com.storytime.client.StoryTime;
+import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeService;
 import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.lobbyroom.LobbyRoom;
@@ -39,7 +39,7 @@ public class GameInProgressRoom {
     int turnPosition = 0;
 
     public GameInProgressRoom() {
-	DEBUG = StoryTime.DEBUG;
+	DEBUG = StoryTimeOldEntryPoint.DEBUG;
     }
 
     public void initialize() {
@@ -125,11 +125,11 @@ public class GameInProgressRoom {
      * @wbp.parser.entryPoint
      */
     public void onModuleLoad() {
-	rootPanel = StoryTime.rootPanel;
+	rootPanel = StoryTimeOldEntryPoint.rootPanel;
 	System.out.println("GameInProgressRoom!");
 	rootPanel.clear();
 
-	final RemoteEventService theRemoteEventService = StoryTime.theRemoteEventService;
+	final RemoteEventService theRemoteEventService = StoryTimeOldEntryPoint.theRemoteEventService;
 	// rootPanel = RootPanel.get();
 	final String username = gameData.thisUser;
 
@@ -303,6 +303,19 @@ public class GameInProgressRoom {
 
 	final Label lblGameStartingIn = new Label("GAME STARTING IN:");
 	rootPanel.add(lblGameStartingIn, 348, 436);
+	
+	final Timer submissionTimer = new Timer() {
+
+	    @Override
+	    public void run() {
+		btnChoosePhrase.setVisible(false);
+		btnSubmitPhrase.setVisible(false);
+		phraseSubmitBox.setVisible(false);
+		if (DEBUG) System.out.println("Client: This client has not submitted a word within the time limit of: " + gameData.timer + " seconds");
+		lblGameStartingIn.setText("Ran out of time!");
+	    }
+	};
+
 
 	theRemoteEventService.addListener(gameData.domain,
 		new RemoteEventListener() {
@@ -338,6 +351,7 @@ public class GameInProgressRoom {
 				btnSubmitPhrase.setVisible(true);
 				phraseSubmitBox.setVisible(true);
 				phraseSubmitBox.setText("");
+				//submissionTimer.schedule(gameData.timer); //TIMER FOR ROUNDS
 			    }
 			} else if (anEvent instanceof PhraseSubmittedEvent) {
 			    PhraseSubmittedEvent phraseEvent = (PhraseSubmittedEvent) anEvent;
@@ -419,7 +433,7 @@ public class GameInProgressRoom {
 		count--;
 	    }
 	};
-	Timer timer = new Timer() {
+	Timer timer1 = new Timer() {
 	    public void run() {
 		setReady();
 		if (DEBUG)
@@ -428,7 +442,7 @@ public class GameInProgressRoom {
 		this.cancel();
 	    }
 	};
-	timer.schedule(3000);
+	timer1.schedule(3000);
 	countdownTimer.scheduleRepeating(1000);
 
 	if (DEBUG)

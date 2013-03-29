@@ -7,7 +7,6 @@
     width: 480px;
 	margin: auto;
 	vertical-align: middle;
-	background-image: url('home.jpg');
 }
 
 h1 {
@@ -123,8 +122,4 @@ box-shadow: 3px 3px 5px #0088ff;
 .gwt-Label {
 	color: White;
 	margin: 3px;
-}
-.LoginPanel {
-	color: #000099;
-	background-color: cornflowerblue;
 }

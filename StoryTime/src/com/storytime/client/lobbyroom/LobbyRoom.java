@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
-import com.storytime.client.StoryTime;
+import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeService;
 import com.storytime.client.StoryTimeServiceAsync;
 
@@ -33,7 +33,7 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 public class LobbyRoom {
 
     RootPanel rootPanel;
-    boolean DEBUG = StoryTime.DEBUG;
+    boolean DEBUG = StoryTimeOldEntryPoint.DEBUG;
 
     StoryTimeServiceAsync storyTimeService = StoryTimeService.Util
 	    .getInstance();
@@ -83,8 +83,8 @@ public class LobbyRoom {
      * @wbp.parser.entryPoint
      */
     public void displayView() {
-	final RemoteEventService theRemoteEventService = StoryTime.theRemoteEventService;
-	rootPanel = StoryTime.rootPanel;
+	final RemoteEventService theRemoteEventService = StoryTimeOldEntryPoint.theRemoteEventService;
+	rootPanel = StoryTimeOldEntryPoint.rootPanel;
 	rootPanel.clear();
 	if (DEBUG)
 	    System.out.println("LobbyRoom!");
@@ -272,7 +272,7 @@ public class LobbyRoom {
 			    }
 
 			});
-		StoryTime.controller("Lobby");
+		StoryTimeOldEntryPoint.controller("Lobby");
 	    }
 	});
 	rootPanel.add(btnLeaveRoom, 10, 415);
@@ -383,11 +383,11 @@ public class LobbyRoom {
 			    if (DEBUG)
 				System.out.println("Client: Left Room: "
 					+ roomData.roomName);
-			    StoryTime.controller("Lobby");
+			    StoryTimeOldEntryPoint.controller("Lobby");
 			    
 			} else if (anEvent instanceof GameStartEvent) {
 			    theRemoteEventService.removeListeners();
-			    StoryTime.controller("GameInProgressRoom");
+			    StoryTimeOldEntryPoint.controller("GameInProgressRoom");
 			}
 		    }
 

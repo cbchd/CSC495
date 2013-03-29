@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
-import com.storytime.client.StoryTime;
+import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeService;
 import com.storytime.client.StoryTimeServiceAsync;
 
@@ -41,7 +41,7 @@ public class Lobby {
 	usersInLobby = new ArrayList<String>();
 	availableRooms = new ArrayList<String>();
 	chatWindowMessages = new ArrayList<String>();
-	rootPanel = StoryTime.rootPanel;
+	rootPanel = StoryTimeOldEntryPoint.rootPanel;
 	DEBUG = true;
     }
 
@@ -92,8 +92,8 @@ public class Lobby {
     public void displayView() {
 	rootPanel.clear();
 	 //rootPanel = RootPanel.get();
-	rootPanel = StoryTime.rootPanel;
-	final RemoteEventService theRemoteEventService = StoryTime.theRemoteEventService;
+	rootPanel = StoryTimeOldEntryPoint.rootPanel;
+	final RemoteEventService theRemoteEventService = StoryTimeOldEntryPoint.theRemoteEventService;
 
 	System.out.println("Lobby!");
 	Label lblHellousername = new Label("Lobby");
@@ -167,7 +167,7 @@ public class Lobby {
 				}
 
 			    });
-		    StoryTime.controller("LobbyRoom");
+		    StoryTimeOldEntryPoint.controller("LobbyRoom");
 		} else {
 		    if (DEBUG)
 			System.out
@@ -287,7 +287,7 @@ public class Lobby {
 					System.out
 						.println("Lobby listeners deactivated");
 				    rootPanel.clear();
-				    StoryTime.controller("LobbyRoom");
+				    StoryTimeOldEntryPoint.controller("LobbyRoom");
 				}
 			    });
 		}
