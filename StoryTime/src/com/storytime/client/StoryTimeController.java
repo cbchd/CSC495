@@ -5,10 +5,16 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
+import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
+import com.storytime.client.presenters.LobbyPresenter;
+import com.storytime.client.presenters.LobbyRoomPresenter;
 import com.storytime.client.presenters.LoginPresenter;
 import com.storytime.client.presenters.Presenter;
+import com.storytime.client.view.LobbyRoomView;
+import com.storytime.client.view.LobbyView;
 import com.storytime.client.view.LoginView;
 
 public class StoryTimeController implements Presenter, ValueChangeHandler<String> {
@@ -37,7 +43,13 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 				presenter = new LoginPresenter(rpcService, eventBus, new LoginView());
 				presenter.go(container);
 			} else if (token.equals("Lobby")) {
-				// presenter = new LobbyPresenter()
+				if (DEBUG)System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded!");
+				presenter = new LobbyPresenter(rpcService, eventBus, new LobbyView());
+				presenter.go(container);
+			} else if (token.equals("Room")) {
+				if (DEBUG) System.out.println("Client: The history token was 'Room' so the presenter associated with the lobby room was loaded");
+				presenter = new LobbyRoomPresenter(rpcService, eventBus, new LobbyRoomView());
+				presenter.go(container);
 			}
 		}
 	}
@@ -70,6 +82,13 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 				History.newItem("Lobby");
 			}
 		});
-	}
+		eventBus.addHandler(HostRoomLocalEvent.TYPE, new HostRoomLocalEventHandler() {
 
+			@Override
+			public void onHostRoom() {
+				if (DEBUG) System.out.println("Set history to 'Room' after recieving a host room event");
+				History.newItem("Room");
+			}
+		});
+	}
 }

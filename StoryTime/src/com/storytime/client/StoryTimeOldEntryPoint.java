@@ -31,7 +31,6 @@ public class StoryTimeOldEntryPoint implements EntryPoint {
 	Window.setTitle("StoryMode");
 	rootPanel.setStyleName("center");
 	rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-	//rootPanel.getElement().getStyle().setBackgroundImage("home.jpg");
 	controller("Login");
     }
 

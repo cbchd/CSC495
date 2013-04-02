@@ -37,18 +37,17 @@ public class LoginPresenter implements Presenter {
 	public void go(HasWidgets container) {
 		bindHandlers();
 		container.clear();
-		System.out
-				.println("Client: Bound the event handlers for the LoginPresenter & cleared the contents of the container");
+		System.out.println("Client: Bound the event handlers for the LoginPresenter & cleared the contents of the container");
 		container.add(display.asWidget());
 		System.out.println("Client: Added the login view to the container");
 	}
 
 	private void bindHandlers() {
 		// Throw a Login Existing User Event when the button is clicked
-		setLoginExistingButtonHandlers();
+		setLoginExistingButtonHandler();
 	}
-	
-	private void setLoginExistingButtonHandlers() {
+
+	private void setLoginExistingButtonHandler() {
 		display.getLoginExistingUserButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -82,7 +81,7 @@ public class LoginPresenter implements Presenter {
 				}
 			}
 		});
-		
+
 	}
 
 }

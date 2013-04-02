@@ -4,11 +4,10 @@ import com.allen_sauer.gwt.voices.client.Sound;
 import com.allen_sauer.gwt.voices.client.SoundController;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -19,8 +18,6 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
 
 public class LoginView extends Composite implements com.storytime.client.presenters.LoginPresenter.Display {
 
@@ -42,7 +39,7 @@ public class LoginView extends Composite implements com.storytime.client.present
 	Button btnLoginExistingUser = new Button("Login Existing User");
 	HorizontalPanel loginButtonHolder = new HorizontalPanel();
 	VerticalPanel loginSubButtonHolder = new VerticalPanel();
-	
+
 	SoundController soundController = new SoundController();
 
 	public LoginView() {
@@ -52,6 +49,7 @@ public class LoginView extends Composite implements com.storytime.client.present
 		initWelcomeHeader();
 		initUsernameAndPasswordPanel();
 		initButtons();
+		initSounds();
 	}
 
 	public Label getLblWelcomeToStorymode() {
@@ -79,9 +77,6 @@ public class LoginView extends Composite implements com.storytime.client.present
 	}
 
 	public void initPanelOrder() {
-		final Sound sound = soundController.createSound(Sound.MIME_TYPE_AUDIO_WAV_UNKNOWN, "buttonClick4.wav");
-		final Sound sound2 = soundController.createSound(Sound.MIME_TYPE_AUDIO_MPEG_MP3, "Barber.mp3");
-
 		mainVerticalPanel.add(welcomeLabelHolder);
 		mainVerticalPanel.add(usernameAndPassLabelsAndFields);
 		mainVerticalPanel.add(usernameAndPassLabelsAndFields);
@@ -98,21 +93,6 @@ public class LoginView extends Composite implements com.storytime.client.present
 		fieldsSubHolder.add(passwordBox);
 
 		loginButtonHolder.add(loginSubButtonHolder);
-		// Set the sound to be played on focus
-		btnLoginExistingUser.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				sound.play();
-				sound2.play();
-			}
-			
-		});
-		btnLoginNewUser.addMouseOverHandler(new MouseOverHandler() {
-			public void onMouseOver(MouseOverEvent event) {
-				sound.play();
-			}
-		});
 		loginSubButtonHolder.add(btnLoginExistingUser);
 		loginSubButtonHolder.setCellHorizontalAlignment(btnLoginExistingUser, HasHorizontalAlignment.ALIGN_CENTER);
 		loginSubButtonHolder.add(btnLoginNewUser);
@@ -120,10 +100,10 @@ public class LoginView extends Composite implements com.storytime.client.present
 	}
 
 	public void initMainVerticalPanel() {
-		mainVerticalPanel.setStyleName("LoginPanel");
+		mainVerticalPanel.setStyleName("LoginPage");
 		mainVerticalPanel.setBorderWidth(10);
-		mainVerticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		mainVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		//mainVerticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		//mainVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		mainVerticalPanel.setSize("597px", "285px");
 	}
 
@@ -199,4 +179,16 @@ public class LoginView extends Composite implements com.storytime.client.present
 		return passwordBox.getText();
 	}
 
+	public void initSounds() {
+		// Set the sounds to be played on button focus
+		final Sound sound = soundController.createSound(Sound.MIME_TYPE_AUDIO_WAV_UNKNOWN, "buttonClick5.wav");
+		
+		btnLoginExistingUser.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				sound.play();
+			}
+		});
+	}
 }
