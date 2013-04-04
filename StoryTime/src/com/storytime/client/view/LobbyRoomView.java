@@ -45,7 +45,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 	RemoteEventService theRemoteEventService = StoryTimeEntryMVP.theRemoteEventService;
 	StoryTimeServiceAsync storyTimeService = StoryTimeEntryMVP.rpcService;
-	LobbyRoomData roomData = new LobbyRoomData();
+	public static LobbyRoomData roomData = new LobbyRoomData();
 	String total = "";
 
 	HorizontalPanel mainHorizontalPanel = new HorizontalPanel();
