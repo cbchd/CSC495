@@ -7,12 +7,14 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.text.client.IntegerRenderer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -25,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
 import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeServiceAsync;
+import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 import com.storytime.client.lobbyroom.RoomDisbandedEvent;
@@ -37,7 +40,6 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 public class LobbyRoomView extends Composite implements com.storytime.client.presenters.LobbyRoomPresenter.Display {
 
@@ -45,6 +47,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 	RemoteEventService theRemoteEventService = StoryTimeEntryMVP.theRemoteEventService;
 	StoryTimeServiceAsync storyTimeService = StoryTimeEntryMVP.rpcService;
+	HandlerManager eventBus = StoryTimeEntryMVP.eventBus;
 	public static LobbyRoomData roomData = new LobbyRoomData();
 	String total = "";
 
@@ -84,10 +87,13 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	public void initialize() {
 		setPanelOrder();
 		setPanelCharacteristics();
-		if (DEBUG) System.out.println("Client: Set lobby room panel order & characteristics");
-		if (DEBUG) System.out.println("Client: Trying to get the lobby room information from the server");
+		if (DEBUG)
+			System.out.println("Client: Set lobby room panel order & characteristics");
+		if (DEBUG)
+			System.out.println("Client: Trying to get the lobby room information from the server");
 		getInitialLobbyRoomInformation();
-		if (DEBUG) System.out.println("Client: Got the lobby room information from the server");
+		if (DEBUG)
+			System.out.println("Client: Got the lobby room information from the server");
 		populateLobbyRoomView();
 		setHandlers();
 	}
@@ -324,19 +330,22 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	}
 
 	public void setRemoteEventListenersAndHandleEvents() {
-		if (DEBUG) System.out.println("Client: Trying to set the lobby room listeners for room " + roomData.roomName);
+		if (DEBUG)
+			System.out.println("Client: Trying to set the lobby room listeners for room " + roomData.roomName);
 		theRemoteEventService.addListener(DomainFactory.getDomain(roomData.roomName), new RemoteEventListener() {
 
 			public void apply(Event anEvent) {
 				if (anEvent instanceof UpdatePointCapEvent) {
 					// Update the point cap set for the room
-					if (DEBUG) System.out.println("Client: Got an Update Point Cap Remote Event");
+					if (DEBUG)
+						System.out.println("Client: Got an Update Point Cap Remote Event");
 					UpdatePointCapEvent updatePointCapEvent = (UpdatePointCapEvent) anEvent;
 					pointLimitBox.setValue(updatePointCapEvent.pointCap);
 					roomData.pointCap = updatePointCapEvent.pointCap;
 				} else if (anEvent instanceof UpdateTimerEvent) {
 					// Update the timer
-					if (DEBUG) System.out.println("Client: Got an Update Timer Remote Event");
+					if (DEBUG)
+						System.out.println("Client: Got an Update Timer Remote Event");
 					UpdateTimerEvent updateTimerEvent = (UpdateTimerEvent) anEvent;
 					timePerRoundBox.setValue(updateTimerEvent.timer);
 					roomData.timer = updateTimerEvent.timer;
@@ -370,12 +379,17 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					StoryTimeOldEntryPoint.controller("Lobby");
 
 				} else if (anEvent instanceof GameStartEvent) {
+					if (DEBUG) System.out.println("Client: Got a game start event for room: " + roomData.roomName);
 					theRemoteEventService.removeListeners();
-					StoryTimeOldEntryPoint.controller("GameInProgressRoom");
+					if (DEBUG) System.out.println("Client: Deactivated lobby room listeners in preparation for starting the game");
+					StartGameLocalEvent startGameEvent = new StartGameLocalEvent();
+					if (DEBUG) System.out.println("Client: Fired Local Event: Game Start Event");
+					eventBus.fireEvent(startGameEvent);
 				}
 			}
 		});
-		if (DEBUG) System.out.println("Client: Lobby room listeners activated");
+		if (DEBUG)
+			System.out.println("Client: Lobby room listeners activated");
 	}
 
 	public void getInitialLobbyRoomInformation() {
@@ -400,7 +414,8 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 						+ ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.timer + ", Users: "
 						+ roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
 				populateLobbyRoomView();
-				if (DEBUG) System.out.println("Client: Set remote event listeners and populated the lobby with known data");
+				if (DEBUG)
+					System.out.println("Client: Set remote event listeners and populated the lobby with known data");
 				setRemoteEventListenersAndHandleEvents();
 			}
 		});

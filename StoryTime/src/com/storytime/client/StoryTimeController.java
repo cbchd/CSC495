@@ -7,12 +7,16 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
+import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
+import com.storytime.client.changeviewevents.StartGameLocalEvent;
+import com.storytime.client.presenters.GameInProgressRoomPresenter;
 import com.storytime.client.presenters.LobbyPresenter;
 import com.storytime.client.presenters.LobbyRoomPresenter;
 import com.storytime.client.presenters.LoginPresenter;
 import com.storytime.client.presenters.Presenter;
+import com.storytime.client.view.GameInProgressRoomView;
 import com.storytime.client.view.LobbyRoomView;
 import com.storytime.client.view.LobbyView;
 import com.storytime.client.view.LoginView;
@@ -50,6 +54,10 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 				if (DEBUG) System.out.println("Client: The history token was 'Room' so the presenter associated with the lobby room was loaded");
 				presenter = new LobbyRoomPresenter(rpcService, eventBus, new LobbyRoomView());
 				presenter.go(container);
+			} else if (token.equals("GameRoom")) {
+				if (DEBUG) System.out.println("Client: The history token was 'GameRoom' so the presenter associated with the game room was loaded");
+				presenter = new GameInProgressRoomPresenter(rpcService, eventBus, new GameInProgressRoomView());
+				presenter.go(container);
 			}
 		}
 	}
@@ -86,9 +94,18 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 
 			@Override
 			public void onHostRoom() {
-				if (DEBUG) System.out.println("Set history to 'Room' after recieving a host room event");
 				History.newItem("Room");
+				if (DEBUG) System.out.println("Client: Set history to 'Room' after recieving a host room local event");
 			}
+		});
+		eventBus.addHandler(StartGameLocalEvent.TYPE, new StartGameLocalEventHandler() {
+
+			@Override
+			public void onStartGame() {
+				if (DEBUG) System.out.println("Client: Set history to 'GameRoom' after recieving a start game local event");
+				History.newItem("GameRoom");
+			}
+			
 		});
 	}
 }

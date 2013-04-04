@@ -126,12 +126,21 @@ h1 {
 }
 
 .LobbyRoomPage {
-	width: 505px;
-	height: 968px;
+	width: 950px;
+	height: 505px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	margin: -252.5px 0 0 -484px;
+}
+
+.GameInProgressPage {
+	width: 505px;
+	height: 950px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -252.5px 0 0 -475px;
 }
 
 .gwt-TextArea {

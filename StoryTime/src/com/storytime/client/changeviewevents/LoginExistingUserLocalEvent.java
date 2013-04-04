@@ -8,6 +8,7 @@ public class LoginExistingUserLocalEvent extends GwtEvent<LoginExistingUserLocal
 	
 	private String username;
 	private String password;
+	public static Type<LoginExistingUserLocalEventHandler> TYPE = new Type<LoginExistingUserLocalEventHandler>();
 	
 	public String getUsername() {
 		return username;
@@ -25,7 +26,6 @@ public class LoginExistingUserLocalEvent extends GwtEvent<LoginExistingUserLocal
 		this.password = password;
 	}
 
-	public static Type<LoginExistingUserLocalEventHandler> TYPE = new Type<LoginExistingUserLocalEventHandler>();
 
 	@Override
 	public com.google.gwt.event.shared.GwtEvent.Type<LoginExistingUserLocalEventHandler> getAssociatedType() {
