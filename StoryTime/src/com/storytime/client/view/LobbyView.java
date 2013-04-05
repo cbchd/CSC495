@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
-import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
+import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
 import com.storytime.client.lobby.UpdateLobbyRoomsEvent;
@@ -305,7 +305,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 			@Override
 			public void onClick(ClickEvent event) {
 				// join the selected room
-				if (roomSelection != null) {
+				if (roomSelection != null && roomSelection != "") {
 					rpcService.joinRoom(roomSelection, new AsyncCallback<Void>() {
 
 						@Override
@@ -321,7 +321,9 @@ public class LobbyView extends Composite implements com.storytime.client.present
 						}
 
 					});
-					StoryTimeOldEntryPoint.controller("LobbyRoom");
+					if (DEBUG) System.out.println("Client: Fired a join room local event");
+					eventBus.fireEvent(new JoinRoomLocalEvent());
+					//StoryTimeOldEntryPoint.controller("LobbyRoom");
 				} else {
 					if (DEBUG)
 						System.out.println("Room selection was null, nothing happened");

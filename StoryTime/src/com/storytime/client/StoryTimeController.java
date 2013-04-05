@@ -6,9 +6,11 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
+import com.storytime.client.changevieweventhandlers.JoinRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
+import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.presenters.GameInProgressRoomPresenter;
@@ -104,6 +106,14 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 			public void onStartGame() {
 				if (DEBUG) System.out.println("Client: Set history to 'GameRoom' after recieving a start game local event");
 				History.newItem("GameRoom");
+			}
+			
+		});
+		eventBus.addHandler(JoinRoomLocalEvent.TYPE, new JoinRoomLocalEventHandler() {
+
+			@Override
+			public void onJoinRoom() {
+				History.newItem("Room");
 			}
 			
 		});
