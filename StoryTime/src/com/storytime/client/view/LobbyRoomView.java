@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
 import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeServiceAsync;
+import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
@@ -201,22 +202,21 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			@Override
 			public void onValueChange(ValueChangeEvent<Integer> event) {
 				// Get point Limit TODO
-				storyTimeService.updateLobbyRoomPointCap(roomData.roomName, event.getValue(),
-						new AsyncCallback<Void>() {
+				storyTimeService.updateLobbyRoomPointCap(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-								if (DEBUG)
-									System.out.println("Client: Error occurred changing the point value");
-							}
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out.println("Client: Error occurred changing the point value");
+					}
 
-							@Override
-							public void onSuccess(Void result) {
-								if (DEBUG)
-									System.out.println("Client: Got confirmation of point change from server");
-							}
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Got confirmation of point change from server");
+					}
 
-						});
+				});
 			}
 		});
 
@@ -229,8 +229,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					@Override
 					public void onFailure(Throwable caught) {
 						if (DEBUG)
-							System.out.println("Client: Error occurred in sending server the new timer value: "
-									+ event.getValue());
+							System.out.println("Client: Error occurred in sending server the new timer value: " + event.getValue());
 					}
 
 					@Override
@@ -255,33 +254,30 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					@Override
 					public void onSuccess(Void result) {
 						if (DEBUG)
-							System.out.println("Client: Successfully left the room: " + roomData.roomName);
+							System.out.println("Client: Confirmation received from server that this user has left the room: " + roomData.roomName);
 					}
-
 				});
-				// StoryTimeOldEntryPoint.controller("Lobby");
 			}
 		});
 
 		chatTextBox.addKeyDownHandler(new KeyDownHandler() {
 			public void onKeyDown(KeyDownEvent event) {
 				if ((event.getNativeKeyCode() == KeyCodes.KEY_ENTER) && !chatTextBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(),
-							new AsyncCallback<Void>() {
+					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
 
-								@Override
-								public void onFailure(Throwable caught) {
-									if (DEBUG)
-										System.out.println("Client: Error occurred while sending text to the chat");
-								}
+						@Override
+						public void onFailure(Throwable caught) {
+							if (DEBUG)
+								System.out.println("Client: Error occurred while sending text to the chat");
+						}
 
-								@Override
-								public void onSuccess(Void result) {
-									if (DEBUG)
-										System.out.println("Client: Successfully posted to chat window");
-									chatTextBox.setText("");
-								}
-							});
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Successfully posted to chat window");
+							chatTextBox.setText("");
+						}
+					});
 				}
 			}
 		});
@@ -290,21 +286,20 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			@Override
 			public void onClick(ClickEvent event) {
 				// Send text to users in room
-				storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(),
-						new AsyncCallback<Void>() {
+				storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-							}
+					@Override
+					public void onFailure(Throwable caught) {
+					}
 
-							@Override
-							public void onSuccess(Void result) {
-								if (DEBUG)
-									System.out.println("Client: Sent message: " + chatTextBox.getText());
-								chatTextBox.setText("");
-							}
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Sent message: " + chatTextBox.getText());
+						chatTextBox.setText("");
+					}
 
-						});
+				});
 			}
 		});
 
@@ -372,18 +367,20 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				} else if (anEvent instanceof RoomDisbandedEvent) {
 					theRemoteEventService.removeListeners();
 					if (DEBUG)
-						System.out.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: "
-								+ roomData.roomName);
+						System.out.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: " + roomData.roomName);
 					if (DEBUG)
 						System.out.println("Client: Left Room: " + roomData.roomName);
-					StoryTimeOldEntryPoint.controller("Lobby");
-
+					// StoryTimeOldEntryPoint.controller("Lobby");
+					eventBus.fireEvent(new LeaveRoomLocalEvent());
 				} else if (anEvent instanceof GameStartEvent) {
-					if (DEBUG) System.out.println("Client: Got a game start event for room: " + roomData.roomName);
+					if (DEBUG)
+						System.out.println("Client: Got a game start event for room: " + roomData.roomName);
 					theRemoteEventService.removeListeners();
-					if (DEBUG) System.out.println("Client: Deactivated lobby room listeners in preparation for starting the game");
+					if (DEBUG)
+						System.out.println("Client: Deactivated lobby room listeners in preparation for starting the game");
 					StartGameLocalEvent startGameEvent = new StartGameLocalEvent();
-					if (DEBUG) System.out.println("Client: Fired Local Event: Game Start Event");
+					if (DEBUG)
+						System.out.println("Client: Fired Local Event: Game Start Event");
 					eventBus.fireEvent(startGameEvent);
 				}
 			}
@@ -410,9 +407,8 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				roomData.users = result.users;
 				roomData.inGame = result.inGame;
 				roomData.domain = result.domain;
-				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName
-						+ ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.timer + ", Users: "
-						+ roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
+				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.timer
+						+ ", Users: " + roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
 				populateLobbyRoomView();
 				if (DEBUG)
 					System.out.println("Client: Set remote event listeners and populated the lobby with known data");

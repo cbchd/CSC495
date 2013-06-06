@@ -7,10 +7,12 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.JoinRoomLocalEventHandler;
+import com.storytime.client.changevieweventhandlers.LeaveRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
+import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.presenters.GameInProgressRoomPresenter;
@@ -45,19 +47,23 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 		if (token != null) {
 			Presenter presenter = null;
 			if (token.equals("Login")) {
-				if (DEBUG)System.out.println("Client: The history token was 'login' so the presenter associated with the login window was loaded!");
+				if (DEBUG)
+					System.out.println("Client: The history token was 'login' so the presenter associated with the login window was loaded!");
 				presenter = new LoginPresenter(rpcService, eventBus, new LoginView());
 				presenter.go(container);
 			} else if (token.equals("Lobby")) {
-				if (DEBUG)System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded!");
+				if (DEBUG)
+					System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded!");
 				presenter = new LobbyPresenter(rpcService, eventBus, new LobbyView());
 				presenter.go(container);
 			} else if (token.equals("Room")) {
-				if (DEBUG) System.out.println("Client: The history token was 'Room' so the presenter associated with the lobby room was loaded");
+				if (DEBUG)
+					System.out.println("Client: The history token was 'Room' so the presenter associated with the lobby room was loaded");
 				presenter = new LobbyRoomPresenter(rpcService, eventBus, new LobbyRoomView());
 				presenter.go(container);
 			} else if (token.equals("GameRoom")) {
-				if (DEBUG) System.out.println("Client: The history token was 'GameRoom' so the presenter associated with the game room was loaded");
+				if (DEBUG)
+					System.out.println("Client: The history token was 'GameRoom' so the presenter associated with the game room was loaded");
 				presenter = new GameInProgressRoomPresenter(rpcService, eventBus, new GameInProgressRoomView());
 				presenter.go(container);
 			}
@@ -97,17 +103,19 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 			@Override
 			public void onHostRoom() {
 				History.newItem("Room");
-				if (DEBUG) System.out.println("Client: Set history to 'Room' after recieving a host room local event");
+				if (DEBUG)
+					System.out.println("Client: Set history to 'Room' after recieving a host room local event");
 			}
 		});
 		eventBus.addHandler(StartGameLocalEvent.TYPE, new StartGameLocalEventHandler() {
 
 			@Override
 			public void onStartGame() {
-				if (DEBUG) System.out.println("Client: Set history to 'GameRoom' after recieving a start game local event");
+				if (DEBUG)
+					System.out.println("Client: Set history to 'GameRoom' after recieving a start game local event");
 				History.newItem("GameRoom");
 			}
-			
+
 		});
 		eventBus.addHandler(JoinRoomLocalEvent.TYPE, new JoinRoomLocalEventHandler() {
 
@@ -115,7 +123,16 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 			public void onJoinRoom() {
 				History.newItem("Room");
 			}
-			
+
+		});
+		eventBus.addHandler(LeaveRoomLocalEvent.TYPE, new LeaveRoomLocalEventHandler() {
+
+			@Override
+			public void onLeaveRoom() {
+				if (DEBUG)
+					System.out.println("Client: Set history to 'Lobby' after recieving a leave room local event");
+				History.newItem("Lobby");
+			}
 		});
 	}
 }

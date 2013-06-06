@@ -86,6 +86,12 @@ public class StoryTimeEngine {
 		// currentLobbyRooms.add(lobbyRoom);
 	}
 
+	public void leaveRoom(String userName, String roomName) {
+		User user = this.usersInLobby.get(userName);
+		lobbyRooms.remove(roomName);
+		user.room = null;
+	}
+	
 	public Boolean joinRoom(User user, String roomName) {
 		usersInLobby.remove(user.username);
 		if (lobbyRooms.containsKey(roomName)) {

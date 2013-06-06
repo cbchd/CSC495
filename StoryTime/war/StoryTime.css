@@ -11,7 +11,7 @@ h1 {
 }
 
 .rootPanel {
-	background-image: url('free-wallpaper-art.jpg');
+	background-image: url('antique-scroll-backgrounds-wallpapers.jpg');
 }
 
 .sendButton {
@@ -144,21 +144,29 @@ h1 {
 }
 
 .gwt-TextArea {
-    border:double 5px #fad900;
+	
+	background:-moz-linear-gradient(80% 20% 0deg, #008A94, #000000 10%)
+
+    border:solid 3px #084d36;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    background:-moz-linear-gradient(80% 20% 0deg, #FFEF47, #FFFFFF 10%)
+
+font-weight:normal;color:#000000;letter-spacing:0pt;word-spacing:0pt;font-size:17px;text-align:left;font-family:arial, helvetica, sans-serif;line-height:1;
+
+
 }
 
 .gwt-ListBox {
+	
+	background:-moz-linear-gradient(80% 20% 0deg, #008A94, #000000 10%)
 
-
-    border:double 5px #fad900;
+    border:solid 3px #084d36;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-background:-moz-linear-gradient(80% 20% 0deg, #FFEF47, #FFFFFF 10%)
+
+font-weight:normal;color:#000000;letter-spacing:0pt;word-spacing:0pt;font-size:17px;text-align:left;font-family:arial, helvetica, sans-serif;line-height:1;
 	
 }
 
@@ -171,6 +179,4 @@ background:-moz-linear-gradient(80% 20% 0deg, #FFEF47, #FFFFFF 10%)
 	text-shadow: 0px 0px 0 rgb(-67, -24, 188), 1px 1px 0 rgb(-124, -81, 131),
 		2px 2px 1px rgba(0, 0, 0, 0.6), 2px 2px 1px rgba(0, 0, 0, 0.5), 0px
 		0px 1px rgba(0, 0, 0, .2);
-}
-. {
 }

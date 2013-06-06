@@ -202,17 +202,18 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		Room usersRoom = foundUser.room;
 		if (usersRoom.host.getUsername().equalsIgnoreCase(foundUser.username)) {
 			// Disband room
+			engine.lobbyRooms.remove(usersRoom.roomName);
+			foundUser.room = null;
+			logger.log(Level.FINEST, "Server: User " + usr.username + " was the host of " + roomName + " and has left the room, so it has been disbanded");
+			// Remove room from room list
 			RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
 			addEvent(DomainFactory.getDomain(roomName), roomDisbandedEvent);
-			// Remove room from room list
-			engine.getLobbyRooms().remove(usersRoom);
-			logger.log(Level.INFO, "User " + usr.username + " was the host of " + roomName + " and has left the room, so it has been disbanded");
 		} else {
 			UserLeftRoomEvent userLeftEvent = new UserLeftRoomEvent();
 			userLeftEvent.username = foundUser.username;
 			addEvent(DomainFactory.getDomain(roomName), userLeftEvent);
 			// Remove user from the room
-			usersRoom.users.remove(foundUser);
+			usersRoom.users.remove(foundUser.username);
 			logger.log(Level.FINEST, "Server: Fired User Left Event for the domain " + roomName);
 		}
 		return;
