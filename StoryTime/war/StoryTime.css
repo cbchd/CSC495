@@ -11,7 +11,7 @@ h1 {
 }
 
 .rootPanel {
-	background-image: url('fairytale.jpg');
+	background-image: url('free-wallpaper-art.jpg');
 }
 
 .sendButton {
@@ -41,7 +41,7 @@ h1 {
 	border-top: 1px solid #139ef5;
 	background: #0800e3;
 	background: -webkit-gradient(linear, left top, left bottom, from(#4a73d9),
-		to(#0800e3) );
+		to(#0800e3));
 	background: -webkit-linear-gradient(top, #4a73d9, #0800e3);
 	background: -moz-linear-gradient(top, #4a73d9, #0800e3);
 	background: -ms-linear-gradient(top, #4a73d9, #0800e3);
@@ -76,7 +76,7 @@ h1 {
 	border-top: 1px solid #139ef5;
 	background: #0800e3;
 	background: -webkit-gradient(linear, left top, left bottom, from(#4a73d9),
-		to(#0800e3) );
+		to(#0800e3));
 	background: -webkit-linear-gradient(top, #4a73d9, #0800e3);
 	background: -moz-linear-gradient(top, #4a73d9, #0800e3);
 	background: -ms-linear-gradient(top, #4a73d9, #0800e3);
@@ -135,23 +135,31 @@ h1 {
 }
 
 .GameInProgressPage {
-	width: 505px;
-	height: 950px;
+	width: 633;
+	height: 900px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin: -252.5px 0 0 -475px;
+	margin: -316.5px 0 0 -450px;
 }
 
 .gwt-TextArea {
-	border: outset 2px #3218f5;
-	-moz-border-radius: 22px;
-	-webkit-border-radius: 22px;
-	border-radius: 22px;
+    border:double 5px #fad900;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background:-moz-linear-gradient(80% 20% 0deg, #FFEF47, #FFFFFF 10%)
 }
 
 .gwt-ListBox {
-	box-shadow: 3px 3px 5px #0088ff;
+
+
+    border:double 5px #fad900;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+background:-moz-linear-gradient(80% 20% 0deg, #FFEF47, #FFFFFF 10%)
+	
 }
 
 .gwt-Label {
@@ -163,4 +171,6 @@ h1 {
 	text-shadow: 0px 0px 0 rgb(-67, -24, 188), 1px 1px 0 rgb(-124, -81, 131),
 		2px 2px 1px rgba(0, 0, 0, 0.6), 2px 2px 1px rgba(0, 0, 0, 0.5), 0px
 		0px 1px rgba(0, 0, 0, .2);
+}
+. {
 }

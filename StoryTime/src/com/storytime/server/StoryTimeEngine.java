@@ -1,82 +1,104 @@
 package com.storytime.server;
 
 import java.util.ArrayList;
-
-import com.storytime.client.gameroom.GameData;
+import java.util.HashMap;
 
 public class StoryTimeEngine {
-    ArrayList<Room> currentLobbyRooms;
-    ArrayList<User> currentOnlineUsers;
-    ArrayList<User> legacyUsers;
-    ArrayList<String> lobbyChat;
-    ArrayList<User> usersInLobby;
-    ArrayList<InGameRoom> inGameRooms;
+	ArrayList<String> lobbyChat;
+	HashMap<String, User> usersInLobby;
+	HashMap<String, User> onlineUsers;
+	HashMap<String, Room> lobbyRooms;
+	HashMap<String, InGameRoom> gameRooms;
 
-    public StoryTimeEngine() {
-	currentLobbyRooms = new ArrayList<Room>();
-	currentOnlineUsers = new ArrayList<User>();
-	legacyUsers = new ArrayList<User>();
-	lobbyChat = new ArrayList<String>();
-	usersInLobby = new ArrayList<User>();
-	inGameRooms = new ArrayList<InGameRoom>();
-    }
-    
-    public Boolean loginUser(String username, String password) {
-	//Always returns true and adds the user to the current user list if he is not there
-	User user = new User(username, password, this);
-	if (!currentOnlineUsers.contains(user)) {
-	    currentOnlineUsers.add(user);
-	    usersInLobby.add(user);
-	    return true;
-	} else {
-	    return true;
+	public ArrayList<String> getLobbyChat() {
+		return lobbyChat;
 	}
-    }
 
-    public ArrayList<Room> getCurrentRooms() {
-	return currentLobbyRooms;
-    }
-
-    public void setCurrentRooms(ArrayList<Room> currentRooms) {
-	this.currentLobbyRooms = currentRooms;
-    }
-
-    public ArrayList<User> getCurrentOnlineUsers() {
-	return currentOnlineUsers;
-    }
-
-    public void setCurrentOnlineUsers(ArrayList<User> currentOnlineUsers) {
-	this.currentOnlineUsers = currentOnlineUsers;
-    }
-
-    public void hostRoom(User host, String roomName) {
-	Room lobbyRoom = new Room(host, roomName);
-	host.room = lobbyRoom;
-	currentLobbyRooms.add(lobbyRoom);
-    }
-
-    public void joinRoom(User user, String roomName) {
-	for (Room r : currentLobbyRooms) {
-	    if (r.roomName.equalsIgnoreCase(roomName)) {
-	    }
+	public void setLobbyChat(ArrayList<String> lobbyChat) {
+		this.lobbyChat = lobbyChat;
 	}
-    }
 
-    public void setIngame(String roomName) {
-	for (Room room : currentLobbyRooms) {
-	    if (room.roomName.equalsIgnoreCase(roomName)) {
-		room.inGame = true;
-	    }
+	public HashMap<String, User> getUsersInLobby() {
+		return usersInLobby;
 	}
-    }
 
-    public Room getUsersRoom(String username) {
-	Room r = null;
-	for (User user : currentOnlineUsers) {
-	    if (username.equalsIgnoreCase(user.username)) {
-		r = user.room;
-	    }
+	public void setUsersInLobby(HashMap<String, User> usersInLobby) {
+		this.usersInLobby = usersInLobby;
 	}
-	return r;
-    }
+
+	public HashMap<String, InGameRoom> getGameRooms() {
+		return gameRooms;
+	}
+
+	public void setGameRooms(HashMap<String, InGameRoom> gameRooms) {
+		this.gameRooms = gameRooms;
+	}
+
+	public void setOnlineUsers(HashMap<String, User> onlineUsers) {
+		this.onlineUsers = onlineUsers;
+	}
+
+	public void setLobbyRooms(HashMap<String, Room> lobbyRooms) {
+		this.lobbyRooms = lobbyRooms;
+	}
+
+	public StoryTimeEngine() {
+		lobbyChat = new ArrayList<String>();
+		usersInLobby = new HashMap<String, User>();
+		onlineUsers = new HashMap<String, User>();
+		lobbyRooms = new HashMap<String, Room>();
+		gameRooms = new HashMap<String, InGameRoom>();
+	}
+
+	public Boolean loginUser(String username, String password) {
+		// Always returns true and adds the user to the current user list if he
+		// is not there
+		User user = new User(username, password, this);
+		if (!onlineUsers.containsKey(username)) {
+			onlineUsers.put(username, user);
+			usersInLobby.put(username, user);
+		}
+		return true;
+
+	}
+
+	public HashMap<String, Room> getLobbyRooms() {
+		return lobbyRooms;
+	}
+
+	public void setCurrentRooms(HashMap<String, Room> lobbyRooms) {
+		this.lobbyRooms = lobbyRooms;
+	}
+
+	public HashMap<String, User> getOnlineUsers() {
+		return onlineUsers;
+	}
+
+	public void setCurrentOnlineUsers(HashMap<String, User> onlineUsers) {
+		this.onlineUsers = onlineUsers;
+	}
+
+	public void hostRoom(User host, String roomName, String theme) {
+		Room lobbyRoom = new Room(host, roomName);
+		host.room = lobbyRoom;
+		lobbyRoom.setTheme(theme);
+		lobbyRooms.put(lobbyRoom.roomName, lobbyRoom);
+		// currentLobbyRooms.add(lobbyRoom);
+	}
+
+	public Boolean joinRoom(User user, String roomName) {
+		usersInLobby.remove(user.username);
+		if (lobbyRooms.containsKey(roomName)) {
+			lobbyRooms.get(roomName).users.put(user.username, user);
+			user.room = lobbyRooms.get(roomName);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public Room getUsersRoom(String username) {
+		Room r = onlineUsers.get(username).room;
+		return r;
+	}
 }

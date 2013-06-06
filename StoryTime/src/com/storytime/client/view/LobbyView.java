@@ -204,7 +204,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		thirdVerticalRoomOptions.setSize("100%", "100%");
 
 		lblAvailableRooms.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblAvailableRooms.setSize("100%", "100%");
+		lblAvailableRooms.setSize("100%", "44px");
 		roomBox.setSize("100%", "153px");
 		roomBox.setVisibleItemCount(5);
 
@@ -323,7 +323,6 @@ public class LobbyView extends Composite implements com.storytime.client.present
 					});
 					if (DEBUG) System.out.println("Client: Fired a join room local event");
 					eventBus.fireEvent(new JoinRoomLocalEvent());
-					//StoryTimeOldEntryPoint.controller("LobbyRoom");
 				} else {
 					if (DEBUG)
 						System.out.println("Room selection was null, nothing happened");
