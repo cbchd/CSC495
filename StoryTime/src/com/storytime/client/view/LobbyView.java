@@ -43,7 +43,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	ArrayList<String> availableRooms = new ArrayList<String>();
 	ArrayList<String> chatWindowMessages = new ArrayList<String>();
 	String roomSelection = "";
-	StoryTimeServiceAsync rpcService = StoryTimeEntryMVP.rpcService; 
+	StoryTimeServiceAsync rpcService = StoryTimeEntryMVP.rpcService;
 	RemoteEventService theRemoteEventService = StoryTimeEntryMVP.theRemoteEventService;
 	String totalChat = "";
 	HandlerManager eventBus = StoryTimeEntryMVP.eventBus;
@@ -294,10 +294,30 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		roomBox.addDoubleClickHandler(new DoubleClickHandler() {
 			@Override
 			public void onDoubleClick(DoubleClickEvent event) {
-				int roomSelectionIndex = roomBox.getSelectedIndex();
-				roomSelection = roomBox.getValue(roomSelectionIndex);
-				// Fill in here what happens when someone tries to enter a room
-				// by double clicking on a cell in the column
+				if (roomSelection != null && roomSelection != "") {
+					rpcService.joinRoom(roomSelection, new AsyncCallback<Void>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							if (DEBUG)
+								System.out.println("Client: Error sending the join room information");
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Joined room " + roomNameBox.getSelectedText());
+						}
+
+					});
+					if (DEBUG)
+						System.out.println("Client: Fired a join room local event");
+					eventBus.fireEvent(new JoinRoomLocalEvent());
+				} else {
+					if (DEBUG)
+						System.out.println("Room selection was null, nothing happened");
+				}
+
 			}
 		});
 
@@ -321,7 +341,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 						}
 
 					});
-					if (DEBUG) System.out.println("Client: Fired a join room local event");
+					if (DEBUG)
+						System.out.println("Client: Fired a join room local event");
 					eventBus.fireEvent(new JoinRoomLocalEvent());
 				} else {
 					if (DEBUG)
@@ -352,11 +373,12 @@ public class LobbyView extends Composite implements com.storytime.client.present
 							String theme = themeBox.getText();
 							String roomName = roomNameBox.getText();
 							if (!theme.equalsIgnoreCase("") && !roomName.equalsIgnoreCase("")) {
-							HostRoomLocalEvent hostRoomLocalEvent = new HostRoomLocalEvent();
-							hostRoomLocalEvent.setTheme(theme);
-							hostRoomLocalEvent.setRoomName(roomName);
-							eventBus.fireEvent(hostRoomLocalEvent);
-							if (DEBUG) System.out.println("Client: Fired host room event for room: " + roomName + ", with theme: " + theme);
+								HostRoomLocalEvent hostRoomLocalEvent = new HostRoomLocalEvent();
+								hostRoomLocalEvent.setTheme(theme);
+								hostRoomLocalEvent.setRoomName(roomName);
+								eventBus.fireEvent(hostRoomLocalEvent);
+								if (DEBUG)
+									System.out.println("Client: Fired host room event for room: " + roomName + ", with theme: " + theme);
 							}
 						}
 					});
@@ -389,8 +411,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 				} else if (anEvent instanceof UpdateLobbyRoomsEvent) {
 					UpdateLobbyRoomsEvent lobbyRoomEvent = (UpdateLobbyRoomsEvent) anEvent;
 					if (DEBUG)
-						System.out.println("Client: Got UpdateLobbyRoomsEvent, with room name: "
-								+ lobbyRoomEvent.roomName);
+						System.out.println("Client: Got UpdateLobbyRoomsEvent, with room name: " + lobbyRoomEvent.roomName);
 					availableRooms.add(lobbyRoomEvent.roomName);
 
 					roomBox.clear();
@@ -422,6 +443,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		for (String s : chatWindowMessages) {
 			totalChat += s + "\n";
 		}
+		chatTextArea.setText(totalChat);
+		chatTextArea.setCursorPos(chatTextArea.getText().length());
 		roomBox.clear();
 		for (String r : availableRooms) {
 			roomBox.addItem(r);

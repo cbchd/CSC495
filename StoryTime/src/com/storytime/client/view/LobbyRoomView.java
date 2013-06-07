@@ -81,6 +81,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		initWidget(mainHorizontalPanel);
 		if (DEBUG)
 			System.out.println("Client: Trying to initialize the lobby room view");
+		chatWindow.setText("");
 		initialize();
 		if (DEBUG)
 			System.out.println("Client: The lobby room view has been initialized");
@@ -377,7 +378,6 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 						System.out.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: " + roomData.roomName);
 					if (DEBUG)
 						System.out.println("Client: Left Room: " + roomData.roomName);
-					// StoryTimeOldEntryPoint.controller("Lobby");
 					eventBus.fireEvent(new LeaveRoomLocalEvent());
 				} else if (anEvent instanceof GameStartEvent) {
 					if (DEBUG)
@@ -414,6 +414,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				roomData.users = result.users;
 				roomData.inGame = result.inGame;
 				roomData.domain = result.domain;
+				roomData.messages = result.messages;
 				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.timer
 						+ ", Users: " + roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
 				populateLobbyRoomView();

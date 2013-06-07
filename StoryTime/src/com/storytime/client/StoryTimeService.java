@@ -56,6 +56,8 @@ public interface StoryTimeService extends RemoteService {
 	public void updateLobbyRoomTimer(String roomName, int timer);
 
 	public void leaveRoom(String roomName);
+	
+	public void leaveRoomAfterLocationCheck();
 
 	public void sendRoomChatMessage(String roomName, String message);
 
@@ -106,4 +108,6 @@ public interface StoryTimeService extends RemoteService {
 	 * @param message
 	 */
 	public void sendGameRoomChatMessage(String roomName, String message);
+	
+	public String getLocation();
 }

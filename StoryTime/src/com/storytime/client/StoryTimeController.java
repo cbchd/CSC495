@@ -30,6 +30,7 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 	private final StoryTimeServiceAsync rpcService;
 	private HasWidgets container;
 	private boolean DEBUG = true;
+	public static String location;
 
 	public StoryTimeController(HandlerManager eventBus, StoryTimeServiceAsync rpcService) {
 		History.addValueChangeHandler(this);

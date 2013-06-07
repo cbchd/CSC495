@@ -45,4 +45,8 @@ public interface StoryTimeServiceAsync {
 
 	void sendGameRoomChatMessage(String roomName, String message, AsyncCallback<Void> callback);
 
+	void leaveRoomAfterLocationCheck(AsyncCallback<Void> callback);
+
+	void getLocation(AsyncCallback<String> callback);
+
 }
