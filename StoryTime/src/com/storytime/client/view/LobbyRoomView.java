@@ -73,8 +73,9 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	VerticalPanel textSendAndStartGamePanel = new VerticalPanel();
 	HorizontalPanel sendTextBoxAndButtonPanel = new HorizontalPanel();
 	TextBox chatTextBox = new TextBox();
-	Button btnNewButton = new Button("Send");
+	Button btnSendToChat = new Button("Send");
 	Button btnStartGame = new Button("Start Game");
+	private final Label label_1 = new Label("");
 
 	public LobbyRoomView() {
 		initWidget(mainHorizontalPanel);
@@ -110,6 +111,9 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		gameDetailsPanel.add(btnLeaveRoom);
 		mainHorizontalPanel.add(chatAndStartGameHolder);
 		chatAndStartGameHolder.add(theme);
+
+		chatAndStartGameHolder.add(label_1);
+		label_1.setSize("441px", "1px");
 		chatAndStartGameHolder.add(lblChat);
 		chatAndStartGameHolder.add(chatWindow);
 		textSendAndStartGamePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -117,7 +121,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		sendTextBoxAndButtonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		textSendAndStartGamePanel.add(sendTextBoxAndButtonPanel);
 		sendTextBoxAndButtonPanel.add(chatTextBox);
-		sendTextBoxAndButtonPanel.add(btnNewButton);
+		sendTextBoxAndButtonPanel.add(btnSendToChat);
 		textSendAndStartGamePanel.add(btnStartGame);
 	}
 
@@ -175,7 +179,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 		theme.setText(roomData.theme);
 		theme.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		theme.setSize("441px", "27px");
+		theme.setSize("90%", "27px");
 
 		lblChat.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblChat.setSize("90%", "100%");
@@ -190,8 +194,8 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 		chatTextBox.setSize("100%", "20px");
 
-		btnNewButton.setStyleName("gwt-LoginExistingButton");
-		btnNewButton.setSize("100%", "30px");
+		btnSendToChat.setStyleName("gwt-LoginExistingButton");
+		btnSendToChat.setSize("100%", "30px");
 
 		btnStartGame.setStyleName("gwt-LoginExistingButton");
 		btnStartGame.setSize("145px", "30px");
@@ -282,24 +286,26 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			}
 		});
 
-		btnNewButton.addClickHandler(new ClickHandler() {
+		btnSendToChat.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				// Send text to users in room
-				storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
+				if (!chatTextBox.getText().equalsIgnoreCase("")) {
+					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-					}
+						@Override
+						public void onFailure(Throwable caught) {
+						}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Sent message: " + chatTextBox.getText());
-						chatTextBox.setText("");
-					}
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Sent message: " + chatTextBox.getText());
+							chatTextBox.setText("");
+						}
 
-				});
+					});
+				}
 			}
 		});
 
@@ -364,6 +370,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 						total += message + "\n";
 					}
 					chatWindow.setText(total);
+					chatWindow.setCursorPos(chatWindow.getText().length());
 				} else if (anEvent instanceof RoomDisbandedEvent) {
 					theRemoteEventService.removeListeners();
 					if (DEBUG)
@@ -426,6 +433,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		for (String message : roomData.messages) {
 			total += message + "\n";
 		}
+		theme.setText(roomData.theme);
 	}
 
 	public Widget asWidget() {

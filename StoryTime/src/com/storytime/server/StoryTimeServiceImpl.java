@@ -17,6 +17,7 @@ import com.storytime.client.gameroom.PhraseChosenEvent;
 import com.storytime.client.gameroom.PhraseSubmittedEvent;
 import com.storytime.client.gameroom.RoundCloseEvent;
 import com.storytime.client.gameroom.RoundStartEvent;
+import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyEvent;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
@@ -225,9 +226,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		User usr = (User) session.getAttribute("User");
 
 		Room room = engine.getLobbyRooms().get(roomName);
-		if (room.roomName.equalsIgnoreCase(roomName)) {
-			room.roomChat.add(usr.username + ": " + message);
-		}
+		room.roomChat.add(usr.username + ": " + message);
+
 		UpdateRoomChatWindowEvent chatWindowEvent = new UpdateRoomChatWindowEvent();
 		chatWindowEvent.message = usr.username + ": " + message;
 		logger.log(Level.FINEST, "Server: Recieved message '" + message + "' for dispersal");
@@ -388,5 +388,20 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		roundStartEvent.chooser = r.users.get(r.turnCounter).username;
 		addEvent(DomainFactory.getDomain(roomName), roundStartEvent);
 		logger.log(Level.FINEST, "Server: Fired Round Start Event for room: " + roomName);
+	}
+
+	public void sendGameRoomChatMessage(String roomName, String message) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User usr = (User) session.getAttribute("User");
+		String messageWithUser = usr.username + ": " + message;
+
+		InGameRoom gameRoom = engine.gameRooms.get(roomName);
+		logger.log(Level.FINEST, "Server: Received message: '" + message + "', for  domain: " + gameRoom.domain.getName());
+		gameRoom.messages.add(messageWithUser);
+		UpdateGameRoomChatWindowEvent chatEvent = new UpdateGameRoomChatWindowEvent();
+		chatEvent.message = messageWithUser;
+		addEvent(gameRoom.domain, chatEvent);
+		logger.log(Level.FINEST, "Server: Fired UpdateGameRoomChatWindowEvent for domain: " + gameRoom.domain.getName());
 	}
 }

@@ -28,56 +28,82 @@ public interface StoryTimeService extends RemoteService {
 	 */
 	public static class Util {
 		private static StoryTimeServiceAsync instance;
-		public static StoryTimeServiceAsync getInstance(){
+
+		public static StoryTimeServiceAsync getInstance() {
 			if (instance == null) {
 				instance = GWT.create(StoryTimeService.class);
 			}
 			return instance;
 		}
 	}
-	
+
 	public void startServer();
-	
+
 	public Boolean loginUser(String username, String password);
-	
+
 	public LobbyInformation getInitialLobbyInformation();
-	
+
 	public void sendLobbyChatMessage(String message);
-	
+
 	public void hostLobbyRoom(String roomName, String theme);
-	
+
 	public void joinRoom(String roomName);
-	
+
 	public LobbyRoomData getLobbyRoomInformation();
-	
+
 	public void updateLobbyRoomPointCap(String roomName, int pointCap);
-	
+
 	public void updateLobbyRoomTimer(String roomName, int timer);
-	
+
 	public void leaveRoom(String roomName);
-	
+
 	public void sendRoomChatMessage(String roomName, String message);
-	
+
 	public void startGame(String roomName);
-	
+
 	public GameData getGameData(String roomName);
-	
+
 	public String getMyUsername();
-	
+
 	/**
 	 * @param roomName
 	 * @return
 	 */
 	public String getStartGameChooser(String roomName);
-	
-	/**Sets the current user's status to "ready"
-	 * If all users in the room are ready, a round start event will be fired
+
+	/**
+	 * Sets the current user's status to "ready" If all users in the room are
+	 * ready, a round start event will be fired
+	 * 
 	 * @param username
 	 * @param roomName
 	 */
 	public void setReady(String username, String roomName);
-	
+
+	/**
+	 * Takes a phrase that is submitted by a user and the name of the in-game
+	 * room (domain) that it applies to
+	 * 
+	 * @param phrase
+	 * @param roomName
+	 */
 	public void submitPhrase(String phrase, String roomName);
-	
+
+	/**
+	 * Takes the winning phrase that is selected by a user, and the in-game room
+	 * name (domain) that it applies to
+	 * 
+	 * @param phrase
+	 * @param roomName
+	 */
 	public void choosePhrase(String phrase, String roomName);
+
+	/**
+	 * Takes the InGameRoom name (domain name) and the message that is to be
+	 * sent to the in-game chat
+	 * 
+	 * @param roomName
+	 * @param message
+	 */
+	public void sendGameRoomChatMessage(String roomName, String message);
 }

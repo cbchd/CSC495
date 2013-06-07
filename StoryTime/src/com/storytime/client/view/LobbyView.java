@@ -385,6 +385,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 						totalChat += s + "\n";
 					}
 					chatTextArea.setText(totalChat);
+					chatTextArea.setCursorPos(chatTextArea.getText().length());
 				} else if (anEvent instanceof UpdateLobbyRoomsEvent) {
 					UpdateLobbyRoomsEvent lobbyRoomEvent = (UpdateLobbyRoomsEvent) anEvent;
 					if (DEBUG)
