@@ -327,7 +327,7 @@ public class GameInProgressRoom {
 						btnSubmitPhrase.setVisible(true);
 						phraseSubmitBox.setVisible(true);
 						phraseSubmitBox.setText("");
-						// submissionTimer.schedule(gameData.timer); //TIMER FOR
+						// disableSubmissionBoxTimer.schedule(gameData.timer); //TIMER FOR
 						// ROUNDS
 					}
 				} else if (anEvent instanceof PhraseSubmittedEvent) {

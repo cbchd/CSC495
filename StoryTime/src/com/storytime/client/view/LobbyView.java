@@ -52,7 +52,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	HorizontalPanel horizontalInMainFlow = new HorizontalPanel();
 
 	VerticalPanel firstVerticalUsersInLobby = new VerticalPanel();
-	Label lblUsersInLobby = new Label("Users in Lobby:");
+	Label lblUsersInLobby = new Label("Users in Lobby");
 	ListBox usersListBox = new ListBox();
 
 	Label lblHellousername = new Label("Lobby Chat");
@@ -64,11 +64,11 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	Button btnSend = new Button("Send");
 
 	VerticalPanel thirdVerticalRoomOptions = new VerticalPanel();
-	Label lblAvailableRooms = new Label("Available Rooms:");
+	Label lblAvailableRooms = new Label("Available Rooms");
 	ListBox roomBox = new ListBox();
 	Button btnJoinRoom = new Button("Join Room");
 
-	Label lblStartYourOwn = new Label("Start Your Own:");
+	Label lblStartYourOwn = new Label("Start Your Own");
 
 	VerticalPanel underThirdVertHostOptions = new VerticalPanel();
 	HorizontalPanel roomNameAndTextBoxHolder = new HorizontalPanel();

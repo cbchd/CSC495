@@ -25,16 +25,16 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
-import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 import com.storytime.client.lobbyroom.RoomDisbandedEvent;
+import com.storytime.client.lobbyroom.UpdateChooserTimerEvent;
 import com.storytime.client.lobbyroom.UpdatePointCapEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
-import com.storytime.client.lobbyroom.UpdateTimerEvent;
+import com.storytime.client.lobbyroom.UpdateSubmissionTimerEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
 
 import de.novanic.eventservice.client.event.Event;
@@ -56,11 +56,11 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	VerticalPanel gameDetailsPanel = new VerticalPanel();
 	TabPanel tabPanel = new TabPanel();
 	HorizontalPanel horizontalPanel = new HorizontalPanel();
-	Grid grid_1 = new Grid(2, 2);
+	Grid grid_1 = new Grid(3, 2);
 	Label lblPointLimit = new Label("Point Limit:");
 	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(IntegerRenderer.instance());
-	Label lblTimePerRound = new Label("Time Per Round:");
-	ValueListBox<Integer> timePerRoundBox = new ValueListBox<Integer>(IntegerRenderer.instance());
+	Label lblSubmissionTime = new Label("Submitter's Time:");
+	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	Grid grid = new Grid(1, 1);
 	ListBox comboBox = new ListBox();
 	Label lblUsers = new Label("Users");
@@ -75,7 +75,9 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	TextBox chatTextBox = new TextBox();
 	Button btnSendToChat = new Button("Send");
 	Button btnStartGame = new Button("Start Game");
-	private final Label label_1 = new Label("");
+	Label label_1 = new Label("");
+	Label lblChooseTime = new Label("Chooser's Time:");
+	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 
 	public LobbyRoomView() {
 		initWidget(mainHorizontalPanel);
@@ -140,21 +142,36 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		grid_1.setSize("187px", "111px");
 		grid_1.setWidget(0, 0, lblPointLimit);
 		grid_1.setWidget(0, 1, pointLimitBox);
-		grid_1.setWidget(1, 0, lblTimePerRound);
-		grid_1.setWidget(1, 1, timePerRoundBox);
+		grid_1.setWidget(1, 0, lblSubmissionTime);
+		lblSubmissionTime.setWidth("257px");
+		grid_1.setWidget(1, 1, submittersTimeBox);
 
+		grid_1.setWidget(2, 0, lblChooseTime);
+		grid_1.setWidget(2, 1, choosersTimeBox);
+
+		pointLimitBox.setValue(5);
 		pointLimitBox.setValue(10);
 		pointLimitBox.setValue(15);
 		pointLimitBox.setValue(20);
 		pointLimitBox.setValue(25);
+		pointLimitBox.setValue(30);
+		pointLimitBox.setValue(35);
+		pointLimitBox.setValue(40);
+		pointLimitBox.setValue(45);
+		pointLimitBox.setValue(50);
+		pointLimitBox.setValue(55);
+		pointLimitBox.setValue(60);
 
-		timePerRoundBox.setValue(roomData.timer);
-		timePerRoundBox.setValue(15);
-		timePerRoundBox.setValue(20);
-		timePerRoundBox.setValue(25);
-		timePerRoundBox.setValue(30);
-		timePerRoundBox.setValue(35);
-		timePerRoundBox.setValue(40);
+		submittersTimeBox.setValue(5);
+		submittersTimeBox.setValue(10);
+		submittersTimeBox.setValue(15);
+		submittersTimeBox.setValue(20);
+		submittersTimeBox.setValue(25);
+		submittersTimeBox.setValue(30);
+		submittersTimeBox.setValue(35);
+		submittersTimeBox.setValue(40);
+
+		choosersTimeBox.setValue(submittersTimeBox.getValue() + 5);
 
 		grid.setSize("5cm", "59px");
 		grid.setWidget(0, 0, comboBox);
@@ -206,7 +223,6 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		pointLimitBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				// Get point Limit TODO
 				storyTimeService.updateLobbyRoomPointCap(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
 
 					@Override
@@ -225,7 +241,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			}
 		});
 
-		timePerRoundBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+		submittersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			@Override
 			public void onValueChange(final ValueChangeEvent<Integer> event) {
 				// Get time per round TODO
@@ -234,13 +250,33 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					@Override
 					public void onFailure(Throwable caught) {
 						if (DEBUG)
-							System.out.println("Client: Error occurred in sending server the new timer value: " + event.getValue());
+							System.out.println("Client: Error occurred in sending server the new submissionTimer value: " + event.getValue());
 					}
 
 					@Override
 					public void onSuccess(Void result) {
 						if (DEBUG)
-							System.out.println("Client: Got confirmation of timer change from server");
+							System.out.println("Client: Got confirmation of submissionTimer change from server");
+						choosersTimeBox.setValue(submittersTimeBox.getValue() + 5, true);
+					}
+				});
+			}
+		});
+
+		choosersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				storyTimeService.updateLobbyRoomChooserTimer(roomData.roomName, choosersTimeBox.getValue(), new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out.println("Client: Failed to tell server to update the chooser's time for room: " + roomData.roomName);
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Sent the server the new chooser's time for room: " + roomData.roomName);
 					}
 
 				});
@@ -329,6 +365,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				});
 			}
 		});
+
 	}
 
 	public void setRemoteEventListenersAndHandleEvents() {
@@ -344,13 +381,16 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					UpdatePointCapEvent updatePointCapEvent = (UpdatePointCapEvent) anEvent;
 					pointLimitBox.setValue(updatePointCapEvent.pointCap);
 					roomData.pointCap = updatePointCapEvent.pointCap;
-				} else if (anEvent instanceof UpdateTimerEvent) {
-					// Update the timer
+				} else if (anEvent instanceof UpdateSubmissionTimerEvent) {
+					// Update the submissionTimer
 					if (DEBUG)
 						System.out.println("Client: Got an Update Timer Remote Event");
-					UpdateTimerEvent updateTimerEvent = (UpdateTimerEvent) anEvent;
-					timePerRoundBox.setValue(updateTimerEvent.timer);
-					roomData.timer = updateTimerEvent.timer;
+					UpdateSubmissionTimerEvent updateSubmissionTimerEvent = (UpdateSubmissionTimerEvent) anEvent;
+					submittersTimeBox.setValue(updateSubmissionTimerEvent.submissionTimer);
+					roomData.timer = updateSubmissionTimerEvent.submissionTimer;
+				} else if (anEvent instanceof UpdateChooserTimerEvent) {
+					UpdateChooserTimerEvent chooserTimerEvent = (UpdateChooserTimerEvent) anEvent;
+					onUpdateChooseTime(chooserTimerEvent.chooseTime);
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;
@@ -435,6 +475,14 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			total += message + "\n";
 		}
 		theme.setText(roomData.theme);
+	}
+
+	public void onUpdateChooseTime(int chooseTime) {
+		if (DEBUG)
+			System.out.println("Client: Got an UpdateChooserTimerEvent for room: " + roomData.roomName);
+		choosersTimeBox.setValue(chooseTime);
+		if (DEBUG)
+			System.out.println("Client: Set the choose time to: " + chooseTime);
 	}
 
 	public Widget asWidget() {

@@ -49,4 +49,8 @@ public interface StoryTimeServiceAsync {
 
 	void getLocation(AsyncCallback<String> callback);
 
+	void setTimerElapsed(AsyncCallback<Void> callback);
+
+	void updateLobbyRoomChooserTimer(String roomName, int timer, AsyncCallback<Void> callback);
+
 }

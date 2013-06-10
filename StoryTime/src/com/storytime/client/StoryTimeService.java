@@ -54,6 +54,8 @@ public interface StoryTimeService extends RemoteService {
 	public void updateLobbyRoomPointCap(String roomName, int pointCap);
 
 	public void updateLobbyRoomTimer(String roomName, int timer);
+	
+	public void updateLobbyRoomChooserTimer(String roomName, int timer);
 
 	public void leaveRoom(String roomName);
 	
@@ -110,4 +112,11 @@ public interface StoryTimeService extends RemoteService {
 	public void sendGameRoomChatMessage(String roomName, String message);
 	
 	public String getLocation();
+	
+	/**Sets this users 'timerElapsed' boolean value to true, called after the submission or choosing submissionTimer expires
+	 * to let the server know that this user is unable to submit or choose because they took longer than 
+	 * the time allotted for their room to act
+	 */
+	public void setTimerElapsed();
+	
 }

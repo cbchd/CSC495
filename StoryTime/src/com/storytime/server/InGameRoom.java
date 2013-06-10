@@ -20,6 +20,9 @@ public class InGameRoom {
     public int phrasesSubmitted = 0;
     public ArrayList<String> story;
     public boolean gameEnded = false;
+    public User chooser;
+    boolean choosersTimerElapsed = false;
+    public int numberOfUsersWhoseTimersHaveElapsed = 0;
 	
     public InGameRoom() {
 	users = new ArrayList<User>();

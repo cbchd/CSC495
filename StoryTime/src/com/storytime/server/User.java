@@ -9,6 +9,7 @@ public class User {
     int score = 0;
     Room room;
     InGameRoom ingameRoom;
+    boolean timerElapsed = false;
     
     StoryTimeEngine storyTimeEngine;
     

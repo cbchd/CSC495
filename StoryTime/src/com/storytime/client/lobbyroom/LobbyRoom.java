@@ -162,14 +162,14 @@ public class LobbyRoom {
 					@Override
 					public void onFailure(Throwable caught) {
 						if (DEBUG)
-							System.out.println("Client: Error occurred in sending server the new timer value: "
+							System.out.println("Client: Error occurred in sending server the new submissionTimer value: "
 									+ event.getValue());
 					}
 
 					@Override
 					public void onSuccess(Void result) {
 						if (DEBUG)
-							System.out.println("Client: Got confirmation of timer change from server");
+							System.out.println("Client: Got confirmation of submissionTimer change from server");
 					}
 
 				});
@@ -321,11 +321,11 @@ public class LobbyRoom {
 					UpdatePointCapEvent updatePointCapEvent = (UpdatePointCapEvent) anEvent;
 					pointLimitBox.setValue(updatePointCapEvent.pointCap);
 					roomData.pointCap = updatePointCapEvent.pointCap;
-				} else if (anEvent instanceof UpdateTimerEvent) {
-					// Update the timer
-					UpdateTimerEvent updateTimerEvent = (UpdateTimerEvent) anEvent;
-					timePerRoundBox.setValue(updateTimerEvent.timer);
-					roomData.timer = updateTimerEvent.timer;
+				} else if (anEvent instanceof UpdateSubmissionTimerEvent) {
+					// Update the submissionTimer
+					UpdateSubmissionTimerEvent updateSubmissionTimerEvent = (UpdateSubmissionTimerEvent) anEvent;
+					timePerRoundBox.setValue(updateSubmissionTimerEvent.submissionTimer);
+					roomData.timer = updateSubmissionTimerEvent.submissionTimer;
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;

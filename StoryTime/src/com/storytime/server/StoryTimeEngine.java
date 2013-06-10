@@ -1,6 +1,7 @@
 package com.storytime.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class StoryTimeEngine {
@@ -91,7 +92,7 @@ public class StoryTimeEngine {
 		lobbyRooms.remove(roomName);
 		user.room = null;
 	}
-	
+
 	public Boolean joinRoom(User user, String roomName) {
 		usersInLobby.remove(user.username);
 		if (lobbyRooms.containsKey(roomName)) {
@@ -106,5 +107,28 @@ public class StoryTimeEngine {
 	public Room getUsersRoom(String username) {
 		Room r = onlineUsers.get(username).room;
 		return r;
+	}
+
+	public String chooseRandomPhrase(InGameRoom gameRoom) {
+		ArrayList<String> phrases = new ArrayList<String>();
+		for (User user : gameRoom.users) {
+			if (!user.phrase.equalsIgnoreCase("")) {
+				phrases.add(user.phrase);
+			}
+		}
+		if (phrases.size() == 0) {
+			phrases.add("");
+		} else {
+			Collections.shuffle(phrases);
+		}
+		return phrases.get(0);
+	}
+
+	public void refreshTimerElapsedValues(InGameRoom gameRoom) {
+		for (User user : gameRoom.users) {
+			user.timerElapsed = false;
+		}
+		gameRoom.choosersTimerElapsed = false;
+		gameRoom.numberOfUsersWhoseTimersHaveElapsed = 0;
 	}
 }
