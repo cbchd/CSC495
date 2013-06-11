@@ -165,8 +165,9 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		LobbyRoomData roomInfo = new LobbyRoomData();
 		roomInfo.pointCap = room.pointCap;
 		roomInfo.theme = room.theme;
-		roomInfo.timer = room.timer;
+		roomInfo.submissionTimer = room.submissionTimer;
 		roomInfo.roomName = room.roomName;
+		roomInfo.chooserTimer = room.chooserTimer;
 		logger.log(Level.FINEST, "Server: Adding users to the list of room information to be sent to " + user.username);
 		for (String usrname : room.users.keySet()) {
 			// Add the relevant users to the room info to be sent
@@ -195,7 +196,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 	public void updateLobbyRoomTimer(String roomName, int timer) {
 		logger.log(Level.FINEST, "Server: Got an UpdateSubmissionTimerEvent for room: " + roomName + " and updated submissionTimer value to: " + timer);
 		Room r = engine.getLobbyRooms().get(roomName);
-		r.timer = timer;
+		r.submissionTimer = timer;
 		UpdateSubmissionTimerEvent submissionTimerEvent = new UpdateSubmissionTimerEvent();
 		submissionTimerEvent.submissionTimer = timer;
 		addEvent(DomainFactory.getDomain(roomName), submissionTimerEvent);
@@ -205,7 +206,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 	public void updateLobbyRoomChooserTimer(String roomName, int timer) {
 		logger.log(Level.FINEST, "Server: Got an UpdateChooserTimerEvent for room: " + roomName + " and updated chooserTimer value to: " + timer);
 		Room room = engine.getLobbyRooms().get(roomName);
-		room.timer = timer;
+		room.chooserTimer = timer;
 		UpdateChooserTimerEvent chooserTimerEvent = new UpdateChooserTimerEvent();
 		chooserTimerEvent.chooseTime = timer;
 		addEvent(DomainFactory.getDomain(roomName), chooserTimerEvent);
@@ -275,7 +276,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		gameRoom.domain = DomainFactory.getDomain(room.roomName);
 		gameRoom.pointCap = room.pointCap;
 		gameRoom.theme = room.theme;
-		gameRoom.timer = room.timer;
+		gameRoom.timer = room.submissionTimer;
 
 		for (User user : room.users.values()) {
 			gameRoom.users.add(user);
@@ -383,7 +384,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 
 	public void choosePhrase(String phrase, String roomName) {
 		InGameRoom r = engine.getGameRooms().get(roomName);
-		r.story.add(" " + phrase);
+		r.story.add(phrase + " ");
 		r.phrasesSubmitted = 0;
 		logger.log(Level.FINEST, "Server: Got the chosen phrase: " + phrase);
 		PhraseChosenEvent phraseChosenEvent = new PhraseChosenEvent();
@@ -427,34 +428,38 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		User usr = (User) session.getAttribute("User");
 		User user = engine.onlineUsers.get(usr.username);
 		InGameRoom usersRoom = user.ingameRoom;
-		logger.log(Level.FINEST, "Server: Trying to set client: " + user.username + "'s game submissionTimer as elapsed");
-		logger.log(Level.FINEST, "Server: The current chooser for room: " + usersRoom.domain.getName() + " is: " + usersRoom.chooser.username);
-		logger.log(Level.FINEST, "Server: Checking to see if " + usersRoom.chooser.username + " is the same as: " + user.username);
+		logger.log(Level.FINEST, "Server: Setting client: " + user.username + "'s timer as elapsed");
 		if (usersRoom.chooser.username.equalsIgnoreCase(user.username)) {
 			usersRoom.choosersTimerElapsed = true;
-			logger.log(Level.FINEST, "Sever: The chooser: " + user.username + "'s submissionTimer has elapsed");
+			logger.log(Level.FINEST, "Server: Client: " + user.username + " is supposed to be the chooser for this round");
+			logger.log(Level.FINEST, "Server: Choosing random phrase for room: " + usersRoom.domain.getName());
 			String randomlySelectedPhrase = engine.chooseRandomPhrase(usersRoom);
-			logger.log(Level.FINEST, "Server: A randomly selected phrase was chosen: " + randomlySelectedPhrase);
-			fireRoundCloseEvent(usersRoom, randomlySelectedPhrase);
-			logger.log(Level.FINEST, "Server: Fired a RoundCloseEvent for room: " + usersRoom.domain.getName());
-			if (usersRoom.gameEnded) {
-				return;
+			if (!randomlySelectedPhrase.equalsIgnoreCase("")) {
+				choosePhrase(randomlySelectedPhrase, usersRoom.domain.getName());
+				logger.log(Level.FINEST, "Server: A randomly selected phrase was chosen: " + randomlySelectedPhrase);
+			} else {
+				logger.log(Level.FINEST, "Server: There were no submissions for room: " + usersRoom.domain.getName() + " so a new round will begin");
+				logger.log(Level.FINEST, "Server: Initiating the round close for room: " + usersRoom.domain.getName());
+				fireRoundCloseEvent(usersRoom, randomlySelectedPhrase);
+				if (usersRoom.gameEnded) {
+					return;
+				}
+				logger.log(Level.FINEST, "Server: Initiating a round start for room: " + usersRoom.domain.getName());
+				fireRoundStartEvent(usersRoom);
 			}
-			fireRoundStartEvent(usersRoom);
-			logger.log(Level.FINEST, "Server: Fired a RoundStartEvent for room: " + usersRoom.domain.getName());
 		} else {
-			logger.log(Level.FINEST, "Server: The submitter: " + user.username + "'s submissionTimer has elapsed");
+			logger.log(Level.FINEST, "Server: The submitter: " + user.username + "'s submission timer has elapsed");
 			user.timerElapsed = true;
 			usersRoom.numberOfUsersWhoseTimersHaveElapsed++;
 		}
-		logger.log(Level.FINEST, "Server: Set " + user.username + "'s timerElapsed value to: " + user.timerElapsed);
+		logger.log(Level.FINEST, "Server: Set " + user.username + "'s timer elapsed value to: " + user.timerElapsed);
 		if (usersRoom.numberOfUsersWhoseTimersHaveElapsed == usersRoom.users.size() - 1) {
 			logger.log(Level.FINEST,
 					"Server: The timers for all the submitters for this round have elapsed and no phrases have been submitted for this round in room: " + usersRoom.domain.getName());
+			logger.log(Level.FINEST, "Server: Initiating round close for room: " + usersRoom.domain.getName());
 			fireRoundCloseEvent(usersRoom, "");
-			logger.log(Level.FINEST, "Server: Fired a RoundCloseEvent for room: " + usersRoom.domain.getName());
+			logger.log(Level.FINEST, "Server: Initiating round start for room: " + usersRoom.domain.getName());
 			fireRoundStartEvent(usersRoom);
-			logger.log(Level.FINEST, "Server: Fired a RoundStartEvent for room: " + usersRoom.domain.getName());
 		}
 	}
 
@@ -483,6 +488,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		if (gameRoom.gameEnded)
 			logger.log(Level.FINEST, "Server: The room: " + roomName + "'s game has ended");
 		engine.refreshTimerElapsedValues(gameRoom);
+		engine.clearAllUsersSubmittedPhrases(roomName);
+		logger.log(Level.FINEST, "Server: Reset the phrases for room: " + roomName);
 	}
 
 	private void fireRoundStartEvent(InGameRoom gameRoom) {

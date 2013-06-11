@@ -47,7 +47,7 @@ public class GameInProgressRoom {
 		gameData.domain = LobbyRoom.roomData.domain;
 		gameData.pointCap = LobbyRoom.roomData.pointCap;
 		gameData.users = LobbyRoom.roomData.users;
-		gameData.timer = LobbyRoom.roomData.timer;
+		gameData.submissionTimer = LobbyRoom.roomData.submissionTimer;
 		gameData.theme = LobbyRoom.roomData.theme;
 		gameData.messages = new ArrayList<String>();
 		for (String user : LobbyRoom.roomData.users) {
@@ -295,7 +295,7 @@ public class GameInProgressRoom {
 				phraseSubmitBox.setVisible(false);
 				if (DEBUG)
 					System.out.println("Client: This client has not submitted a word within the time limit of: "
-							+ gameData.timer + " seconds");
+							+ gameData.submissionTimer + " seconds");
 				lblGameStartingIn.setText("Ran out of time!");
 			}
 		};

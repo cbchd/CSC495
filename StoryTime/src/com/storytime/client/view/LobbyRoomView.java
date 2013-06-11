@@ -387,7 +387,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 						System.out.println("Client: Got an Update Timer Remote Event");
 					UpdateSubmissionTimerEvent updateSubmissionTimerEvent = (UpdateSubmissionTimerEvent) anEvent;
 					submittersTimeBox.setValue(updateSubmissionTimerEvent.submissionTimer);
-					roomData.timer = updateSubmissionTimerEvent.submissionTimer;
+					roomData.submissionTimer = updateSubmissionTimerEvent.submissionTimer;
 				} else if (anEvent instanceof UpdateChooserTimerEvent) {
 					UpdateChooserTimerEvent chooserTimerEvent = (UpdateChooserTimerEvent) anEvent;
 					onUpdateChooseTime(chooserTimerEvent.chooseTime);
@@ -450,12 +450,12 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				roomData.pointCap = result.pointCap;
 				roomData.roomName = result.roomName;
 				roomData.theme = result.theme;
-				roomData.timer = result.timer;
+				roomData.submissionTimer = result.submissionTimer;
 				roomData.users = result.users;
 				roomData.inGame = result.inGame;
 				roomData.domain = result.domain;
 				roomData.messages = result.messages;
-				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.timer
+				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.submissionTimer
 						+ ", Users: " + roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
 				populateLobbyRoomView();
 				if (DEBUG)

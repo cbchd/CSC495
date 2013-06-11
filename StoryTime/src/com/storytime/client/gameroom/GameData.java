@@ -10,7 +10,8 @@ public class GameData implements Serializable {
     private static final long serialVersionUID = 1L;
     public String theme;
     public int pointCap = 0;
-    public int timer = 0;
+    public int submissionTimer = 0;
+    public int chooserTimer = 0;
     public boolean inGame;
     public ArrayList<String> users;
     public String message;

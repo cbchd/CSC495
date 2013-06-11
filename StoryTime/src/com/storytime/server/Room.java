@@ -7,7 +7,8 @@ public class Room {
     String roomName; 
     String theme;
     int pointCap = 5;
-    int timer = 10;
+    int submissionTimer = 10;
+    int chooserTimer = 15;
     User host;
     boolean inGame;
     HashMap<String, User> users;
@@ -47,11 +48,11 @@ public class Room {
 	}
 
 	public int getTimer() {
-		return timer;
+		return submissionTimer;
 	}
 
 	public void setTimer(int timer) {
-		this.timer = timer;
+		this.submissionTimer = timer;
 	}
 
 	public User getHost() {
