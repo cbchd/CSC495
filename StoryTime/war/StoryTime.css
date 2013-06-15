@@ -143,6 +143,15 @@ h1 {
 	margin: -316.5px 0 0 -450px;
 }
 
+.SpellCustomizationPage {
+	width: 752;
+	height: 620px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -310px 0 0 -376px;
+}
+
 .gwt-TextArea {
 	
 	background:-moz-linear-gradient(80% 20% 0deg, #008A94, #000000 10%)
@@ -179,4 +188,7 @@ font-weight:normal;color:#000000;letter-spacing:0pt;word-spacing:0pt;font-size:1
 	text-shadow: 0px 0px 0 rgb(-67, -24, 188), 1px 1px 0 rgb(-124, -81, 131),
 		2px 2px 1px rgba(0, 0, 0, 0.6), 2px 2px 1px rgba(0, 0, 0, 0.5), 0px
 		0px 1px rgba(0, 0, 0, .2);
+}
+.spell-page-label {
+	background-color: Black;
 }

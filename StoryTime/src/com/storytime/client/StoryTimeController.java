@@ -5,11 +5,13 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.storytime.client.changevieweventhandlers.CustomizeSpellsLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.JoinRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LeaveRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
+import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
@@ -20,10 +22,12 @@ import com.storytime.client.presenters.LobbyPresenter;
 import com.storytime.client.presenters.LobbyRoomPresenter;
 import com.storytime.client.presenters.LoginPresenter;
 import com.storytime.client.presenters.Presenter;
+import com.storytime.client.presenters.SpellCustomizationPresenter;
 import com.storytime.client.view.GameInProgressRoomView;
 import com.storytime.client.view.LobbyRoomView;
 import com.storytime.client.view.LobbyView;
 import com.storytime.client.view.LoginView;
+import com.storytime.client.view.SpellCustomizationView;
 
 public class StoryTimeController implements Presenter, ValueChangeHandler<String> {
 	private final HandlerManager eventBus;
@@ -47,25 +51,30 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 		String token = event.getValue();
 		if (token != null) {
 			Presenter presenter = null;
-			if (token.equals("Login")) {
+			if (token.equalsIgnoreCase("Login")) {
 				if (DEBUG)
 					System.out.println("Client: The history token was 'login' so the presenter associated with the login window was loaded!");
 				presenter = new LoginPresenter(rpcService, eventBus, new LoginView());
 				presenter.go(container);
-			} else if (token.equals("Lobby")) {
+			} else if (token.equalsIgnoreCase("Lobby")) {
 				if (DEBUG)
 					System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded!");
 				presenter = new LobbyPresenter(rpcService, eventBus, new LobbyView());
 				presenter.go(container);
-			} else if (token.equals("Room")) {
+			} else if (token.equalsIgnoreCase("Room")) {
 				if (DEBUG)
 					System.out.println("Client: The history token was 'Room' so the presenter associated with the lobby room was loaded");
 				presenter = new LobbyRoomPresenter(rpcService, eventBus, new LobbyRoomView());
 				presenter.go(container);
-			} else if (token.equals("GameRoom")) {
+			} else if (token.equalsIgnoreCase("GameRoom")) {
 				if (DEBUG)
 					System.out.println("Client: The history token was 'GameRoom' so the presenter associated with the game room was loaded");
 				presenter = new GameInProgressRoomPresenter(rpcService, eventBus, new GameInProgressRoomView());
+				presenter.go(container);
+			} else if (token.equalsIgnoreCase("Spells")) {
+				if (DEBUG)
+					System.out.println("Client: The history token was 'Spells' so the presenter associated with the spell customization page was loaded");
+				presenter = new SpellCustomizationPresenter(rpcService, eventBus, new SpellCustomizationView());
 				presenter.go(container);
 			}
 		}
@@ -134,6 +143,14 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 					System.out.println("Client: Set history to 'Lobby' after recieving a leave room local event");
 				History.newItem("Lobby");
 			}
+		});
+		eventBus.addHandler(CustomizeSpellsLocalEvent.TYPE, new CustomizeSpellsLocalEventHandler() {
+
+			@Override
+			public void onGoToCustomizeSpellsPage() {
+				History.newItem("Spells");
+			}
+
 		});
 	}
 }

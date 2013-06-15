@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
 import com.storytime.client.StoryTimeServiceAsync;
+import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.lobby.LobbyInformation;
@@ -78,6 +80,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	Label lblTheme = new Label("Theme:");
 	TextBox themeBox = new TextBox();
 	Button btnHost = new Button("Host");
+	private final HorizontalPanel spellCustomizationPanel = new HorizontalPanel();
+	private final Button btnSpellCustomization = new Button("Spell Customization");
 
 	public LobbyView() {
 		initWidget(mainFlowPanel);
@@ -141,8 +145,17 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		horizontalInMainFlow.add(firstVerticalUsersInLobby);
 		lblUsersInLobby.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		firstVerticalUsersInLobby.add(lblUsersInLobby);
-		lblUsersInLobby.setSize("100%", "100%");
+		lblUsersInLobby.setSize("100%", "56px");
 		firstVerticalUsersInLobby.add(usersListBox);
+		spellCustomizationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+		firstVerticalUsersInLobby.add(spellCustomizationPanel);
+		spellCustomizationPanel.setSize("100%", "88px");
+
+		btnSpellCustomization.setStyleName("gwt-LoginExistingButton");
+
+		spellCustomizationPanel.add(btnSpellCustomization);
+		btnSpellCustomization.setSize("182px", "30px");
 		horizontalInMainFlow.add(secondVerticalLobbyChat);
 		secondVerticalLobbyChat.add(lblHellousername);
 		secondVerticalLobbyChat.add(chatTextArea);
@@ -180,7 +193,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		firstVerticalUsersInLobby.setSize("100%", "100%");
 
 		usersListBox.setName("User List");
-		usersListBox.setSize("95%", "346px");
+		usersListBox.setSize("95%", "279px");
 		usersListBox.setVisibleItemCount(5);
 
 		secondVerticalLobbyChat.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -336,6 +349,9 @@ public class LobbyView extends Composite implements com.storytime.client.present
 
 						@Override
 						public void onSuccess(Void result) {
+							theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
+							if (DEBUG)
+								System.out.println("Client: Lobby listeners deactivated");
 							if (DEBUG)
 								System.out.println("Client: Joined room " + roomNameBox.getSelectedText());
 						}
@@ -383,6 +399,16 @@ public class LobbyView extends Composite implements com.storytime.client.present
 						}
 					});
 				}
+			}
+		});
+
+		btnSpellCustomization.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
+				if (DEBUG)
+					System.out.println("Client: Lobby listeners deactivated");
+				CustomizeSpellsLocalEvent customizeSpellsEvent = new CustomizeSpellsLocalEvent();
+				eventBus.fireEvent(customizeSpellsEvent);
 			}
 		});
 	}
