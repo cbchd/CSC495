@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeEntryMVP;
 import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
-import com.storytime.client.changeviewevents.HostRoomLocalEvent;
+import com.storytime.client.changeviewevents.HostRoomWindowLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
@@ -73,12 +73,6 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	Label lblStartYourOwn = new Label("Start Your Own");
 
 	VerticalPanel underThirdVertHostOptions = new VerticalPanel();
-	HorizontalPanel roomNameAndTextBoxHolder = new HorizontalPanel();
-	Label lblRoomName = new Label("Room Name:");
-	TextBox roomNameBox = new TextBox();
-	HorizontalPanel roomThemeAndTextBoxHolder = new HorizontalPanel();
-	Label lblTheme = new Label("Theme:");
-	TextBox themeBox = new TextBox();
 	Button btnHost = new Button("Host");
 	private final HorizontalPanel spellCustomizationPanel = new HorizontalPanel();
 	private final Button btnSpellCustomization = new Button("Spell Customization");
@@ -170,12 +164,6 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		thirdVerticalRoomOptions.add(lblStartYourOwn);
 		underThirdVertHostOptions.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		thirdVerticalRoomOptions.add(underThirdVertHostOptions);
-		underThirdVertHostOptions.add(roomNameAndTextBoxHolder);
-		roomNameAndTextBoxHolder.add(lblRoomName);
-		roomNameAndTextBoxHolder.add(roomNameBox);
-		underThirdVertHostOptions.add(roomThemeAndTextBoxHolder);
-		roomThemeAndTextBoxHolder.add(lblTheme);
-		roomThemeAndTextBoxHolder.add(themeBox);
 		underThirdVertHostOptions.add(btnHost);
 	}
 
@@ -226,23 +214,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 
 		lblStartYourOwn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblStartYourOwn.setSize("100%", "100%");
-		underThirdVertHostOptions.setSize("100%", "100%");
-
-		roomNameAndTextBoxHolder.setSize("100%", "100%");
-
-		lblRoomName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblRoomName.setSize("109px", "100%");
-
-		roomNameBox.setWidth("100%");
-		roomNameBox.setName("Room Name");
-
-		roomThemeAndTextBoxHolder.setSize("100%", "34px");
-
-		lblTheme.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		lblTheme.setSize("109px", "100%");
-
-		themeBox.setWidth("100%");
-		themeBox.setName("Theme Box");
+		underThirdVertHostOptions.setSize("100%", "118px");
 
 		btnHost.setStyleName("gwt-LoginExistingButton");
 		btnHost.setText("Host Room\r\n");
@@ -318,8 +290,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 
 						@Override
 						public void onSuccess(Void result) {
-							if (DEBUG)
-								System.out.println("Client: Joined room " + roomNameBox.getSelectedText());
+							if (DEBUG) System.out.println("Client: Got confirmation from the server that this client has joined the room: " + roomSelection);
 						}
 
 					});
@@ -352,8 +323,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 							theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
 							if (DEBUG)
 								System.out.println("Client: Lobby listeners deactivated");
-							if (DEBUG)
-								System.out.println("Client: Joined room " + roomNameBox.getSelectedText());
+							if (DEBUG) System.out.println("Client: Got confirmation from the server that this client has joined the room: " + roomSelection);
 						}
 
 					});
@@ -370,35 +340,9 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		btnHost.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				// Host game logic
-				String roomName = roomNameBox.getText();
-				String theme = themeBox.getText();
-				if (!roomName.equalsIgnoreCase("") && !theme.equalsIgnoreCase("")) {
-					rpcService.hostLobbyRoom(roomName, theme, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
-							if (DEBUG)
-								System.out.println("Lobby listeners deactivated");
-							// TODO:Clear the rootPanel
-							String theme = themeBox.getText();
-							String roomName = roomNameBox.getText();
-							if (!theme.equalsIgnoreCase("") && !roomName.equalsIgnoreCase("")) {
-								HostRoomLocalEvent hostRoomLocalEvent = new HostRoomLocalEvent();
-								hostRoomLocalEvent.setTheme(theme);
-								hostRoomLocalEvent.setRoomName(roomName);
-								eventBus.fireEvent(hostRoomLocalEvent);
-								if (DEBUG)
-									System.out.println("Client: Fired host room event for room: " + roomName + ", with theme: " + theme);
-							}
-						}
-					});
-				}
+				theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
+				if (DEBUG) System.out.println("Client: Fired HostRoomWindowLocalEvent");
+				eventBus.fireEvent(new HostRoomWindowLocalEvent());
 			}
 		});
 

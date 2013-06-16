@@ -3,9 +3,11 @@ package com.storytime.server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.logging.Level;
+
+import com.storytime.spellrelated.Spell;
 
 public class StoryTimeEngine {
+	
 	ArrayList<String> lobbyChat;
 	HashMap<String, User> usersInLobby;
 	HashMap<String, User> onlineUsers;
@@ -132,11 +134,15 @@ public class StoryTimeEngine {
 		gameRoom.choosersTimerElapsed = false;
 		gameRoom.numberOfUsersWhoseTimersHaveElapsed = 0;
 	}
-	
+
 	public void clearAllUsersSubmittedPhrases(String roomName) {
 		InGameRoom gameRoom = gameRooms.get(roomName);
 		for (User user : gameRoom.users) {
 			user.phrase = "";
 		}
+	}
+
+	public void castSpell(String casterUsername, String targetUsername, Spell spell) {
+		// TODO
 	}
 }

@@ -152,6 +152,15 @@ h1 {
 	margin: -310px 0 0 -376px;
 }
 
+.HostRoomPage {
+	width: 772;
+	height: 565px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -282.5px 0 0 -386px;
+}
+
 .gwt-TextArea {
 	
 	background:-moz-linear-gradient(80% 20% 0deg, #008A94, #000000 10%)

@@ -4,26 +4,31 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.storytime.client.changevieweventhandlers.CustomizeSpellsLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.HostRoomLocalEventHandler;
+import com.storytime.client.changevieweventhandlers.HostRoomWindowLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.JoinRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LeaveRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
 import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
+import com.storytime.client.changeviewevents.HostRoomWindowLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.presenters.GameInProgressRoomPresenter;
+import com.storytime.client.presenters.HostRoomPresenter;
 import com.storytime.client.presenters.LobbyPresenter;
 import com.storytime.client.presenters.LobbyRoomPresenter;
 import com.storytime.client.presenters.LoginPresenter;
 import com.storytime.client.presenters.Presenter;
 import com.storytime.client.presenters.SpellCustomizationPresenter;
 import com.storytime.client.view.GameInProgressRoomView;
+import com.storytime.client.view.HostRoomView;
 import com.storytime.client.view.LobbyRoomView;
 import com.storytime.client.view.LobbyView;
 import com.storytime.client.view.LoginView;
@@ -53,13 +58,18 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 			Presenter presenter = null;
 			if (token.equalsIgnoreCase("Login")) {
 				if (DEBUG)
-					System.out.println("Client: The history token was 'login' so the presenter associated with the login window was loaded!");
+					System.out.println("Client: The history token was 'login' so the presenter associated with the login window was loaded");
 				presenter = new LoginPresenter(rpcService, eventBus, new LoginView());
 				presenter.go(container);
 			} else if (token.equalsIgnoreCase("Lobby")) {
 				if (DEBUG)
-					System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded!");
+					System.out.println("Client: The history token was 'Lobby' so the presenter associated with the lobby window was loaded");
 				presenter = new LobbyPresenter(rpcService, eventBus, new LobbyView());
+				presenter.go(container);
+			} else if (token.equalsIgnoreCase("HostRoom")) {
+				if (DEBUG) System.out.println("Client: The history token was 'HostRoom' so the presenter associated with the host room was loaded");
+				//Window.open("http://192.168.1.2:8888/StoryTime.html?gwt.codesvr=192.168.1.2:9997#HostRoom", "RoomSetup", "");
+				presenter = new HostRoomPresenter(rpcService, eventBus, new HostRoomView());
 				presenter.go(container);
 			} else if (token.equalsIgnoreCase("Room")) {
 				if (DEBUG)
@@ -116,6 +126,15 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 				if (DEBUG)
 					System.out.println("Client: Set history to 'Room' after recieving a host room local event");
 			}
+		});
+		eventBus.addHandler(HostRoomWindowLocalEvent.TYPE, new HostRoomWindowLocalEventHandler() {
+
+			@Override
+			public void onGoToHostRoomWindow() {
+				if (DEBUG) System.out.println("Client: Set history to 'HostRoom' after receiving a host room window local event");
+				History.newItem("HostRoom");
+			}
+			
 		});
 		eventBus.addHandler(StartGameLocalEvent.TYPE, new StartGameLocalEventHandler() {
 
