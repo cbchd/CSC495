@@ -1,2 +1,4 @@
 # Module storytime
 # RPC service class, partial path of RPC policy file
+com.storytime.client.StoryTimeService, 25655209BE137220046025BC74C6B65A.gwt.rpc
+de.novanic.eventservice.client.event.service.EventService, CB11844A7044D362F55EEFD424DF5055.gwt.rpc
