@@ -2,6 +2,7 @@ package com.storytime.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.storytime.client.gameroom.GameData;
+import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 
@@ -52,5 +53,7 @@ public interface StoryTimeServiceAsync {
 	void setTimerElapsed(AsyncCallback<Void> callback);
 
 	void updateLobbyRoomChooserTimer(String roomName, int timer, AsyncCallback<Void> callback);
+
+	void getJoinableRoomsAndTheirInformation(AsyncCallback<JoinableRoomsInformation> callback);
 
 }

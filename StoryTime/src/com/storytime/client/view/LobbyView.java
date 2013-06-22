@@ -28,6 +28,7 @@ import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomWindowLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
+import com.storytime.client.changeviewevents.JoinRoomWindowLocalEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
 import com.storytime.client.lobby.UpdateLobbyRoomsEvent;
@@ -308,32 +309,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		btnJoinRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				// join the selected room
-				if (roomSelection != null && roomSelection != "") {
-					rpcService.joinRoom(roomSelection, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							if (DEBUG)
-								System.out.println("Client: Error sending the join room information");
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
-							if (DEBUG)
-								System.out.println("Client: Lobby listeners deactivated");
-							if (DEBUG) System.out.println("Client: Got confirmation from the server that this client has joined the room: " + roomSelection);
-						}
-
-					});
-					if (DEBUG)
-						System.out.println("Client: Fired a join room local event");
-					eventBus.fireEvent(new JoinRoomLocalEvent());
-				} else {
-					if (DEBUG)
-						System.out.println("Room selection was null, nothing happened");
-				}
+				// Go to the join room page
+				eventBus.fireEvent(new JoinRoomWindowLocalEvent());
 			}
 		});
 

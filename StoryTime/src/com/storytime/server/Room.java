@@ -6,9 +6,10 @@ import java.util.HashMap;
 public class Room {
     String roomName; 
     String theme;
-    int pointCap = 5;
-    int submissionTimer = 10;
-    int chooserTimer = 15;
+    int pointLimit = 5;
+    int authorsTime = 10;
+    int mastersTime = 15;
+    int numberOfPlayers = 0;
     User host;
     boolean inGame;
     HashMap<String, User> users;
@@ -40,19 +41,19 @@ public class Room {
 	}
 
 	public int getPointCap() {
-		return pointCap;
+		return pointLimit;
 	}
 
 	public void setPointCap(int pointCap) {
-		this.pointCap = pointCap;
+		this.pointLimit = pointCap;
 	}
 
 	public int getTimer() {
-		return submissionTimer;
+		return authorsTime;
 	}
 
 	public void setTimer(int timer) {
-		this.submissionTimer = timer;
+		this.authorsTime = timer;
 	}
 
 	public User getHost() {

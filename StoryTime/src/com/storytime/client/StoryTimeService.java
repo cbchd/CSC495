@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.storytime.client.gameroom.GameData;
+import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 
@@ -39,26 +40,64 @@ public interface StoryTimeService extends RemoteService {
 
 	public void startServer();
 
+	/**Logs a user into the game
+	 * @param username
+	 * @param password
+	 * @return true if login was successful
+	 */
 	public Boolean loginUser(String username, String password);
 
+	/**
+	 * @return the initial state of the lobby (lobby related information pertinent to a user who has just gotten into the lobby)
+	 */
 	public LobbyInformation getInitialLobbyInformation();
 
+	/**Sends a chat message through the server, to all users in the lobby
+	 * @param message
+	 */
 	public void sendLobbyChatMessage(String message);
 
+	/**Hosts a lobby room for the user who activates this method, based on the theme & room name specified
+	 * @param roomName
+	 * @param theme
+	 */
 	public void hostLobbyRoom(String roomName, String theme);
 
+	/**
+	 * When the user activates this method, the user will be put into the room
+	 * specified by the room name on the server side
+	 * 
+	 * @param roomName
+	 */
 	public void joinRoom(String roomName);
 
+	/**
+	 * @return the lobby room information
+	 */
 	public LobbyRoomData getLobbyRoomInformation();
 
+	/**
+	 * Updates the point capacity for a specific lobby room
+	 * 
+	 * @param roomName
+	 * @param pointCap
+	 */
 	public void updateLobbyRoomPointCap(String roomName, int pointCap);
 
+	/**
+	 * Updates the lobby room timer for a specific room name
+	 * 
+	 * @param roomName
+	 * @param timer
+	 */
 	public void updateLobbyRoomTimer(String roomName, int timer);
-	
+
 	public void updateLobbyRoomChooserTimer(String roomName, int timer);
+	
+	public JoinableRoomsInformation getJoinableRoomsAndTheirInformation();
 
 	public void leaveRoom(String roomName);
-	
+
 	public void leaveRoomAfterLocationCheck();
 
 	public void sendRoomChatMessage(String roomName, String message);
@@ -67,6 +106,9 @@ public interface StoryTimeService extends RemoteService {
 
 	public GameData getGameData(String roomName);
 
+	/**
+	 * @return username of the user who requested the information
+	 */
 	public String getMyUsername();
 
 	/**
@@ -110,13 +152,15 @@ public interface StoryTimeService extends RemoteService {
 	 * @param message
 	 */
 	public void sendGameRoomChatMessage(String roomName, String message);
-	
+
 	public String getLocation();
-	
-	/**Sets this users 'timerElapsed' boolean value to true, called after the submission or choosing submissionTimer expires
-	 * to let the server know that this user is unable to submit or choose because they took longer than 
-	 * the time allotted for their room to act
+
+	/**
+	 * Sets this users 'timerElapsed' boolean value to true, called after the
+	 * submission or choosing submissionTimer expires to let the server know
+	 * that this user is unable to submit or choose because they took longer
+	 * than the time allotted for their room to act
 	 */
 	public void setTimerElapsed();
-	
+
 }
