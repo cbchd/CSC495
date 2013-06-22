@@ -59,7 +59,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	Grid grid_1 = new Grid(3, 2);
 	Label lblPointLimit = new Label("Point Limit:");
 	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(IntegerRenderer.instance());
-	Label lblSubmissionTime = new Label("Submitter's Time:");
+	Label lblSubmissionTime = new Label("Author's Time:");
 	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	Grid grid = new Grid(1, 1);
 	ListBox comboBox = new ListBox();
@@ -76,7 +76,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	Button btnSendToChat = new Button("Send");
 	Button btnStartGame = new Button("Start Game");
 	Label label_1 = new Label("");
-	Label lblChooseTime = new Label("Chooser's Time:");
+	Label lblChooseTime = new Label("Master's Time:");
 	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 
 	public LobbyRoomView() {

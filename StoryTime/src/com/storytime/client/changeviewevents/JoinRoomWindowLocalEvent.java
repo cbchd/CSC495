@@ -5,7 +5,6 @@ import com.storytime.client.changevieweventhandlers.JoinRoomWindowLocalEventHand
 
 public class JoinRoomWindowLocalEvent extends GwtEvent<JoinRoomWindowLocalEventHandler> {
 
-	private static final long serialVersionUID = -4928210984755975107L;
 	public static Type<JoinRoomWindowLocalEventHandler> TYPE = new Type<JoinRoomWindowLocalEventHandler>();
 	
 	@Override
