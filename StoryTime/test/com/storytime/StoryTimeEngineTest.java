@@ -41,10 +41,11 @@ public class StoryTimeEngineTest {
 		String password = "1234";
 		String roomName = "Dragons";
 		String theme = "D&D";
+		int numberOfPlayers = 3;
 		engine = new StoryTimeEngine();
 		engine.loginUser(username, password);
 		User foundUser = engine.getOnlineUsers().get(username);
-		engine.hostRoom(foundUser, roomName, theme);
+		engine.hostRoom(foundUser, roomName, theme, password, numberOfPlayers);
 		Room foundRoom = engine.getLobbyRooms().get(roomName);
 		assertNotNull(foundRoom);
 		assertEquals(foundRoom.getRoomName(), roomName);
@@ -64,14 +65,15 @@ public class StoryTimeEngineTest {
 		String password2 = "4321";
 		String roomName = "Dragons";
 		String theme = "D&D";
-		
+		String password = "";
+		int numberOfPlayers = 3;
 		engine.loginUser(username1, password1);
 		engine.loginUser(username2, password2);
 		
 		User foundUser1 = engine.getOnlineUsers().get(username1);
 		User foundUser2 = engine.getOnlineUsers().get(username2);
 		
-		engine.hostRoom(foundUser1, roomName, theme);
+		engine.hostRoom(foundUser1, roomName, theme, password, numberOfPlayers);
 		engine.joinRoom(foundUser2, roomName);
 		
 		Room foundRoom = engine.getLobbyRooms().get(roomName);

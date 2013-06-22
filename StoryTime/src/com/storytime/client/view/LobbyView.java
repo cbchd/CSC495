@@ -67,11 +67,9 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	Button btnSend = new Button("Send");
 
 	VerticalPanel thirdVerticalRoomOptions = new VerticalPanel();
-	Label lblAvailableRooms = new Label("Available Rooms");
-	ListBox roomBox = new ListBox();
 	Button btnJoinRoom = new Button("Join Room");
 
-	Label lblStartYourOwn = new Label("Start Your Own");
+	Label lblStartYourOwn = new Label("Host/Join");
 
 	VerticalPanel underThirdVertHostOptions = new VerticalPanel();
 	Button btnHost = new Button("Host");
@@ -142,10 +140,11 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		firstVerticalUsersInLobby.add(lblUsersInLobby);
 		lblUsersInLobby.setSize("100%", "56px");
 		firstVerticalUsersInLobby.add(usersListBox);
-		spellCustomizationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		spellCustomizationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		spellCustomizationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 
 		firstVerticalUsersInLobby.add(spellCustomizationPanel);
-		spellCustomizationPanel.setSize("100%", "88px");
+		spellCustomizationPanel.setSize("100%", "52px");
 
 		btnSpellCustomization.setStyleName("gwt-LoginExistingButton");
 
@@ -159,10 +158,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		textToSendBoxAndButtonHolder.add(btnSend);
 		thirdVerticalRoomOptions.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalInMainFlow.add(thirdVerticalRoomOptions);
-		thirdVerticalRoomOptions.add(lblAvailableRooms);
-		thirdVerticalRoomOptions.add(roomBox);
-		thirdVerticalRoomOptions.add(btnJoinRoom);
 		thirdVerticalRoomOptions.add(lblStartYourOwn);
+		thirdVerticalRoomOptions.add(btnJoinRoom);
 		underThirdVertHostOptions.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		thirdVerticalRoomOptions.add(underThirdVertHostOptions);
 		underThirdVertHostOptions.add(btnHost);
@@ -189,14 +186,13 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		secondVerticalLobbyChat.setSize("100%", "100%");
 
 		lblHellousername.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblHellousername.setSize("100%", "100%");
+		lblHellousername.setSize("100%", "52px");
 
 		chatTextArea.setReadOnly(true);
 		chatTextArea.setDirectionEstimator(true);
-		chatTextArea.setSize("95%", "276px");
+		chatTextArea.setSize("95%", "264px");
 		chatTextArea.setText(totalChat);
-
-		textToSendBoxAndButtonHolder.setSize("100%", "100%");
+		textToSendBoxAndButtonHolder.setSize("100%", "31px");
 
 		textToSendToChat.setName("Send To Chat Field");
 		textToSendToChat.setSize("95%", "22px");
@@ -205,17 +201,12 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		btnSend.setStyleName("gwt-LoginExistingButton");
 		thirdVerticalRoomOptions.setSize("100%", "100%");
 
-		lblAvailableRooms.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblAvailableRooms.setSize("100%", "44px");
-		roomBox.setSize("100%", "153px");
-		roomBox.setVisibleItemCount(5);
-
 		btnJoinRoom.setSize("182px", "28px");
 		btnJoinRoom.setStyleName("gwt-LoginExistingButton");
 
 		lblStartYourOwn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblStartYourOwn.setSize("100%", "100%");
-		underThirdVertHostOptions.setSize("100%", "118px");
+		lblStartYourOwn.setSize("100%", "49px");
+		underThirdVertHostOptions.setSize("100%", "31px");
 
 		btnHost.setStyleName("gwt-LoginExistingButton");
 		btnHost.setText("Host Room\r\n");
@@ -266,43 +257,6 @@ public class LobbyView extends Composite implements com.storytime.client.present
 					});
 					textToSendToChat.setText(""); // blank out the message bar
 				}
-			}
-		});
-
-		roomBox.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				int roomSelectionIndex = roomBox.getSelectedIndex();
-				roomSelection = roomBox.getValue(roomSelectionIndex);
-			}
-		});
-
-		roomBox.addDoubleClickHandler(new DoubleClickHandler() {
-			@Override
-			public void onDoubleClick(DoubleClickEvent event) {
-				if (roomSelection != null && roomSelection != "") {
-					rpcService.joinRoom(roomSelection, new AsyncCallback<Void>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							if (DEBUG)
-								System.out.println("Client: Error sending the join room information");
-						}
-
-						@Override
-						public void onSuccess(Void result) {
-							if (DEBUG) System.out.println("Client: Got confirmation from the server that this client has joined the room: " + roomSelection);
-						}
-
-					});
-					if (DEBUG)
-						System.out.println("Client: Fired a join room local event");
-					eventBus.fireEvent(new JoinRoomLocalEvent());
-				} else {
-					if (DEBUG)
-						System.out.println("Room selection was null, nothing happened");
-				}
-
 			}
 		});
 
@@ -361,9 +315,9 @@ public class LobbyView extends Composite implements com.storytime.client.present
 						System.out.println("Client: Got UpdateLobbyRoomsEvent, with room name: " + lobbyRoomEvent.roomName);
 					availableRooms.add(lobbyRoomEvent.roomName);
 
-					roomBox.clear();
+					//roomBox.clear();
 					for (String r : availableRooms) {
-						roomBox.addItem(r);
+						//roomBox.addItem(r);
 					}
 				} else if (anEvent instanceof UpdateLobbyUsersEvent) {
 					UpdateLobbyUsersEvent usersEvent = (UpdateLobbyUsersEvent) anEvent;
@@ -392,9 +346,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		}
 		chatTextArea.setText(totalChat);
 		chatTextArea.setCursorPos(chatTextArea.getText().length());
-		roomBox.clear();
 		for (String r : availableRooms) {
-			roomBox.addItem(r);
+			//roomBox.addItem(r);
 		}
 		if (DEBUG)
 			System.out.println("Lobby listeners activated");

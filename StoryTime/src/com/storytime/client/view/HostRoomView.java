@@ -21,6 +21,7 @@ import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
 
 import de.novanic.eventservice.client.event.domain.DomainFactory;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 
 public class HostRoomView extends Composite implements com.storytime.client.presenters.HostRoomPresenter.Display {
 
@@ -34,7 +35,7 @@ public class HostRoomView extends Composite implements com.storytime.client.pres
 	Label lblTheme = new Label("Theme:");
 	TextBox themeTextBox = new TextBox();
 	Label lblPassword = new Label("Password:");
-	TextBox passwordTextBox = new TextBox();
+	PasswordTextBox passwordTextBox = new PasswordTextBox();
 	Label lblPlayers = new Label("Players:");
 	ValueListBox<Integer> numberOfPlayersValueListBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	VerticalPanel verticalPanel_1 = new VerticalPanel();
@@ -111,7 +112,7 @@ public class HostRoomView extends Composite implements com.storytime.client.pres
 				final int numberOfPlayers = numberOfPlayersValueListBox.getValue();
 
 				if (!roomName.equalsIgnoreCase("") && !theme.equalsIgnoreCase("")) {
-					rpcService.hostLobbyRoom(roomName, theme, new AsyncCallback<Void>() {
+					rpcService.hostLobbyRoom(roomName, theme, password, numberOfPlayers, new AsyncCallback<Void>() {
 
 						@Override
 						public void onFailure(Throwable caught) {

@@ -263,39 +263,39 @@ public class Lobby {
 
 	Button btnHost = new Button("Host");
 	btnHost.setStyleName("gwt-LoginExistingButton");
-	btnHost.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		// Host game logic
-		String roomName = roomNameBox.getText();
-		String theme = themeBox.getText();
-		if (!roomName.equalsIgnoreCase("")
-			&& !theme.equalsIgnoreCase("")) {
-		    storyTimeService.hostLobbyRoom(roomName, theme,
-			    new AsyncCallback<Void>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-				}
-
-				@Override
-				public void onSuccess(Void result) {
-				    theRemoteEventService
-					    .removeListeners(DomainFactory
-						    .getDomain("Lobby"));
-				    if (DEBUG)
-					System.out
-						.println("Lobby listeners deactivated");
-				    rootPanel.clear();
-				    StoryTimeOldEntryPoint.controller("LobbyRoom");
-				}
-			    });
-		}
-	    }
-	});
-	btnHost.setText("Host Room\r\n");
-	rootPanel.add(btnHost, 477, 360);
-	btnHost.setSize("182px", "28px");
+//	btnHost.addClickHandler(new ClickHandler() {
+//	    @Override
+//	    public void onClick(ClickEvent event) {
+//		// Host game logic
+//		String roomName = roomNameBox.getText();
+//		String theme = themeBox.getText();
+//		if (!roomName.equalsIgnoreCase("")
+//			&& !theme.equalsIgnoreCase("")) {
+//		    storyTimeService.hostLobbyRoom(roomName, theme,
+//			    new AsyncCallback<Void>() {
+//
+//				@Override
+//				public void onFailure(Throwable caught) {
+//				}
+//
+//				@Override
+//				public void onSuccess(Void result) {
+//				    theRemoteEventService
+//					    .removeListeners(DomainFactory
+//						    .getDomain("Lobby"));
+//				    if (DEBUG)
+//					System.out
+//						.println("Lobby listeners deactivated");
+//				    rootPanel.clear();
+//				    StoryTimeOldEntryPoint.controller("LobbyRoom");
+//				}
+//			    });
+//		}
+//	    }
+//	});
+//	btnHost.setText("Host Room\r\n");
+//	rootPanel.add(btnHost, 477, 360);
+//	btnHost.setSize("182px", "28px");
 
 	// add a listener
 	theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"),

@@ -16,7 +16,7 @@ public interface StoryTimeServiceAsync {
 
 	void sendLobbyChatMessage(String message, AsyncCallback<Void> callback);
 
-	void hostLobbyRoom(String roomName, String theme, AsyncCallback<Void> callback);
+	void hostLobbyRoom(String roomName, String theme, String password, int numberOfPlayers, AsyncCallback<Void> callback);
 
 	void joinRoom(String roomName, AsyncCallback<Void> callback);
 

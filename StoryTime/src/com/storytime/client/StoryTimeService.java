@@ -61,7 +61,7 @@ public interface StoryTimeService extends RemoteService {
 	 * @param roomName
 	 * @param theme
 	 */
-	public void hostLobbyRoom(String roomName, String theme);
+	public void hostLobbyRoom(String roomName, String theme, String password, int numberOfPlayers);
 
 	/**
 	 * When the user activates this method, the user will be put into the room

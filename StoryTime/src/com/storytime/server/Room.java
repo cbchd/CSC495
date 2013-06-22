@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Room {
     String roomName; 
     String theme;
+    String password = "";
     int pointLimit = 5;
     int authorsTime = 10;
     int mastersTime = 15;
@@ -86,5 +87,45 @@ public class Room {
 
 	public void setRoomChat(ArrayList<String> roomChat) {
 		this.roomChat = roomChat;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getPointLimit() {
+		return pointLimit;
+	}
+
+	public void setPointLimit(int pointLimit) {
+		this.pointLimit = pointLimit;
+	}
+
+	public int getAuthorsTime() {
+		return authorsTime;
+	}
+
+	public void setAuthorsTime(int authorsTime) {
+		this.authorsTime = authorsTime;
+	}
+
+	public int getMastersTime() {
+		return mastersTime;
+	}
+
+	public void setMastersTime(int mastersTime) {
+		this.mastersTime = mastersTime;
+	}
+
+	public int getNumberOfPlayers() {
+		return numberOfPlayers;
+	}
+
+	public void setNumberOfPlayers(int numberOfPlayers) {
+		this.numberOfPlayers = numberOfPlayers;
 	}
 }

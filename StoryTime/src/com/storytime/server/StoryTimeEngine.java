@@ -82,12 +82,13 @@ public class StoryTimeEngine {
 		this.onlineUsers = onlineUsers;
 	}
 
-	public void hostRoom(User host, String roomName, String theme) {
+	public void hostRoom(User host, String roomName, String theme, String password, int numberOfPlayers) {
 		Room lobbyRoom = new Room(host, roomName);
-		host.room = lobbyRoom;
 		lobbyRoom.setTheme(theme);
+		lobbyRoom.password = password;
+		lobbyRoom.numberOfPlayers = numberOfPlayers;
+		host.room = lobbyRoom;
 		lobbyRooms.put(lobbyRoom.roomName, lobbyRoom);
-		// currentLobbyRooms.add(lobbyRoom);
 	}
 
 	public void leaveRoom(String userName, String roomName) {

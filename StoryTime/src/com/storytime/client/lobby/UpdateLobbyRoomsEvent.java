@@ -11,9 +11,10 @@ public class UpdateLobbyRoomsEvent implements Event {
     private static final long serialVersionUID = 1L;
     public static Domain domain = DomainFactory.getDomain("Lobby"); 
     public String roomName = "";
+    public String theme = "";
+    public String password = "";
+    public int numberOfPlayers = 0;
     
     public UpdateLobbyRoomsEvent() {
     }
-    
-
 }

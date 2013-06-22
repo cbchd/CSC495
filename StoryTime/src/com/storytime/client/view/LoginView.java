@@ -23,7 +23,7 @@ public class LoginView extends Composite implements com.storytime.client.present
 
 	VerticalPanel mainVerticalPanel = new VerticalPanel();
 
-	Label lblWelcomeToStorymode = new Label("Welcome to StoryMode! Login Below");
+	Label lblWelcomeToStorymode = new Label("Welcome To StoryMode!");
 	VerticalPanel welcomeLabelHolder = new VerticalPanel();
 
 	Label lblUsername = new Label("Username:");

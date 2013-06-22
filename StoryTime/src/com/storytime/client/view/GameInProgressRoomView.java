@@ -169,7 +169,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		// initialize();
 		// enableChoosing();
 		// enableSubmitting();
-		// overallVerticalPanel.setStyleName("GameInProgressPage");
+		 overallVerticalPanel.setStyleName("GameInProgressPage");
 		initWidget(overallVerticalPanel);
 		if (DEBUG)
 			System.out.println("Initializing the game room");

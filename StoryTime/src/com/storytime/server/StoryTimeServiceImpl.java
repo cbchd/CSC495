@@ -113,7 +113,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 						+ message);
 	}
 
-	public void hostLobbyRoom(String roomName, String theme) {
+	public void hostLobbyRoom(String roomName, String theme, String password, int numberOfPlayers) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("User");
@@ -121,12 +121,15 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		user = engine.getOnlineUsers().get(user.username);
 		if (user != null) {
 			foundUser = true;
-			engine.hostRoom(user, roomName, theme);
+			engine.hostRoom(user, roomName, theme, password, numberOfPlayers);
 			logger.log(Level.FINEST, "Server " + user.username
 					+ " hosted a room with the name: " + roomName
-					+ " and the theme: " + theme);
+					+ " and the theme: " + theme + " and the with the password: " + password + " and with the maximum number of players at: " + numberOfPlayers);
 			UpdateLobbyRoomsEvent roomsEvent = new UpdateLobbyRoomsEvent();
 			roomsEvent.roomName = roomName;
+			roomsEvent.theme = theme;
+			roomsEvent.password = password;
+			roomsEvent.numberOfPlayers = numberOfPlayers;
 			addEvent(UpdateLobbyRoomsEvent.domain, roomsEvent);
 			logger.log(Level.FINEST,
 					"Server: Fired UpdateLobbyRoomsEvent for room: " + roomName);
@@ -639,6 +642,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			joinRoom.roomName = room.roomName;
 			joinRoom.theme = room.theme;
 			joinRoom.mastersTime = room.mastersTime;
+			joinRoom.authorsTime = room.authorsTime;
 			joinRoom.numberOfPlayers = room.numberOfPlayers;
 			joinRoom.pointLimit = room.pointLimit;
 			joinableRoomsInformation.joinableRooms.add(joinRoom);

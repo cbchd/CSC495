@@ -42,17 +42,15 @@ public class JoinRoomView extends Composite implements
 	Column<JoinRoom, String> playersTextColumn;
 	Column<JoinRoom, String> mastersTimeTextColumn;
 	Column<JoinRoom, String> authorsTimeTextColumn;
+	Label lblCurrentRooms = new Label("Current Rooms");
 
 	public JoinRoomView() {
 		if (DEBUG)
 			System.out.println("Client: Initializing the JoinRoomView");
-		// RootPanel rp = RootPanel.get();
 		getJoinableRoomsInformation();
-		// rp.add(verticalPanel, 10, 10);
 		initWidget(verticalPanel);
 		verticalPanel.setSize("688px", "595px");
-		//verticalPanel.setStyleName("JoinRoomPage");
-		Label lblCurrentRooms = new Label("Current Rooms");
+		verticalPanel.setStyleName("JoinRoomPage");
 		lblCurrentRooms
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.add(lblCurrentRooms);
@@ -62,8 +60,8 @@ public class JoinRoomView extends Composite implements
 		currentRoomsTable.setSize("100%", "100%");
 		verticalPanel.setCellWidth(currentRoomsTable, "100%");
 		verticalPanel.setCellHeight(currentRoomsTable, "100%");
-		setUpColumns();
 		setHandlers();
+		setUpColumns();
 	}
 
 	public void setUpColumns() {
