@@ -447,12 +447,15 @@ public class LobbyRoomView extends Composite implements
 					if (DEBUG) System.out.println("Client: Got a UserLeftRoomEvent for user: " + leftRoomEvent.username);
 					int indexToBeRemoved = -1;
 					for (int x = 0; x < roomData.users.size(); x++) {
-						if (username.equalsIgnoreCase(leftRoomEvent.username)) {
+						if (roomData.users.get(x).equalsIgnoreCase(leftRoomEvent.username)) {
+							if (DEBUG) System.out.println("Client: Found user: " + leftRoomEvent.username + " in the user list");
 							indexToBeRemoved = x;
 						}
 					}
 					if (indexToBeRemoved != -1) {
 						roomData.users.remove(indexToBeRemoved);
+						populateUserList();
+						if (DEBUG) System.out.println("Client: Removed " + leftRoomEvent.username + " from the user list");
 					}
 					if (leftRoomEvent.username.equalsIgnoreCase(username)) {
 						if (DEBUG) System.out.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
@@ -464,20 +467,16 @@ public class LobbyRoomView extends Composite implements
 					UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
 					String username = userEnteredRoomEvent.getUsername();
 					if (DEBUG) System.out.println("Client: Received UserEnteredRoomEvent (" + username + ") for room: " + roomData.roomName);
-					userListBox.addItem(username);
-					
+					roomData.users.add(username);
+					populateUserList();
 				} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
 					UpdateRoomChatWindowEvent chatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
 					roomData.messages.add(chatWindowEvent.message);
 					if (DEBUG)
 						System.out.println("Client: Got message: " + chatWindowEvent.message + ", from server");
 
-					String total = "";
-					for (String message : roomData.messages) {
-						total += message + "\n";
-					}
-					chatWindow.setText(total);
-					chatWindow.setCursorPos(chatWindow.getText().length());
+					populateMessages();
+					
 					
 				} else if (anEvent instanceof RoomDisbandedEvent) {
 					theRemoteEventService.removeListeners();
@@ -561,17 +560,29 @@ public class LobbyRoomView extends Composite implements
 	}
 
 	public void populateLobbyRoomView() {
+		populateUserList();
+		populateMessages();
+		populateTheme();
+	}
+	private void populateUserList() {
 		userListBox.clear();
 		for (String users : roomData.users) {
 			userListBox.addItem(users);
 		}
+	}
+
+	private void populateMessages() {
 		total = "";
 		for (String message : roomData.messages) {
 			total += message + "\n";
 		}
+		chatWindow.setText(total);
+		chatWindow.setCursorPos(chatWindow.getText().length());
+	}
+	
+	private void populateTheme() {
 		theme.setText(roomData.theme);
 	}
-
 	public void onUpdateChooseTime(int chooseTime) {
 		if (DEBUG)
 			System.out
