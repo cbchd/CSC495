@@ -19,9 +19,13 @@ import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.joinroom.JoinRoom;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
+import com.storytime.client.joinroom.LobbyRoomDisbandedEvent;
+import com.storytime.client.joinroom.LobbyRoomHostedEvent;
 
+import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 public class JoinRoomView extends Composite implements
 		com.storytime.client.presenters.HostRoomPresenter.Display {
@@ -62,6 +66,7 @@ public class JoinRoomView extends Composite implements
 		verticalPanel.setCellHeight(currentRoomsTable, "100%");
 		setHandlers();
 		setUpColumns();
+		setRemoteEventListenersAndHandleEvents();
 	}
 
 	public void setUpColumns() {
@@ -198,5 +203,38 @@ public class JoinRoomView extends Composite implements
 			}
 
 		}, DoubleClickEvent.getType());
+	}
+
+	public void setRemoteEventListenersAndHandleEvents() {
+		theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"), new RemoteEventListener() {
+
+			@Override
+			public void apply(Event anEvent) {
+				 if (anEvent instanceof LobbyRoomHostedEvent) {
+					LobbyRoomHostedEvent lobbyRoomEvent = (LobbyRoomHostedEvent) anEvent;
+					if (DEBUG)
+						System.out.println("Client: Got LobbyRoomHostedEvent for room name: " + lobbyRoomEvent.roomName);
+					JoinRoom joinableRoom = new JoinRoom();
+					joinableRoom.setRoomName(lobbyRoomEvent.getRoomName());
+					joinableRoom.setTheme(lobbyRoomEvent.getTheme());
+					joinableRoom.setPointLimit(lobbyRoomEvent.getPointLimit());
+					joinableRoom.setNumberOfPlayers(lobbyRoomEvent.getNumberOfPlayers());
+					joinableRoom.setMastersTime(lobbyRoomEvent.getMastersTime());
+					joinableRoom.setAuthorsTime(lobbyRoomEvent.getAuthorsTime());
+					joinableRoomsInformation.joinableRooms.add(joinableRoom);
+					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+				} else if (anEvent instanceof LobbyRoomDisbandedEvent) {
+					LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = (LobbyRoomDisbandedEvent) anEvent;
+					if (DEBUG) System.out.println("Client: Got LobbyRoomDisbandedEvent for room name: " + lobbyRoomDisbandedEvent.getRoomName());
+					for (int x = 0; x < joinableRoomsInformation.joinableRooms.size(); x++) {
+						if (joinableRoomsInformation.joinableRooms.get(x).roomName.equalsIgnoreCase(lobbyRoomDisbandedEvent.getRoomName())) {
+							joinableRoomsInformation.joinableRooms.remove(x);
+							break;
+						}
+					}
+					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+				}
+			}
+		});
 	}
 }

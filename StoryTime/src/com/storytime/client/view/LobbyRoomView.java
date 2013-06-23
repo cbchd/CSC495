@@ -51,6 +51,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	HandlerManager eventBus = StoryTimeEntryMVP.eventBus;
 	public static LobbyRoomData roomData = new LobbyRoomData();
 	String total = "";
+	String username = "";
 
 	HorizontalPanel mainHorizontalPanel = new HorizontalPanel();
 	VerticalPanel gameDetailsPanel = new VerticalPanel();
@@ -90,6 +91,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	}
 
 	public void initialize() {
+		getAndSetMyUsername();
 		setPanelOrder();
 		setPanelCharacteristics();
 		if (DEBUG)
@@ -394,12 +396,21 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;
-					for (String username : roomData.users) {
+					if (DEBUG) System.out.println("Client: Got a UserLeftRoomEvent for user: " + leftRoomEvent.username);
+					int indexToBeRemoved = -1;
+					for (int x = 0; x < roomData.users.size(); x++) {
 						if (username.equalsIgnoreCase(leftRoomEvent.username)) {
-							roomData.users.remove(username);
+							indexToBeRemoved = x;
 						}
 					}
-
+					if (indexToBeRemoved != -1) {
+						roomData.users.remove(indexToBeRemoved);
+					}
+					if (leftRoomEvent.username.equalsIgnoreCase(username)) {
+						if (DEBUG) System.out.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
+						theRemoteEventService.removeListeners();
+						eventBus.fireEvent(new LeaveRoomLocalEvent());
+					}
 				} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
 					UpdateRoomChatWindowEvent chatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
 					roomData.messages.add(chatWindowEvent.message);
@@ -465,6 +476,23 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		});
 	}
 
+	public void getAndSetMyUsername() {
+		storyTimeService.getMyUsername(new AsyncCallback<String>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				if (DEBUG) System.out.println("Client: Failed to get this users username from the server");
+				caught.printStackTrace();
+			}
+ 
+			@Override
+			public void onSuccess(String result) {
+				username = result;
+			}
+			
+		});
+	}
+	
 	public void populateLobbyRoomView() {
 		userListBox.clear();
 		for (String users : roomData.users) {

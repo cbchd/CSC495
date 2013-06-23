@@ -29,9 +29,9 @@ import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomWindowLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomLocalEvent;
 import com.storytime.client.changeviewevents.JoinRoomWindowLocalEvent;
+import com.storytime.client.joinroom.LobbyRoomHostedEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
-import com.storytime.client.lobby.UpdateLobbyRoomsEvent;
 import com.storytime.client.lobby.UpdateLobbyUsersEvent;
 
 import de.novanic.eventservice.client.event.Event;
@@ -39,7 +39,8 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
-public class LobbyView extends Composite implements com.storytime.client.presenters.LobbyPresenter.Display {
+public class LobbyView extends Composite implements
+		com.storytime.client.presenters.LobbyPresenter.Display {
 
 	boolean DEBUG = true;
 	ArrayList<String> usersInLobby = new ArrayList<String>();
@@ -74,7 +75,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	VerticalPanel underThirdVertHostOptions = new VerticalPanel();
 	Button btnHost = new Button("Host");
 	private final HorizontalPanel spellCustomizationPanel = new HorizontalPanel();
-	private final Button btnSpellCustomization = new Button("Spell Customization");
+	private final Button btnSpellCustomization = new Button(
+			"Spell Customization");
 
 	public LobbyView() {
 		initWidget(mainFlowPanel);
@@ -83,36 +85,40 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	}
 
 	public void getInitialLobbyInformation() {
-		rpcService.getInitialLobbyInformation(new AsyncCallback<LobbyInformation>() {
+		rpcService
+				.getInitialLobbyInformation(new AsyncCallback<LobbyInformation>() {
 
-			@Override
-			public void onFailure(Throwable caught) {
-				if (DEBUG)
-					System.out.println("Failed to get the initial lobby information");
-			}
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out
+									.println("Failed to get the initial lobby information");
+					}
 
-			@Override
-			public void onSuccess(LobbyInformation result) {
-				if (DEBUG)
-					System.out.println("Got the initial lobby information");
-				for (String user : result.users) {
-					if (DEBUG)
-						System.out.println("Client: Users: " + user);
-					usersInLobby.add(user);
-				}
-				for (String r : result.rooms) {
-					if (DEBUG)
-						System.out.println("Client: Room: " + r);
-					availableRooms.add(r);
-				}
-				for (String message : result.chatMessages) {
-					chatWindowMessages.add(message);
-					if (DEBUG)
-						System.out.println("Client: Messages: " + message);
-				}
-				populateLobbyViewWithInformation();
-			}
-		});
+					@Override
+					public void onSuccess(LobbyInformation result) {
+						if (DEBUG)
+							System.out
+									.println("Got the initial lobby information");
+						for (String user : result.users) {
+							if (DEBUG)
+								System.out.println("Client: Users: " + user);
+							usersInLobby.add(user);
+						}
+						for (String r : result.rooms) {
+							if (DEBUG)
+								System.out.println("Client: Room: " + r);
+							availableRooms.add(r);
+						}
+						for (String message : result.chatMessages) {
+							chatWindowMessages.add(message);
+							if (DEBUG)
+								System.out.println("Client: Messages: "
+										+ message);
+						}
+						populateLobbyViewWithInformation();
+					}
+				});
 	}
 
 	/**
@@ -136,12 +142,15 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	public void setPanelOrder() {
 		mainFlowPanel.add(horizontalInMainFlow);
 		horizontalInMainFlow.add(firstVerticalUsersInLobby);
-		lblUsersInLobby.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblUsersInLobby
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		firstVerticalUsersInLobby.add(lblUsersInLobby);
 		lblUsersInLobby.setSize("100%", "56px");
 		firstVerticalUsersInLobby.add(usersListBox);
-		spellCustomizationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		spellCustomizationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+		spellCustomizationPanel
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		spellCustomizationPanel
+				.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 
 		firstVerticalUsersInLobby.add(spellCustomizationPanel);
 		spellCustomizationPanel.setSize("100%", "52px");
@@ -156,11 +165,13 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		secondVerticalLobbyChat.add(textToSendBoxAndButtonHolder);
 		textToSendBoxAndButtonHolder.add(textToSendToChat);
 		textToSendBoxAndButtonHolder.add(btnSend);
-		thirdVerticalRoomOptions.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		thirdVerticalRoomOptions
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalInMainFlow.add(thirdVerticalRoomOptions);
 		thirdVerticalRoomOptions.add(lblStartYourOwn);
 		thirdVerticalRoomOptions.add(btnJoinRoom);
-		underThirdVertHostOptions.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		underThirdVertHostOptions
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		thirdVerticalRoomOptions.add(underThirdVertHostOptions);
 		underThirdVertHostOptions.add(btnHost);
 	}
@@ -175,17 +186,20 @@ public class LobbyView extends Composite implements com.storytime.client.present
 
 		horizontalInMainFlow.setSize("100%", "100%");
 
-		firstVerticalUsersInLobby.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		firstVerticalUsersInLobby
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		firstVerticalUsersInLobby.setSize("100%", "100%");
 
 		usersListBox.setName("User List");
 		usersListBox.setSize("95%", "279px");
 		usersListBox.setVisibleItemCount(5);
 
-		secondVerticalLobbyChat.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		secondVerticalLobbyChat
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		secondVerticalLobbyChat.setSize("100%", "100%");
 
-		lblHellousername.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblHellousername
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblHellousername.setSize("100%", "52px");
 
 		chatTextArea.setReadOnly(true);
@@ -204,7 +218,8 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		btnJoinRoom.setSize("182px", "28px");
 		btnJoinRoom.setStyleName("gwt-LoginExistingButton");
 
-		lblStartYourOwn.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblStartYourOwn
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblStartYourOwn.setSize("100%", "49px");
 		underThirdVertHostOptions.setSize("100%", "31px");
 
@@ -222,18 +237,23 @@ public class LobbyView extends Composite implements com.storytime.client.present
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					if (!textToSendToChat.getText().equalsIgnoreCase("")) {
-						rpcService.sendLobbyChatMessage(textToSendToChat.getText(), new AsyncCallback<Void>() {
+						rpcService.sendLobbyChatMessage(
+								textToSendToChat.getText(),
+								new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-							}
+									@Override
+									public void onFailure(Throwable caught) {
+									}
 
-							@Override
-							public void onSuccess(Void result) {
-								System.out.println("Client: Sent Message: " + textToSendToChat.getText());
-								textToSendToChat.setText("");
-							}
-						});
+									@Override
+									public void onSuccess(Void result) {
+										System.out
+												.println("Client: Sent Message: "
+														+ textToSendToChat
+																.getText());
+										textToSendToChat.setText("");
+									}
+								});
 					}
 				}
 			}
@@ -244,17 +264,19 @@ public class LobbyView extends Composite implements com.storytime.client.present
 			public void onClick(ClickEvent event) {
 				// send message and update the chat window
 				if (!textToSendToChat.getText().equals("")) {
-					rpcService.sendLobbyChatMessage(textToSendToChat.getText(), new AsyncCallback<Void>() {
+					rpcService.sendLobbyChatMessage(textToSendToChat.getText(),
+							new AsyncCallback<Void>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+								@Override
+								public void onFailure(Throwable caught) {
+								}
 
-						@Override
-						public void onSuccess(Void result) {
-							System.out.println("Client: Sent Message: " + textToSendToChat.getText());
-						}
-					});
+								@Override
+								public void onSuccess(Void result) {
+									System.out.println("Client: Sent Message: "
+											+ textToSendToChat.getText());
+								}
+							});
 					textToSendToChat.setText(""); // blank out the message bar
 				}
 			}
@@ -271,15 +293,19 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		btnHost.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
-				if (DEBUG) System.out.println("Client: Fired HostRoomWindowLocalEvent");
+				theRemoteEventService.removeListeners(DomainFactory
+						.getDomain("Lobby"));
+				if (DEBUG)
+					System.out
+							.println("Client: Fired HostRoomWindowLocalEvent");
 				eventBus.fireEvent(new HostRoomWindowLocalEvent());
 			}
 		});
 
 		btnSpellCustomization.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				theRemoteEventService.removeListeners(DomainFactory.getDomain("Lobby"));
+				theRemoteEventService.removeListeners(DomainFactory
+						.getDomain("Lobby"));
 				if (DEBUG)
 					System.out.println("Client: Lobby listeners deactivated");
 				CustomizeSpellsLocalEvent customizeSpellsEvent = new CustomizeSpellsLocalEvent();
@@ -295,36 +321,29 @@ public class LobbyView extends Composite implements com.storytime.client.present
 	 */
 	public void setRemoteEventListenersAndHandleEvents() {
 		// There is more logic in here than just setting listeners
-		theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"), new RemoteEventListener() {
+		theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"),
+				new RemoteEventListener() {
 
-			@Override
-			public void apply(Event anEvent) {
-				if (anEvent instanceof UpdateLobbyMessagesEvent) {
-					UpdateLobbyMessagesEvent messageEvent = (UpdateLobbyMessagesEvent) anEvent;
-					chatWindowMessages.add(messageEvent.message);
-					System.out.println("Client: Recieved Message " + messageEvent.message);
-					String totalChat = "";
-					for (String s : chatWindowMessages) {
-						totalChat += s + "\n";
+					@Override
+					public void apply(Event anEvent) {
+						if (anEvent instanceof UpdateLobbyMessagesEvent) {
+							UpdateLobbyMessagesEvent messageEvent = (UpdateLobbyMessagesEvent) anEvent;
+							chatWindowMessages.add(messageEvent.message);
+							System.out.println("Client: Recieved Message "
+									+ messageEvent.message);
+							String totalChat = "";
+							for (String s : chatWindowMessages) {
+								totalChat += s + "\n";
+							}
+							chatTextArea.setText(totalChat);
+							chatTextArea.setCursorPos(chatTextArea.getText()
+									.length());
+						} else if (anEvent instanceof UpdateLobbyUsersEvent) {
+							UpdateLobbyUsersEvent usersEvent = (UpdateLobbyUsersEvent) anEvent;
+							usersListBox.addItem(usersEvent.getUsername());
+						}
 					}
-					chatTextArea.setText(totalChat);
-					chatTextArea.setCursorPos(chatTextArea.getText().length());
-				} else if (anEvent instanceof UpdateLobbyRoomsEvent) {
-					UpdateLobbyRoomsEvent lobbyRoomEvent = (UpdateLobbyRoomsEvent) anEvent;
-					if (DEBUG)
-						System.out.println("Client: Got UpdateLobbyRoomsEvent, with room name: " + lobbyRoomEvent.roomName);
-					availableRooms.add(lobbyRoomEvent.roomName);
-
-					//roomBox.clear();
-					for (String r : availableRooms) {
-						//roomBox.addItem(r);
-					}
-				} else if (anEvent instanceof UpdateLobbyUsersEvent) {
-					UpdateLobbyUsersEvent usersEvent = (UpdateLobbyUsersEvent) anEvent;
-					usersListBox.addItem(usersEvent.getUsername());
-				}
-			}
-		});
+				});
 	}
 
 	/**
@@ -347,7 +366,7 @@ public class LobbyView extends Composite implements com.storytime.client.present
 		chatTextArea.setText(totalChat);
 		chatTextArea.setCursorPos(chatTextArea.getText().length());
 		for (String r : availableRooms) {
-			//roomBox.addItem(r);
+			// roomBox.addItem(r);
 		}
 		if (DEBUG)
 			System.out.println("Lobby listeners activated");

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.storytime.client.StoryTimeOldEntryPoint;
 import com.storytime.client.StoryTimeService;
 import com.storytime.client.StoryTimeServiceAsync;
+import com.storytime.client.joinroom.LobbyRoomHostedEvent;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
@@ -313,8 +314,8 @@ public class Lobby {
 				totalChat += s + "\n";
 			    }
 			    chatTextArea.setText(totalChat);
-			} else if (anEvent instanceof UpdateLobbyRoomsEvent) {
-			    UpdateLobbyRoomsEvent lobbyRoomEvent = (UpdateLobbyRoomsEvent) anEvent;
+			} else if (anEvent instanceof LobbyRoomHostedEvent) {
+			    LobbyRoomHostedEvent lobbyRoomEvent = (LobbyRoomHostedEvent) anEvent;
 			    if (DEBUG)
 				System.out
 					.println("Client: Got UpdateLobbyRoomsEvent, with room name: "

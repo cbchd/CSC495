@@ -20,10 +20,11 @@ import com.storytime.client.gameroom.RoundStartEvent;
 import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
 import com.storytime.client.joinroom.JoinRoom;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
+import com.storytime.client.joinroom.LobbyRoomDisbandedEvent;
+import com.storytime.client.joinroom.LobbyRoomHostedEvent;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobby.UpdateLobbyEvent;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
-import com.storytime.client.lobby.UpdateLobbyRoomsEvent;
 import com.storytime.client.lobby.UpdateLobbyUsersEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
@@ -125,14 +126,14 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			logger.log(Level.FINEST, "Server " + user.username
 					+ " hosted a room with the name: " + roomName
 					+ " and the theme: " + theme + " and the with the password: " + password + " and with the maximum number of players at: " + numberOfPlayers);
-			UpdateLobbyRoomsEvent roomsEvent = new UpdateLobbyRoomsEvent();
+			LobbyRoomHostedEvent roomsEvent = new LobbyRoomHostedEvent();
 			roomsEvent.roomName = roomName;
 			roomsEvent.theme = theme;
 			roomsEvent.password = password;
 			roomsEvent.numberOfPlayers = numberOfPlayers;
-			addEvent(UpdateLobbyRoomsEvent.domain, roomsEvent);
+			addEvent(LobbyRoomHostedEvent.domain, roomsEvent);
 			logger.log(Level.FINEST,
-					"Server: Fired UpdateLobbyRoomsEvent for room: " + roomName);
+					"Server: Fired LobbyRoomHostedEvent for room: " + roomName);
 			user.location = "LobbyRoom";
 			logger.log(Level.FINEST, "Server: Set " + user.username
 					+ "'s location to: " + user.location);
@@ -290,6 +291,11 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			// Remove room from room list
 			RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
 			addEvent(DomainFactory.getDomain(roomName), roomDisbandedEvent);
+			logger.log(Level.FINEST, "Server: Fired a RoomDisbandedEvent to notify users in the current disbanded room");
+			LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = new LobbyRoomDisbandedEvent();
+			lobbyRoomDisbandedEvent.setRoomName(roomName);
+			addEvent(DomainFactory.getDomain("Lobby"), lobbyRoomDisbandedEvent);
+			logger.log(Level.FINEST, "Server: Fired a LobbyRoomDisbandedEvent to notify users in the lobby of a room that can no longer be joined");
 		} else {
 			UserLeftRoomEvent userLeftEvent = new UserLeftRoomEvent();
 			userLeftEvent.username = foundUser.username;
