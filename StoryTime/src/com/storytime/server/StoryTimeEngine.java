@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import com.storytime.spellrelated.Spell;
+import com.storytime.client.spellrelated.Spell;
 
 public class StoryTimeEngine {
 	

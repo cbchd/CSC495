@@ -2,7 +2,7 @@ package com.storytime.server;
 
 import java.util.HashMap;
 
-import com.storytime.spellrelated.SpellBook;
+import com.storytime.client.spellrelated.SpellBook;
 
 
 public class User {

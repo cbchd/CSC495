@@ -31,10 +31,11 @@ import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 import com.storytime.client.lobbyroom.RoomDisbandedEvent;
-import com.storytime.client.lobbyroom.UpdateChooserTimerEvent;
-import com.storytime.client.lobbyroom.UpdatePointCapEvent;
+import com.storytime.client.lobbyroom.UpdateAuthorsTimerEvent;
+import com.storytime.client.lobbyroom.UpdateMastersTimerEvent;
+import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
-import com.storytime.client.lobbyroom.UpdateSubmissionTimerEvent;
+import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
 
 import de.novanic.eventservice.client.event.Event;
@@ -42,7 +43,8 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
-public class LobbyRoomView extends Composite implements com.storytime.client.presenters.LobbyRoomPresenter.Display {
+public class LobbyRoomView extends Composite implements
+		com.storytime.client.presenters.LobbyRoomPresenter.Display {
 
 	boolean DEBUG = true;
 
@@ -59,9 +61,11 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	HorizontalPanel horizontalPanel = new HorizontalPanel();
 	Grid grid_1 = new Grid(3, 2);
 	Label lblPointLimit = new Label("Point Limit:");
-	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(IntegerRenderer.instance());
+	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(
+			IntegerRenderer.instance());
 	Label lblSubmissionTime = new Label("Author's Time:");
-	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
+	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(
+			IntegerRenderer.instance());
 	Grid grid = new Grid(1, 1);
 	ListBox comboBox = new ListBox();
 	Label lblUsers = new Label("Users");
@@ -78,16 +82,19 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	Button btnStartGame = new Button("Start Game");
 	Label label_1 = new Label("");
 	Label lblChooseTime = new Label("Master's Time:");
-	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
+	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(
+			IntegerRenderer.instance());
 
 	public LobbyRoomView() {
 		initWidget(mainHorizontalPanel);
 		if (DEBUG)
-			System.out.println("Client: Trying to initialize the lobby room view");
+			System.out
+					.println("Client: Trying to initialize the lobby room view");
 		chatWindow.setText("");
 		initialize();
 		if (DEBUG)
-			System.out.println("Client: The lobby room view has been initialized");
+			System.out
+					.println("Client: The lobby room view has been initialized");
 	}
 
 	public void initialize() {
@@ -95,12 +102,15 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		setPanelOrder();
 		setPanelCharacteristics();
 		if (DEBUG)
-			System.out.println("Client: Set lobby room panel order & characteristics");
+			System.out
+					.println("Client: Set lobby room panel order & characteristics");
 		if (DEBUG)
-			System.out.println("Client: Trying to get the lobby room information from the server");
+			System.out
+					.println("Client: Trying to get the lobby room information from the server");
 		getInitialLobbyRoomInformation();
 		if (DEBUG)
-			System.out.println("Client: Got the lobby room information from the server");
+			System.out
+					.println("Client: Got the lobby room information from the server");
 		populateLobbyRoomView();
 		setHandlers();
 	}
@@ -121,9 +131,11 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		label_1.setSize("441px", "1px");
 		chatAndStartGameHolder.add(lblChat);
 		chatAndStartGameHolder.add(chatWindow);
-		textSendAndStartGamePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		textSendAndStartGamePanel
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		chatAndStartGameHolder.add(textSendAndStartGamePanel);
-		sendTextBoxAndButtonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		sendTextBoxAndButtonPanel
+				.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		textSendAndStartGamePanel.add(sendTextBoxAndButtonPanel);
 		sendTextBoxAndButtonPanel.add(chatTextBox);
 		sendTextBoxAndButtonPanel.add(btnSendToChat);
@@ -194,7 +206,8 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		btnLeaveRoom.setSize("100%", "30px");
 		btnLeaveRoom.setStyleName("gwt-LoginExistingButton");
 
-		chatAndStartGameHolder.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		chatAndStartGameHolder
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		chatAndStartGameHolder.setSize("100%", "100%");
 
 		theme.setText(roomData.theme);
@@ -209,7 +222,8 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		chatWindow.setText(total);
 		textSendAndStartGamePanel.setSize("90%", "100%");
 
-		sendTextBoxAndButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		sendTextBoxAndButtonPanel
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		sendTextBoxAndButtonPanel.setSize("100%", "100%");
 
 		chatTextBox.setSize("100%", "20px");
@@ -225,102 +239,128 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		pointLimitBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				storyTimeService.updateLobbyRoomPointCap(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
+				storyTimeService.updateLobbyRoomPointLimit(roomData.roomName,
+						event.getValue(), new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out.println("Client: Error occurred changing the point value");
-					}
+							@Override
+							public void onFailure(Throwable caught) {
+								if (DEBUG)
+									System.out
+											.println("Client: Error occurred changing the point value");
+							}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Got confirmation of point change from server");
-					}
+							@Override
+							public void onSuccess(Void result) {
+								if (DEBUG)
+									System.out
+											.println("Client: Got confirmation of point change from server");
+							}
 
-				});
+						});
 			}
 		});
 
-		submittersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-			@Override
-			public void onValueChange(final ValueChangeEvent<Integer> event) {
-				// Get time per round TODO
-				storyTimeService.updateLobbyRoomTimer(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
-
+		submittersTimeBox
+				.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out.println("Client: Error occurred in sending server the new submissionTimer value: " + event.getValue());
-					}
+					public void onValueChange(
+							final ValueChangeEvent<Integer> event) {
+						// Get time per round TODO
+						storyTimeService.updateLobbyRoomTimer(
+								roomData.roomName, event.getValue(),
+								new AsyncCallback<Void>() {
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Got confirmation of submissionTimer change from server");
-						choosersTimeBox.setValue(submittersTimeBox.getValue() + 5, true);
+									@Override
+									public void onFailure(Throwable caught) {
+										if (DEBUG)
+											System.out
+													.println("Client: Error occurred in sending server the new submissionTimer value: "
+															+ event.getValue());
+									}
+
+									@Override
+									public void onSuccess(Void result) {
+										if (DEBUG)
+											System.out
+													.println("Client: Got confirmation of submissionTimer change from server");
+										choosersTimeBox.setValue(
+												submittersTimeBox.getValue() + 5,
+												true);
+									}
+								});
 					}
 				});
-			}
-		});
 
-		choosersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-			public void onValueChange(ValueChangeEvent<Integer> event) {
-				storyTimeService.updateLobbyRoomChooserTimer(roomData.roomName, choosersTimeBox.getValue(), new AsyncCallback<Void>() {
+		choosersTimeBox
+				.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+					public void onValueChange(ValueChangeEvent<Integer> event) {
+						storyTimeService.updateLobbyRoomChooserTimer(
+								roomData.roomName, choosersTimeBox.getValue(),
+								new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out.println("Client: Failed to tell server to update the chooser's time for room: " + roomData.roomName);
+									@Override
+									public void onFailure(Throwable caught) {
+										if (DEBUG)
+											System.out
+													.println("Client: Failed to tell server to update the chooser's time for room: "
+															+ roomData.roomName);
+									}
+
+									@Override
+									public void onSuccess(Void result) {
+										if (DEBUG)
+											System.out
+													.println("Client: Sent the server the new chooser's time for room: "
+															+ roomData.roomName);
+									}
+
+								});
 					}
-
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Sent the server the new chooser's time for room: " + roomData.roomName);
-					}
-
 				});
-			}
-		});
 
 		btnLeaveRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				storyTimeService.leaveRoom(roomData.roomName, new AsyncCallback<Void>() {
+				storyTimeService.leaveRoom(roomData.roomName,
+						new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-					}
+							@Override
+							public void onFailure(Throwable caught) {
+							}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Confirmation received from server that this user has left the room: " + roomData.roomName);
-					}
-				});
+							@Override
+							public void onSuccess(Void result) {
+								if (DEBUG)
+									System.out
+											.println("Client: Confirmation received from server that this user has left the room: "
+													+ roomData.roomName);
+							}
+						});
 			}
 		});
 
 		chatTextBox.addKeyDownHandler(new KeyDownHandler() {
 			public void onKeyDown(KeyDownEvent event) {
-				if ((event.getNativeKeyCode() == KeyCodes.KEY_ENTER) && !chatTextBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
+				if ((event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+						&& !chatTextBox.getText().equalsIgnoreCase("")) {
+					storyTimeService.sendRoomChatMessage(roomData.roomName,
+							chatTextBox.getText(), new AsyncCallback<Void>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							if (DEBUG)
-								System.out.println("Client: Error occurred while sending text to the chat");
-						}
+								@Override
+								public void onFailure(Throwable caught) {
+									if (DEBUG)
+										System.out
+												.println("Client: Error occurred while sending text to the chat");
+								}
 
-						@Override
-						public void onSuccess(Void result) {
-							if (DEBUG)
-								System.out.println("Client: Successfully posted to chat window");
-							chatTextBox.setText("");
-						}
-					});
+								@Override
+								public void onSuccess(Void result) {
+									if (DEBUG)
+										System.out
+												.println("Client: Successfully posted to chat window");
+									chatTextBox.setText("");
+								}
+							});
 				}
 			}
 		});
@@ -330,20 +370,23 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 			public void onClick(ClickEvent event) {
 				// Send text to users in room
 				if (!chatTextBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
+					storyTimeService.sendRoomChatMessage(roomData.roomName,
+							chatTextBox.getText(), new AsyncCallback<Void>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-						}
+								@Override
+								public void onFailure(Throwable caught) {
+								}
 
-						@Override
-						public void onSuccess(Void result) {
-							if (DEBUG)
-								System.out.println("Client: Sent message: " + chatTextBox.getText());
-							chatTextBox.setText("");
-						}
+								@Override
+								public void onSuccess(Void result) {
+									if (DEBUG)
+										System.out
+												.println("Client: Sent message: "
+														+ chatTextBox.getText());
+									chatTextBox.setText("");
+								}
 
-					});
+							});
 				}
 			}
 		});
@@ -351,20 +394,23 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		btnStartGame.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				storyTimeService.startGame(roomData.roomName, new AsyncCallback<Void>() {
+				storyTimeService.startGame(roomData.roomName,
+						new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out.println("Client: Error in the start game call");
-					}
+							@Override
+							public void onFailure(Throwable caught) {
+								if (DEBUG)
+									System.out
+											.println("Client: Error in the start game call");
+							}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out.println("Client: Confirmation of started game recieved");
-					}
-				});
+							@Override
+							public void onSuccess(Void result) {
+								if (DEBUG)
+									System.out
+											.println("Client: Confirmation of started game recieved");
+							}
+						});
 			}
 		});
 
@@ -376,23 +422,25 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		theRemoteEventService.addListener(DomainFactory.getDomain(roomData.roomName), new RemoteEventListener() {
 
 			public void apply(Event anEvent) {
-				if (anEvent instanceof UpdatePointCapEvent) {
+				if (anEvent instanceof UpdatePointLimitEvent) {
 					// Update the point cap set for the room
 					if (DEBUG)
 						System.out.println("Client: Got an Update Point Cap Remote Event");
-					UpdatePointCapEvent updatePointCapEvent = (UpdatePointCapEvent) anEvent;
-					pointLimitBox.setValue(updatePointCapEvent.pointCap);
-					roomData.pointCap = updatePointCapEvent.pointCap;
-				} else if (anEvent instanceof UpdateSubmissionTimerEvent) {
+					UpdatePointLimitEvent updatePointCapEvent = (UpdatePointLimitEvent) anEvent;
+					pointLimitBox.setValue(updatePointCapEvent.getPointLimit());
+					roomData.pointCap = updatePointCapEvent.getPointLimit();
+				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
 					// Update the submissionTimer
 					if (DEBUG)
 						System.out.println("Client: Got an Update Timer Remote Event");
-					UpdateSubmissionTimerEvent updateSubmissionTimerEvent = (UpdateSubmissionTimerEvent) anEvent;
-					submittersTimeBox.setValue(updateSubmissionTimerEvent.submissionTimer);
-					roomData.submissionTimer = updateSubmissionTimerEvent.submissionTimer;
-				} else if (anEvent instanceof UpdateChooserTimerEvent) {
-					UpdateChooserTimerEvent chooserTimerEvent = (UpdateChooserTimerEvent) anEvent;
-					onUpdateChooseTime(chooserTimerEvent.chooseTime);
+					UpdateAuthorsTimerEvent updateSubmissionTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+					submittersTimeBox.setValue(updateSubmissionTimerEvent.authorsTimer);
+					roomData.submissionTimer = updateSubmissionTimerEvent.authorsTimer;
+					
+				} else if (anEvent instanceof UpdateMastersTimerEvent) {
+					UpdateMastersTimerEvent chooserTimerEvent = (UpdateMastersTimerEvent) anEvent;
+					onUpdateChooseTime(chooserTimerEvent.mastersTime);
+					
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;
@@ -411,6 +459,13 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 						theRemoteEventService.removeListeners();
 						eventBus.fireEvent(new LeaveRoomLocalEvent());
 					}
+					
+				} else if (anEvent instanceof UserEnteredRoomEvent) {
+					UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
+					String username = userEnteredRoomEvent.getUsername();
+					if (DEBUG) System.out.println("Client: Received UserEnteredRoomEvent (" + username + ") for room: " + roomData.roomName);
+					userListBox.addItem(username);
+					
 				} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
 					UpdateRoomChatWindowEvent chatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
 					roomData.messages.add(chatWindowEvent.message);
@@ -423,6 +478,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					}
 					chatWindow.setText(total);
 					chatWindow.setCursorPos(chatWindow.getText().length());
+					
 				} else if (anEvent instanceof RoomDisbandedEvent) {
 					theRemoteEventService.removeListeners();
 					if (DEBUG)
@@ -430,6 +486,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 					if (DEBUG)
 						System.out.println("Client: Left Room: " + roomData.roomName);
 					eventBus.fireEvent(new LeaveRoomLocalEvent());
+					
 				} else if (anEvent instanceof GameStartEvent) {
 					if (DEBUG)
 						System.out.println("Client: Got a game start event for room: " + roomData.roomName);
@@ -448,32 +505,40 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	}
 
 	public void getInitialLobbyRoomInformation() {
-		storyTimeService.getLobbyRoomInformation(new AsyncCallback<LobbyRoomData>() {
+		storyTimeService
+				.getLobbyRoomInformation(new AsyncCallback<LobbyRoomData>() {
 
-			@Override
-			public void onFailure(Throwable caught) {
-				if (DEBUG)
-					System.out.println("Client: Error occurred while initializing the lobby room state");
-			}
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out
+									.println("Client: Error occurred while initializing the lobby room state");
+					}
 
-			@Override
-			public void onSuccess(LobbyRoomData result) {
-				roomData.pointCap = result.pointCap;
-				roomData.roomName = result.roomName;
-				roomData.theme = result.theme;
-				roomData.submissionTimer = result.submissionTimer;
-				roomData.users = result.users;
-				roomData.inGame = result.inGame;
-				roomData.domain = result.domain;
-				roomData.messages = result.messages;
-				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.submissionTimer
-						+ ", Users: " + roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
-				populateLobbyRoomView();
-				if (DEBUG)
-					System.out.println("Client: Set remote event listeners and populated the lobby with known data");
-				setRemoteEventListenersAndHandleEvents();
-			}
-		});
+					@Override
+					public void onSuccess(LobbyRoomData result) {
+						roomData.pointCap = result.pointCap;
+						roomData.roomName = result.roomName;
+						roomData.theme = result.theme;
+						roomData.submissionTimer = result.submissionTimer;
+						roomData.users = result.users;
+						roomData.inGame = result.inGame;
+						roomData.domain = result.domain;
+						roomData.messages = result.messages;
+						System.out.println("Client: Got Data: PointCap: "
+								+ roomData.pointCap + ", Name: "
+								+ roomData.roomName + ", Theme: "
+								+ roomData.theme + ", " + "Timer: "
+								+ roomData.submissionTimer + ", Users: "
+								+ roomData.users.toString() + ", and Domain: "
+								+ roomData.domain.getName());
+						populateLobbyRoomView();
+						if (DEBUG)
+							System.out
+									.println("Client: Set remote event listeners and populated the lobby with known data");
+						setRemoteEventListenersAndHandleEvents();
+					}
+				});
 	}
 
 	public void getAndSetMyUsername() {
@@ -481,18 +546,20 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if (DEBUG) System.out.println("Client: Failed to get this users username from the server");
+				if (DEBUG)
+					System.out
+							.println("Client: Failed to get this users username from the server");
 				caught.printStackTrace();
 			}
- 
+
 			@Override
 			public void onSuccess(String result) {
 				username = result;
 			}
-			
+
 		});
 	}
-	
+
 	public void populateLobbyRoomView() {
 		userListBox.clear();
 		for (String users : roomData.users) {
@@ -507,7 +574,9 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 	public void onUpdateChooseTime(int chooseTime) {
 		if (DEBUG)
-			System.out.println("Client: Got an UpdateChooserTimerEvent for room: " + roomData.roomName);
+			System.out
+					.println("Client: Got an UpdateChooserTimerEvent for room: "
+							+ roomData.roomName);
 		choosersTimeBox.setValue(chooseTime);
 		if (DEBUG)
 			System.out.println("Client: Set the choose time to: " + chooseTime);

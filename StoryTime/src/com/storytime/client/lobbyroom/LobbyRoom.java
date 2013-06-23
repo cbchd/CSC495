@@ -122,7 +122,7 @@ public class LobbyRoom {
 			@Override
 			public void onValueChange(ValueChangeEvent<Integer> event) {
 				// Get point Limit TODO
-				storyTimeService.updateLobbyRoomPointCap(roomData.roomName, event.getValue(),
+				storyTimeService.updateLobbyRoomPointLimit(roomData.roomName, event.getValue(),
 						new AsyncCallback<Void>() {
 
 							@Override
@@ -316,16 +316,16 @@ public class LobbyRoom {
 		theRemoteEventService.addListener(DomainFactory.getDomain(roomData.roomName), new RemoteEventListener() {
 
 			public void apply(Event anEvent) {
-				if (anEvent instanceof UpdatePointCapEvent) {
+				if (anEvent instanceof UpdatePointLimitEvent) {
 					// Update the point cap set for the room
-					UpdatePointCapEvent updatePointCapEvent = (UpdatePointCapEvent) anEvent;
-					pointLimitBox.setValue(updatePointCapEvent.pointCap);
-					roomData.pointCap = updatePointCapEvent.pointCap;
-				} else if (anEvent instanceof UpdateSubmissionTimerEvent) {
+					UpdatePointLimitEvent updatePointCapEvent = (UpdatePointLimitEvent) anEvent;
+					pointLimitBox.setValue(updatePointCapEvent.getPointLimit());
+					roomData.pointCap = updatePointCapEvent.getPointLimit();
+				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
 					// Update the submissionTimer
-					UpdateSubmissionTimerEvent updateSubmissionTimerEvent = (UpdateSubmissionTimerEvent) anEvent;
-					timePerRoundBox.setValue(updateSubmissionTimerEvent.submissionTimer);
-					roomData.submissionTimer = updateSubmissionTimerEvent.submissionTimer;
+					UpdateAuthorsTimerEvent updateSubmissionTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+					timePerRoundBox.setValue(updateSubmissionTimerEvent.authorsTimer);
+					roomData.submissionTimer = updateSubmissionTimerEvent.authorsTimer;
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;

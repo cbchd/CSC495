@@ -82,7 +82,7 @@ public interface StoryTimeService extends RemoteService {
 	 * @param roomName
 	 * @param pointCap
 	 */
-	public void updateLobbyRoomPointCap(String roomName, int pointCap);
+	public void updateLobbyRoomPointLimit(String roomName, int pointCap);
 
 	/**
 	 * Updates the lobby room timer for a specific room name

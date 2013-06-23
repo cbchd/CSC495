@@ -41,54 +41,6 @@ public class Room {
 		this.theme = theme;
 	}
 
-	public int getPointCap() {
-		return pointLimit;
-	}
-
-	public void setPointCap(int pointCap) {
-		this.pointLimit = pointCap;
-	}
-
-	public int getTimer() {
-		return authorsTime;
-	}
-
-	public void setTimer(int timer) {
-		this.authorsTime = timer;
-	}
-
-	public User getHost() {
-		return host;
-	}
-
-	public void setHost(User host) {
-		this.host = host;
-	}
-
-	public boolean isInGame() {
-		return inGame;
-	}
-
-	public void setInGame(boolean inGame) {
-		this.inGame = inGame;
-	}
-
-	public HashMap<String, User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(HashMap<String, User> users) {
-		this.users = users;
-	}
-
-	public ArrayList<String> getRoomChat() {
-		return roomChat;
-	}
-
-	public void setRoomChat(ArrayList<String> roomChat) {
-		this.roomChat = roomChat;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -128,4 +80,37 @@ public class Room {
 	public void setNumberOfPlayers(int numberOfPlayers) {
 		this.numberOfPlayers = numberOfPlayers;
 	}
+
+	public User getHost() {
+		return host;
+	}
+
+	public void setHost(User host) {
+		this.host = host;
+	}
+
+	public boolean isInGame() {
+		return inGame;
+	}
+
+	public void setInGame(boolean inGame) {
+		this.inGame = inGame;
+	}
+
+	public HashMap<String, User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(HashMap<String, User> users) {
+		this.users = users;
+	}
+
+	public ArrayList<String> getRoomChat() {
+		return roomChat;
+	}
+
+	public void setRoomChat(ArrayList<String> roomChat) {
+		this.roomChat = roomChat;
+	}
+    
 }

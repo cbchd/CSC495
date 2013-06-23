@@ -22,7 +22,7 @@ public interface StoryTimeServiceAsync {
 
 	void getLobbyRoomInformation(AsyncCallback<LobbyRoomData> callback);
 
-	void updateLobbyRoomPointCap(String roomName, int pointCap, AsyncCallback<Void> callback);
+	void updateLobbyRoomPointLimit(String roomName, int pointCap, AsyncCallback<Void> callback);
 
 	void updateLobbyRoomTimer(String roomName, int timer, AsyncCallback<Void> callback);
 

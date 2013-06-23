@@ -21,6 +21,9 @@ import com.storytime.client.joinroom.JoinRoom;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.joinroom.LobbyRoomDisbandedEvent;
 import com.storytime.client.joinroom.LobbyRoomHostedEvent;
+import com.storytime.client.lobbyroom.UpdateAuthorsTimerEvent;
+import com.storytime.client.lobbyroom.UpdateMastersTimerEvent;
+import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
@@ -230,6 +233,35 @@ public class JoinRoomView extends Composite implements
 						if (joinableRoomsInformation.joinableRooms.get(x).roomName.equalsIgnoreCase(lobbyRoomDisbandedEvent.getRoomName())) {
 							joinableRoomsInformation.joinableRooms.remove(x);
 							break;
+						}
+					}
+					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+				} else if (anEvent instanceof UpdatePointLimitEvent) {
+					UpdatePointLimitEvent pointLimitChangeEvent = (UpdatePointLimitEvent) anEvent;
+					if (DEBUG) System.out.println("Client: Received a LobbyRoomPointLimitChangeEvent for room: " + pointLimitChangeEvent.getRoomName());
+					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+						if (room.getRoomName().equalsIgnoreCase(pointLimitChangeEvent.getRoomName())) {
+							room.setPointLimit(pointLimitChangeEvent.getPointLimit());
+						}
+					}
+					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
+					UpdateAuthorsTimerEvent updateAuthorsTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+					String roomName = updateAuthorsTimerEvent.getRoomName();
+					if (DEBUG) System.out.println("Client: Received an UpdatesubmissionTimerEvent for room: " + roomName);
+					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+						if (room.getRoomName().equalsIgnoreCase(roomName)) {
+							room.setAuthorsTime(updateAuthorsTimerEvent.getAuthorsTimer());
+						}
+					}
+					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+				} else if (anEvent instanceof UpdateMastersTimerEvent) {
+					UpdateMastersTimerEvent updateMastersTimerEvent = (UpdateMastersTimerEvent) anEvent;
+					String roomName = updateMastersTimerEvent.getRoomName();
+					if (DEBUG) System.out.println("Client: Received an UpdateMastersTimerEvent for room: " + roomName);
+					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+						if (room.getRoomName().equalsIgnoreCase(roomName)) {
+							room.setMastersTime(updateMastersTimerEvent.getMastersTime());
 						}
 					}
 					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);

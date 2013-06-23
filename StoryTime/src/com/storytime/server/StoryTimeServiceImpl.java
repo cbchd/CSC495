@@ -29,10 +29,11 @@ import com.storytime.client.lobby.UpdateLobbyUsersEvent;
 import com.storytime.client.lobbyroom.GameStartEvent;
 import com.storytime.client.lobbyroom.LobbyRoomData;
 import com.storytime.client.lobbyroom.RoomDisbandedEvent;
-import com.storytime.client.lobbyroom.UpdateChooserTimerEvent;
-import com.storytime.client.lobbyroom.UpdatePointCapEvent;
+import com.storytime.client.lobbyroom.UpdateAuthorsTimerEvent;
+import com.storytime.client.lobbyroom.UpdateMastersTimerEvent;
+import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
-import com.storytime.client.lobbyroom.UpdateSubmissionTimerEvent;
+import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
 
 import de.novanic.eventservice.client.event.domain.Domain;
@@ -165,6 +166,12 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			logger.log(Level.FINEST, "Server: Set " + user.username
 					+ "'s location to: " + user.location);
 		}
+		UserEnteredRoomEvent userEnteredRoomEvent = new UserEnteredRoomEvent();
+		userEnteredRoomEvent.setUsername(thisUser.getUsername());
+		addEvent(DomainFactory.getDomain(thisUser.getRoom().roomName), userEnteredRoomEvent);
+		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: " + thisUser.getRoom().getRoomName());
+		addEvent(DomainFactory.getDomain("Lobby"), userEnteredRoomEvent);
+		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: Lobby");
 	}
 
 	public LobbyRoomData getLobbyRoomInformation() {
@@ -223,16 +230,19 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		return roomInfo;
 	}
 
-	public void updateLobbyRoomPointCap(String roomName, int pointCap) {
+	public void updateLobbyRoomPointLimit(String roomName, int pointCap) {
 		Room r = engine.getLobbyRooms().get(roomName);
 		r.pointLimit = pointCap;
 		logger.log(Level.FINEST, "Server: Set " + r.roomName
 				+ "'s pointCap to " + r.pointLimit);
-		UpdatePointCapEvent pointChangeEvent = new UpdatePointCapEvent();
-		pointChangeEvent.pointCap = r.pointLimit;
+		UpdatePointLimitEvent pointChangeEvent = new UpdatePointLimitEvent();
+		pointChangeEvent.setPointLimit(r.getPointLimit());
+		pointChangeEvent.setRoomName(roomName);
 		addEvent(DomainFactory.getDomain(roomName), pointChangeEvent);
 		logger.log(Level.FINEST,
 				"Server: Fired Point Change Event for domain: " + roomName);
+		addEvent(DomainFactory.getDomain("Lobby"), pointChangeEvent);
+		logger.log(Level.FINEST, "Server: Fired Point Change Event for domain: Lobby");
 		return;
 	}
 
@@ -243,12 +253,15 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 						+ timer);
 		Room r = engine.getLobbyRooms().get(roomName);
 		r.authorsTime = timer;
-		UpdateSubmissionTimerEvent submissionTimerEvent = new UpdateSubmissionTimerEvent();
-		submissionTimerEvent.submissionTimer = timer;
+		UpdateAuthorsTimerEvent submissionTimerEvent = new UpdateAuthorsTimerEvent();
+		submissionTimerEvent.authorsTimer = timer;
+		submissionTimerEvent.roomName = roomName;
 		addEvent(DomainFactory.getDomain(roomName), submissionTimerEvent);
 		logger.log(Level.FINEST,
 				"Server: Fired UpdateSubmissionTimerEvent for domain: "
 						+ roomName);
+		addEvent(DomainFactory.getDomain("Lobby"), submissionTimerEvent);
+		logger.log(Level.FINEST, "Server: Fired UpdateSubmissionTimerEvent for domain: Lobby");
 	}
 
 	public void updateLobbyRoomChooserTimer(String roomName, int timer) {
@@ -257,11 +270,14 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 						+ " and updated chooserTimer value to: " + timer);
 		Room room = engine.getLobbyRooms().get(roomName);
 		room.mastersTime = timer;
-		UpdateChooserTimerEvent chooserTimerEvent = new UpdateChooserTimerEvent();
-		chooserTimerEvent.chooseTime = timer;
+		UpdateMastersTimerEvent chooserTimerEvent = new UpdateMastersTimerEvent();
+		chooserTimerEvent.mastersTime = timer;
+		chooserTimerEvent.roomName = roomName;
 		addEvent(DomainFactory.getDomain(roomName), chooserTimerEvent);
 		logger.log(Level.FINEST,
 				"Server: Fired UpdateChooserTimerEvent for domain: " + roomName);
+		addEvent(DomainFactory.getDomain("Lobby"), chooserTimerEvent);
+		logger.log(Level.FINEST, "Server: Fired UpdateChooserTimerEvent for domain: Lobby");
 	}
 
 	public void leaveRoom(String roomName) {
