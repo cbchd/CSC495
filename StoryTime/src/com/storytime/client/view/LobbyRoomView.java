@@ -418,87 +418,124 @@ public class LobbyRoomView extends Composite implements
 
 	public void setRemoteEventListenersAndHandleEvents() {
 		if (DEBUG)
-			System.out.println("Client: Trying to set the lobby room listeners for room " + roomData.roomName);
-		theRemoteEventService.addListener(DomainFactory.getDomain(roomData.roomName), new RemoteEventListener() {
+			System.out
+					.println("Client: Trying to set the lobby room listeners for room "
+							+ roomData.roomName);
+		theRemoteEventService.addListener(
+				DomainFactory.getDomain(roomData.roomName),
+				new RemoteEventListener() {
 
-			public void apply(Event anEvent) {
-				if (anEvent instanceof UpdatePointLimitEvent) {
-					// Update the point cap set for the room
-					if (DEBUG)
-						System.out.println("Client: Got an Update Point Cap Remote Event");
-					UpdatePointLimitEvent updatePointCapEvent = (UpdatePointLimitEvent) anEvent;
-					pointLimitBox.setValue(updatePointCapEvent.getPointLimit());
-					roomData.pointCap = updatePointCapEvent.getPointLimit();
-				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
-					// Update the submissionTimer
-					if (DEBUG)
-						System.out.println("Client: Got an Update Timer Remote Event");
-					UpdateAuthorsTimerEvent updateSubmissionTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
-					submittersTimeBox.setValue(updateSubmissionTimerEvent.authorsTimer);
-					roomData.submissionTimer = updateSubmissionTimerEvent.authorsTimer;
-					
-				} else if (anEvent instanceof UpdateMastersTimerEvent) {
-					UpdateMastersTimerEvent chooserTimerEvent = (UpdateMastersTimerEvent) anEvent;
-					onUpdateChooseTime(chooserTimerEvent.mastersTime);
-					
-				} else if (anEvent instanceof UserLeftRoomEvent) {
-					// Remove the user from the user list
-					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;
-					if (DEBUG) System.out.println("Client: Got a UserLeftRoomEvent for user: " + leftRoomEvent.username);
-					int indexToBeRemoved = -1;
-					for (int x = 0; x < roomData.users.size(); x++) {
-						if (roomData.users.get(x).equalsIgnoreCase(leftRoomEvent.username)) {
-							if (DEBUG) System.out.println("Client: Found user: " + leftRoomEvent.username + " in the user list");
-							indexToBeRemoved = x;
+					public void apply(Event anEvent) {
+						if (anEvent instanceof UpdatePointLimitEvent) {
+							// Update the point cap set for the room
+							if (DEBUG)
+								System.out
+										.println("Client: Got an Update Point Cap Remote Event");
+							UpdatePointLimitEvent updatePointCapEvent = (UpdatePointLimitEvent) anEvent;
+							pointLimitBox.setValue(updatePointCapEvent
+									.getPointLimit());
+							roomData.pointCap = updatePointCapEvent
+									.getPointLimit();
+						} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
+							// Update the submissionTimer
+							if (DEBUG)
+								System.out
+										.println("Client: Got an Update Timer Remote Event");
+							UpdateAuthorsTimerEvent updateSubmissionTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+							submittersTimeBox
+									.setValue(updateSubmissionTimerEvent.authorsTimer);
+							roomData.submissionTimer = updateSubmissionTimerEvent.authorsTimer;
+
+						} else if (anEvent instanceof UpdateMastersTimerEvent) {
+							UpdateMastersTimerEvent chooserTimerEvent = (UpdateMastersTimerEvent) anEvent;
+							onUpdateChooseTime(chooserTimerEvent.mastersTime);
+
+						} else if (anEvent instanceof UserLeftRoomEvent) {
+							// Remove the user from the user list
+							UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;
+							if (DEBUG)
+								System.out
+										.println("Client: Got a UserLeftRoomEvent for user: "
+												+ leftRoomEvent.username);
+							int indexToBeRemoved = -1;
+							for (int x = 0; x < roomData.users.size(); x++) {
+								if (roomData.users.get(x).equalsIgnoreCase(
+										leftRoomEvent.username)) {
+									if (DEBUG)
+										System.out
+												.println("Client: Found user: "
+														+ leftRoomEvent.username
+														+ " in the user list");
+									indexToBeRemoved = x;
+								}
+							}
+							if (indexToBeRemoved != -1) {
+								roomData.users.remove(indexToBeRemoved);
+								populateUserList();
+								if (DEBUG)
+									System.out.println("Client: Removed "
+											+ leftRoomEvent.username
+											+ " from the user list");
+							}
+							if (leftRoomEvent.username
+									.equalsIgnoreCase(username)) {
+								if (DEBUG)
+									System.out
+											.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
+								theRemoteEventService.removeListeners();
+								eventBus.fireEvent(new LeaveRoomLocalEvent());
+							}
+
+						} else if (anEvent instanceof UserEnteredRoomEvent) {
+							UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
+							String username = userEnteredRoomEvent
+									.getUsername();
+							if (DEBUG)
+								System.out
+										.println("Client: Received UserEnteredRoomEvent ("
+												+ username
+												+ ") for room: "
+												+ roomData.roomName);
+							roomData.users.add(username);
+							populateUserList();
+						} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
+							UpdateRoomChatWindowEvent chatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
+							roomData.messages.add(chatWindowEvent.message);
+							if (DEBUG)
+								System.out.println("Client: Got message: "
+										+ chatWindowEvent.message
+										+ ", from server");
+
+							populateMessages();
+
+						} else if (anEvent instanceof RoomDisbandedEvent) {
+							theRemoteEventService.removeListeners();
+							if (DEBUG)
+								System.out
+										.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: "
+												+ roomData.roomName);
+							if (DEBUG)
+								System.out.println("Client: Left Room: "
+										+ roomData.roomName);
+							eventBus.fireEvent(new LeaveRoomLocalEvent());
+
+						} else if (anEvent instanceof GameStartEvent) {
+							if (DEBUG)
+								System.out
+										.println("Client: Got a game start event for room: "
+												+ roomData.roomName);
+							theRemoteEventService.removeListeners();
+							if (DEBUG)
+								System.out
+										.println("Client: Deactivated lobby room listeners in preparation for starting the game");
+							StartGameLocalEvent startGameEvent = new StartGameLocalEvent();
+							if (DEBUG)
+								System.out
+										.println("Client: Fired Local Event: Game Start Event");
+							eventBus.fireEvent(startGameEvent);
 						}
 					}
-					if (indexToBeRemoved != -1) {
-						roomData.users.remove(indexToBeRemoved);
-						populateUserList();
-						if (DEBUG) System.out.println("Client: Removed " + leftRoomEvent.username + " from the user list");
-					}
-					if (leftRoomEvent.username.equalsIgnoreCase(username)) {
-						if (DEBUG) System.out.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
-						theRemoteEventService.removeListeners();
-						eventBus.fireEvent(new LeaveRoomLocalEvent());
-					}
-					
-				} else if (anEvent instanceof UserEnteredRoomEvent) {
-					UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
-					String username = userEnteredRoomEvent.getUsername();
-					if (DEBUG) System.out.println("Client: Received UserEnteredRoomEvent (" + username + ") for room: " + roomData.roomName);
-					roomData.users.add(username);
-					populateUserList();
-				} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
-					UpdateRoomChatWindowEvent chatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
-					roomData.messages.add(chatWindowEvent.message);
-					if (DEBUG)
-						System.out.println("Client: Got message: " + chatWindowEvent.message + ", from server");
-
-					populateMessages();
-					
-					
-				} else if (anEvent instanceof RoomDisbandedEvent) {
-					theRemoteEventService.removeListeners();
-					if (DEBUG)
-						System.out.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: " + roomData.roomName);
-					if (DEBUG)
-						System.out.println("Client: Left Room: " + roomData.roomName);
-					eventBus.fireEvent(new LeaveRoomLocalEvent());
-					
-				} else if (anEvent instanceof GameStartEvent) {
-					if (DEBUG)
-						System.out.println("Client: Got a game start event for room: " + roomData.roomName);
-					theRemoteEventService.removeListeners();
-					if (DEBUG)
-						System.out.println("Client: Deactivated lobby room listeners in preparation for starting the game");
-					StartGameLocalEvent startGameEvent = new StartGameLocalEvent();
-					if (DEBUG)
-						System.out.println("Client: Fired Local Event: Game Start Event");
-					eventBus.fireEvent(startGameEvent);
-				}
-			}
-		});
+				});
 		if (DEBUG)
 			System.out.println("Client: Lobby room listeners activated");
 	}
@@ -564,6 +601,7 @@ public class LobbyRoomView extends Composite implements
 		populateMessages();
 		populateTheme();
 	}
+
 	private void populateUserList() {
 		userListBox.clear();
 		for (String users : roomData.users) {
@@ -579,10 +617,11 @@ public class LobbyRoomView extends Composite implements
 		chatWindow.setText(total);
 		chatWindow.setCursorPos(chatWindow.getText().length());
 	}
-	
+
 	private void populateTheme() {
 		theme.setText(roomData.theme);
 	}
+
 	public void onUpdateChooseTime(int chooseTime) {
 		if (DEBUG)
 			System.out

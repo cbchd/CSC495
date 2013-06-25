@@ -2,15 +2,22 @@ package com.storytime.client.view;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.BrowserEvents;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
@@ -49,7 +56,9 @@ public class JoinRoomView extends Composite implements
 	Column<JoinRoom, String> playersTextColumn;
 	Column<JoinRoom, String> mastersTimeTextColumn;
 	Column<JoinRoom, String> authorsTimeTextColumn;
+	Column<JoinRoom, String> passwordTextColumn;
 	Label lblCurrentRooms = new Label("Current Rooms");
+	final PasswordPopupView popup = new PasswordPopupView();
 
 	public JoinRoomView() {
 		if (DEBUG)
@@ -70,6 +79,7 @@ public class JoinRoomView extends Composite implements
 		setHandlers();
 		setUpColumns();
 		setRemoteEventListenersAndHandleEvents();
+		setPopupHandlers();
 	}
 
 	public void setUpColumns() {
@@ -120,6 +130,20 @@ public class JoinRoomView extends Composite implements
 			}
 		};
 		currentRoomsTable.addColumn(authorsTimeTextColumn, "Author's Time");
+
+		passwordTextColumn = new Column<JoinRoom, String>(new TextCell()) {
+
+			@Override
+			public String getValue(JoinRoom object) {
+				if (!object.password.equalsIgnoreCase("")) {
+					return "Yes";
+				} else {
+					return "No";
+				}
+			}
+
+		};
+		currentRoomsTable.addColumn(passwordTextColumn, "Password");
 	}
 
 	public void populateCellData() {
@@ -201,72 +225,162 @@ public class JoinRoomView extends Composite implements
 				if (DEBUG)
 					System.out.println("Client: Trying to join the room: "
 							+ joinableRoomsInformation.joinableRooms.get(row).roomName);
-				joinRoom(joinableRoomsInformation.joinableRooms.get(row).roomName);
-
+				if (!joinableRoomsInformation.joinableRooms.get(row).password
+						.equalsIgnoreCase("")) {
+					popup.lblIncorrectPassword.setVisible(false);
+					displayPasswordPopup();
+					//joinRoom(joinableRoomsInformation.joinableRooms.get(row).roomName);
+				} else {
+					joinRoom(joinableRoomsInformation.joinableRooms.get(row).roomName);
+				}
 			}
 
 		}, DoubleClickEvent.getType());
 	}
 
 	public void setRemoteEventListenersAndHandleEvents() {
-		theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"), new RemoteEventListener() {
+		theRemoteEventService.addListener(DomainFactory.getDomain("Lobby"),
+				new RemoteEventListener() {
+
+					@Override
+					public void apply(Event anEvent) {
+						if (anEvent instanceof LobbyRoomHostedEvent) {
+							LobbyRoomHostedEvent lobbyRoomEvent = (LobbyRoomHostedEvent) anEvent;
+							if (DEBUG)
+								System.out
+										.println("Client: Got LobbyRoomHostedEvent for room name: "
+												+ lobbyRoomEvent.roomName);
+							JoinRoom joinableRoom = new JoinRoom();
+							joinableRoom.setRoomName(lobbyRoomEvent
+									.getRoomName());
+							joinableRoom.setTheme(lobbyRoomEvent.getTheme());
+							joinableRoom.setPointLimit(lobbyRoomEvent
+									.getPointLimit());
+							joinableRoom.setNumberOfPlayers(lobbyRoomEvent
+									.getNumberOfPlayers());
+							joinableRoom.setMastersTime(lobbyRoomEvent
+									.getMastersTime());
+							joinableRoom.setAuthorsTime(lobbyRoomEvent
+									.getAuthorsTime());
+							joinableRoomsInformation.joinableRooms
+									.add(joinableRoom);
+							currentRoomsTable
+									.setRowData(joinableRoomsInformation.joinableRooms);
+						} else if (anEvent instanceof LobbyRoomDisbandedEvent) {
+							LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = (LobbyRoomDisbandedEvent) anEvent;
+							if (DEBUG)
+								System.out
+										.println("Client: Got LobbyRoomDisbandedEvent for room name: "
+												+ lobbyRoomDisbandedEvent
+														.getRoomName());
+							for (int x = 0; x < joinableRoomsInformation.joinableRooms
+									.size(); x++) {
+								if (joinableRoomsInformation.joinableRooms
+										.get(x).roomName
+										.equalsIgnoreCase(lobbyRoomDisbandedEvent
+												.getRoomName())) {
+									joinableRoomsInformation.joinableRooms
+											.remove(x);
+									break;
+								}
+							}
+							currentRoomsTable
+									.setRowData(joinableRoomsInformation.joinableRooms);
+						} else if (anEvent instanceof UpdatePointLimitEvent) {
+							UpdatePointLimitEvent pointLimitChangeEvent = (UpdatePointLimitEvent) anEvent;
+							if (DEBUG)
+								System.out
+										.println("Client: Received a LobbyRoomPointLimitChangeEvent for room: "
+												+ pointLimitChangeEvent
+														.getRoomName());
+							for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+								if (room.getRoomName().equalsIgnoreCase(
+										pointLimitChangeEvent.getRoomName())) {
+									room.setPointLimit(pointLimitChangeEvent
+											.getPointLimit());
+								}
+							}
+							currentRoomsTable
+									.setRowData(joinableRoomsInformation.joinableRooms);
+						} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
+							UpdateAuthorsTimerEvent updateAuthorsTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+							String roomName = updateAuthorsTimerEvent
+									.getRoomName();
+							if (DEBUG)
+								System.out
+										.println("Client: Received an UpdatesubmissionTimerEvent for room: "
+												+ roomName);
+							for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+								if (room.getRoomName().equalsIgnoreCase(
+										roomName)) {
+									room.setAuthorsTime(updateAuthorsTimerEvent
+											.getAuthorsTimer());
+								}
+							}
+							currentRoomsTable
+									.setRowData(joinableRoomsInformation.joinableRooms);
+						} else if (anEvent instanceof UpdateMastersTimerEvent) {
+							UpdateMastersTimerEvent updateMastersTimerEvent = (UpdateMastersTimerEvent) anEvent;
+							String roomName = updateMastersTimerEvent
+									.getRoomName();
+							if (DEBUG)
+								System.out
+										.println("Client: Received an UpdateMastersTimerEvent for room: "
+												+ roomName);
+							for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
+								if (room.getRoomName().equalsIgnoreCase(
+										roomName)) {
+									room.setMastersTime(updateMastersTimerEvent
+											.getMastersTime());
+								}
+							}
+							currentRoomsTable
+									.setRowData(joinableRoomsInformation.joinableRooms);
+						}
+					}
+				});
+	}
+
+	public void displayPasswordPopup() {
+		if (DEBUG) System.out.println("Client: Please enter the password for room: " + joinableRoomsInformation.joinableRooms.get(row).roomName);
+		
+		popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 
 			@Override
-			public void apply(Event anEvent) {
-				 if (anEvent instanceof LobbyRoomHostedEvent) {
-					LobbyRoomHostedEvent lobbyRoomEvent = (LobbyRoomHostedEvent) anEvent;
-					if (DEBUG)
-						System.out.println("Client: Got LobbyRoomHostedEvent for room name: " + lobbyRoomEvent.roomName);
-					JoinRoom joinableRoom = new JoinRoom();
-					joinableRoom.setRoomName(lobbyRoomEvent.getRoomName());
-					joinableRoom.setTheme(lobbyRoomEvent.getTheme());
-					joinableRoom.setPointLimit(lobbyRoomEvent.getPointLimit());
-					joinableRoom.setNumberOfPlayers(lobbyRoomEvent.getNumberOfPlayers());
-					joinableRoom.setMastersTime(lobbyRoomEvent.getMastersTime());
-					joinableRoom.setAuthorsTime(lobbyRoomEvent.getAuthorsTime());
-					joinableRoomsInformation.joinableRooms.add(joinableRoom);
-					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
-				} else if (anEvent instanceof LobbyRoomDisbandedEvent) {
-					LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = (LobbyRoomDisbandedEvent) anEvent;
-					if (DEBUG) System.out.println("Client: Got LobbyRoomDisbandedEvent for room name: " + lobbyRoomDisbandedEvent.getRoomName());
-					for (int x = 0; x < joinableRoomsInformation.joinableRooms.size(); x++) {
-						if (joinableRoomsInformation.joinableRooms.get(x).roomName.equalsIgnoreCase(lobbyRoomDisbandedEvent.getRoomName())) {
-							joinableRoomsInformation.joinableRooms.remove(x);
-							break;
-						}
-					}
-					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
-				} else if (anEvent instanceof UpdatePointLimitEvent) {
-					UpdatePointLimitEvent pointLimitChangeEvent = (UpdatePointLimitEvent) anEvent;
-					if (DEBUG) System.out.println("Client: Received a LobbyRoomPointLimitChangeEvent for room: " + pointLimitChangeEvent.getRoomName());
-					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
-						if (room.getRoomName().equalsIgnoreCase(pointLimitChangeEvent.getRoomName())) {
-							room.setPointLimit(pointLimitChangeEvent.getPointLimit());
-						}
-					}
-					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
-				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
-					UpdateAuthorsTimerEvent updateAuthorsTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
-					String roomName = updateAuthorsTimerEvent.getRoomName();
-					if (DEBUG) System.out.println("Client: Received an UpdatesubmissionTimerEvent for room: " + roomName);
-					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
-						if (room.getRoomName().equalsIgnoreCase(roomName)) {
-							room.setAuthorsTime(updateAuthorsTimerEvent.getAuthorsTimer());
-						}
-					}
-					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
-				} else if (anEvent instanceof UpdateMastersTimerEvent) {
-					UpdateMastersTimerEvent updateMastersTimerEvent = (UpdateMastersTimerEvent) anEvent;
-					String roomName = updateMastersTimerEvent.getRoomName();
-					if (DEBUG) System.out.println("Client: Received an UpdateMastersTimerEvent for room: " + roomName);
-					for (JoinRoom room : joinableRoomsInformation.joinableRooms) {
-						if (room.getRoomName().equalsIgnoreCase(roomName)) {
-							room.setMastersTime(updateMastersTimerEvent.getMastersTime());
-						}
-					}
-					currentRoomsTable.setRowData(joinableRoomsInformation.joinableRooms);
+			public void setPosition(int offsetWidth, int offsetHeight) {
+	            popup.setGlassEnabled(true);
+	            popup.textBox.setFocus(true);
+	            popup.textBox.setCursorPos(0);
+	            popup.center();
+			}
+			
+		});
+	}
+	
+	public void setPopupHandlers() {
+		popup.textBox.addKeyDownHandler(new KeyDownHandler() {
+			public void onKeyDown(KeyDownEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					popup.lblIncorrectPassword.setVisible(false);
+					checkForCorrectPasswordEnteredInPopup();
 				}
 			}
 		});
+		popup.btnEnter.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				popup.lblIncorrectPassword.setVisible(false);
+				checkForCorrectPasswordEnteredInPopup();
+			}
+		});
+	}
+	
+	public void checkForCorrectPasswordEnteredInPopup() {
+		JoinRoom roomTryingToJoin = joinableRoomsInformation.joinableRooms.get(row);
+		if (popup.textBox.getText().equalsIgnoreCase(roomTryingToJoin.password)) {
+		joinRoom(joinableRoomsInformation.joinableRooms.get(row).roomName);
+		} else {
+			if (DEBUG) System.out.println("Client: An incorrect password was entered for the room: " + roomTryingToJoin.roomName);
+			popup.lblIncorrectPassword.setVisible(true);
+		}
 	}
 }

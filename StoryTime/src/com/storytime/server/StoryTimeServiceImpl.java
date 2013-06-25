@@ -667,6 +667,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			joinRoom.authorsTime = room.authorsTime;
 			joinRoom.numberOfPlayers = room.numberOfPlayers;
 			joinRoom.pointLimit = room.pointLimit;
+			joinRoom.password = room.password;
 			joinableRoomsInformation.joinableRooms.add(joinRoom);
 		}
 		return joinableRoomsInformation;

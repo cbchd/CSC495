@@ -7,9 +7,9 @@ public class Room {
     String roomName; 
     String theme;
     String password = "";
-    int pointLimit = 5;
-    int authorsTime = 10;
-    int mastersTime = 15;
+    int pointLimit = 60;
+    int authorsTime = 40;
+    int mastersTime = 45;
     int numberOfPlayers = 0;
     User host;
     boolean inGame;
