@@ -143,6 +143,13 @@ public class StoryTimeEngine {
 		}
 	}
 
+	public void setPassword(String roomName, User host, String password) {
+		Room lobbyRoom = lobbyRooms.get(roomName);
+		if (lobbyRoom.host.getUsername().equalsIgnoreCase(host.getUsername())) {
+			lobbyRoom.setPassword(password);
+		}
+	}
+	
 	public void castSpell(String casterUsername, String targetUsername, Spell spell) {
 		// TODO
 	}

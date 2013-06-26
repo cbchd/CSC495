@@ -60,12 +60,12 @@ public class LobbyRoom {
 				roomData.pointCap = result.pointCap;
 				roomData.roomName = result.roomName;
 				roomData.theme = result.theme;
-				roomData.submissionTimer = result.submissionTimer;
+				roomData.authorsTimer = result.authorsTimer;
 				roomData.users = result.users;
 				roomData.inGame = result.inGame;
 				roomData.domain = result.domain;
 				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName
-						+ ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.submissionTimer + ", Users: "
+						+ ", Theme: " + roomData.theme + ", " + "Timer: " + roomData.authorsTimer + ", Users: "
 						+ roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
 				displayView();
 			}
@@ -146,7 +146,7 @@ public class LobbyRoom {
 		grid_1.setWidget(1, 0, lblTimePerRound);
 
 		final ValueListBox<Integer> timePerRoundBox = new ValueListBox<Integer>(IntegerRenderer.instance());
-		timePerRoundBox.setValue(roomData.submissionTimer);
+		timePerRoundBox.setValue(roomData.authorsTimer);
 		timePerRoundBox.setValue(15);
 		timePerRoundBox.setValue(20);
 		timePerRoundBox.setValue(25);
@@ -325,7 +325,7 @@ public class LobbyRoom {
 					// Update the submissionTimer
 					UpdateAuthorsTimerEvent updateSubmissionTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
 					timePerRoundBox.setValue(updateSubmissionTimerEvent.authorsTimer);
-					roomData.submissionTimer = updateSubmissionTimerEvent.authorsTimer;
+					roomData.authorsTimer = updateSubmissionTimerEvent.authorsTimer;
 				} else if (anEvent instanceof UserLeftRoomEvent) {
 					// Remove the user from the user list
 					UserLeftRoomEvent leftRoomEvent = (UserLeftRoomEvent) anEvent;

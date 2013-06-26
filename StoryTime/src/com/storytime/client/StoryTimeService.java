@@ -162,5 +162,7 @@ public interface StoryTimeService extends RemoteService {
 	 * than the time allotted for their room to act
 	 */
 	public void setTimerElapsed();
+	
+	public void setPassword(String roomName, String password);
 
 }

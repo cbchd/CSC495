@@ -31,6 +31,7 @@ import com.storytime.client.lobbyroom.LobbyRoomData;
 import com.storytime.client.lobbyroom.RoomDisbandedEvent;
 import com.storytime.client.lobbyroom.UpdateAuthorsTimerEvent;
 import com.storytime.client.lobbyroom.UpdateMastersTimerEvent;
+import com.storytime.client.lobbyroom.UpdatePasswordEvent;
 import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
 import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
@@ -127,11 +128,15 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			logger.log(Level.FINEST, "Server " + user.username
 					+ " hosted a room with the name: " + roomName
 					+ " and the theme: " + theme + " and the with the password: " + password + " and with the maximum number of players at: " + numberOfPlayers);
+			Room hostedRoom = engine.lobbyRooms.get(roomName);
 			LobbyRoomHostedEvent roomsEvent = new LobbyRoomHostedEvent();
-			roomsEvent.roomName = roomName;
-			roomsEvent.theme = theme;
-			roomsEvent.password = password;
-			roomsEvent.numberOfPlayers = numberOfPlayers;
+			roomsEvent.setRoomName(hostedRoom.getRoomName());
+			roomsEvent.setTheme(hostedRoom.getTheme());
+			roomsEvent.setPassword(hostedRoom.getPassword());
+			roomsEvent.setNumberOfPlayers(hostedRoom.getNumberOfPlayers());
+			roomsEvent.setPointLimit(hostedRoom.getPointLimit());
+			roomsEvent.setAuthorsTime(hostedRoom.getAuthorsTime());
+			roomsEvent.setMastersTime(hostedRoom.getMastersTime());
 			addEvent(LobbyRoomHostedEvent.domain, roomsEvent);
 			logger.log(Level.FINEST,
 					"Server: Fired LobbyRoomHostedEvent for room: " + roomName);
@@ -203,11 +208,13 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 					+ "'s room: " + room.roomName);
 		}
 		LobbyRoomData roomInfo = new LobbyRoomData();
-		roomInfo.pointCap = room.pointLimit;
-		roomInfo.theme = room.theme;
-		roomInfo.submissionTimer = room.authorsTime;
-		roomInfo.roomName = room.roomName;
-		roomInfo.chooserTimer = room.mastersTime;
+		roomInfo.setPointCap(room.getPointLimit());
+		roomInfo.setTheme(room.getTheme());
+		roomInfo.setAuthorsTimer(room.getAuthorsTime());
+		roomInfo.setRoomName(room.getRoomName());
+		roomInfo.setMastersTimer(room.getMastersTime());
+		roomInfo.setHostsName(room.getHost().getUsername());
+		roomInfo.setPassword(room.getPassword());
 		logger.log(Level.FINEST,
 				"Server: Adding users to the list of room information to be sent to "
 						+ user.username);
@@ -671,6 +678,22 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			joinableRoomsInformation.joinableRooms.add(joinRoom);
 		}
 		return joinableRoomsInformation;
+	}
+
+	@Override
+	public void setPassword(String roomName, String password) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User usr = (User) session.getAttribute("User");
+		engine.setPassword(roomName, usr, password);
+		logger.log(Level.FINEST, "Server: Set the password for room: " + roomName + " to be: " + password);
+		UpdatePasswordEvent passwordChangedEvent = new UpdatePasswordEvent();
+		passwordChangedEvent.setNewPassword(password);
+		passwordChangedEvent.setRoomName(roomName);
+		addEvent(DomainFactory.getDomain(roomName), passwordChangedEvent);
+		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for room: " + roomName);
+		addEvent(DomainFactory.getDomain("Lobby"), passwordChangedEvent);
+		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
 	}
 
 }

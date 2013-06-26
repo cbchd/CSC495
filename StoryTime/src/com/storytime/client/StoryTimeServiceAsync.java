@@ -56,4 +56,6 @@ public interface StoryTimeServiceAsync {
 
 	void getJoinableRoomsAndTheirInformation(AsyncCallback<JoinableRoomsInformation> callback);
 
+	void setPassword(String roomName, String password, AsyncCallback<Void> callback);
+
 }

@@ -176,10 +176,10 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		gameData.domain = LobbyRoomView.roomData.domain;
 		gameData.pointCap = LobbyRoomView.roomData.pointCap;
 		gameData.users = LobbyRoomView.roomData.users;
-		gameData.submissionTimer = LobbyRoomView.roomData.submissionTimer;
+		gameData.submissionTimer = LobbyRoomView.roomData.authorsTimer;
 		gameData.theme = LobbyRoomView.roomData.theme;
 		gameData.messages = new ArrayList<String>();
-		gameData.chooserTimer = LobbyRoomView.roomData.chooserTimer;
+		gameData.chooserTimer = LobbyRoomView.roomData.mastersTimer;
 		if (DEBUG)
 			System.out.println("Client: Setting the game room's maximum point cap to: " + gameData.pointCap);
 		if (DEBUG)

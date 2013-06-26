@@ -47,7 +47,7 @@ public class GameInProgressRoom {
 		gameData.domain = LobbyRoom.roomData.domain;
 		gameData.pointCap = LobbyRoom.roomData.pointCap;
 		gameData.users = LobbyRoom.roomData.users;
-		gameData.submissionTimer = LobbyRoom.roomData.submissionTimer;
+		gameData.submissionTimer = LobbyRoom.roomData.authorsTimer;
 		gameData.theme = LobbyRoom.roomData.theme;
 		gameData.messages = new ArrayList<String>();
 		for (String user : LobbyRoom.roomData.users) {

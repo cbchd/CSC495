@@ -10,7 +10,14 @@ public class JoinRoom implements Serializable {
     public String password = "";
     public int authorsTime = 0;
     public int mastersTime = 0;
-    public int numberOfPlayers = 0;
+    
+    public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public int numberOfPlayers = 0;
     public int pointLimit = 0;
 	
 	public int getNumberOfPlayers() {
