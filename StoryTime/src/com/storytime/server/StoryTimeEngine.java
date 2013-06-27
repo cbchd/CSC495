@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import com.storytime.client.spellrelated.Spell;
-
 public class StoryTimeEngine {
 	
 	ArrayList<String> lobbyChat;
@@ -150,7 +148,4 @@ public class StoryTimeEngine {
 		}
 	}
 	
-	public void castSpell(String casterUsername, String targetUsername, Spell spell) {
-		// TODO
-	}
 }

@@ -1,8 +1,5 @@
 package com.storytime.server;
 
-import java.util.HashMap;
-
-import com.storytime.client.spellrelated.SpellBook;
 
 
 public class User {
@@ -15,7 +12,6 @@ public class User {
 	Room room;
 	InGameRoom ingameRoom;
 	boolean timerElapsed = false;
-	HashMap<String, SpellBook> spellBooks = new HashMap<String, SpellBook>();
 
 	StoryTimeEngine storyTimeEngine;
 
@@ -24,14 +20,6 @@ public class User {
 		this.password = password;
 		this.storyTimeEngine = storyTimeEngine;
 		room = null;
-	}
-
-	public HashMap<String, SpellBook> getSpellBooks() {
-		return spellBooks;
-	}
-
-	public void setSpellBooks(HashMap<String, SpellBook> spellBooks) {
-		this.spellBooks = spellBooks;
 	}
 
 	public int getScore() {

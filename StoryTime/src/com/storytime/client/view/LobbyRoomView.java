@@ -248,9 +248,8 @@ public class LobbyRoomView extends Composite implements
 	private void setHandlers() {
 		passwordEnabledCheckBox.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				if (!passwordEnabledCheckBox.isEnabled()) {
+				if (passwordEnabledCheckBox.isChecked()) {
 					passwordPopup.textBox.setText("");
-					passwordPopup.setVisible(true);
 					passwordPopup.show();
 				} else {
 					passwordPopup.textBox.setText("");
@@ -258,7 +257,7 @@ public class LobbyRoomView extends Composite implements
 				}
 			}
 		});
-		passwordEnabledCheckBox.addKeyDownHandler(new KeyDownHandler() {
+		passwordPopup.textBox.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
@@ -272,29 +271,7 @@ public class LobbyRoomView extends Composite implements
 
 			@Override
 			public void onClick(ClickEvent event) {
-				storyTimeService.setPassword(roomData.roomName,
-						passwordPopup.textBox.getText(),
-						new AsyncCallback<Void>() {
-
-							@Override
-							public void onFailure(Throwable caught) {
-								if (DEBUG)
-									System.out
-											.println("Client: Failed to tell the server what the new password for room "
-													+ roomData.roomName + " is");
-							}
-
-							@Override
-							public void onSuccess(Void result) {
-								if (DEBUG)
-									System.out
-											.println("Client: Successfully told the server to change the password for room "
-													+ roomData.roomName);
-								passwordPopup.textBox.setText("");
-								passwordPopup.hide();
-							}
-
-						});
+				setPassword();
 			}
 
 		});
@@ -740,10 +717,13 @@ public class LobbyRoomView extends Composite implements
 			@Override
 			public void onSuccess(Void result) {
 				if (DEBUG) System.out.println("Client: Successfully told server to change the password for room: " + roomData.getRoomName());
+				passwordPopup.textBox.setText("");
+				passwordPopup.hide();
 			}
 			
 		});
 	}
+	
 	public Widget asWidget() {
 		return this;
 	}
