@@ -14,6 +14,16 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.TabBar;
+import com.google.gwt.user.client.ui.DecoratedTabBar;
+import com.google.gwt.user.client.ui.CheckBox;
 
 public class GameInProgressRoomPowerMenuView {
 	
@@ -21,19 +31,21 @@ public class GameInProgressRoomPowerMenuView {
 		RootPanel rp = RootPanel.get();
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
+		//verticalPanel.setStyleName("AttackAndDefendPage");
+		rp.setStyleName("AttackAndDefendPage");
 		verticalPanel.setBorderWidth(0);
-		rp.add(verticalPanel, 10, 10);
-		verticalPanel.setSize("748px", "388px");
-		
+		rp.add(verticalPanel, 172, 124);
+		verticalPanel.setSize("748px", "226px");
 		Label lblAttacksDefenses = new Label("Attacks & Defenses");
 		lblAttacksDefenses.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.add(lblAttacksDefenses);
+		lblAttacksDefenses.setHeight("48px");
 		
 		DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
 		verticalPanel.add(decoratedTabPanel);
 		decoratedTabPanel.setSize("100%", "196px");
 		
-		DecoratedTabPanel decoratedTabPanel_1 = new DecoratedTabPanel();
+		StackPanel decoratedTabPanel_1 = new StackPanel();
 		decoratedTabPanel.add(decoratedTabPanel_1, "Offense", false);
 		decoratedTabPanel_1.setSize("100%", "100%");
 		
@@ -48,17 +60,27 @@ public class GameInProgressRoomPowerMenuView {
 		Label lblRemoveAll = new Label("Remove All:");
 		grid_2.setWidget(0, 0, lblRemoveAll);
 		
-		TextBox textBox_4 = new TextBox();
-		grid_2.setWidget(0, 1, textBox_4);
+		TextBox removalTextBox = new TextBox();
+		grid_2.setWidget(0, 1, removalTextBox);
 		grid_2.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		grid_2.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		ToggleButton tglbtnUpText = new ToggleButton("Up text");
-		tglbtnUpText.getDownFace().setText("Armed");
-		tglbtnUpText.setHTML("Arm");
-		verticalPanel_3.add(tglbtnUpText);
-		verticalPanel_3.setCellHorizontalAlignment(tglbtnUpText, HasHorizontalAlignment.ALIGN_CENTER);
-		tglbtnUpText.setWidth("10%");
+		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
+		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_3.add(horizontalPanel_2);
+		horizontalPanel_2.setSize("100%", "100%");
+		
+		ToggleButton tglbtnArmLetterRemoval = new ToggleButton("Arm");
+		tglbtnArmLetterRemoval.getDownFace().setText("Armed");
+		horizontalPanel_2.add(tglbtnArmLetterRemoval);
+		tglbtnArmLetterRemoval.setHTML("Arm");
+		verticalPanel_3.setCellHorizontalAlignment(tglbtnArmLetterRemoval, HasHorizontalAlignment.ALIGN_CENTER);
+		tglbtnArmLetterRemoval.setWidth("50%");
+		
+		Button btnActivate_1 = new Button("Activate");
+		btnActivate_1.setStyleName("gwt-LoginAsNewUserButton");
+		horizontalPanel_2.add(btnActivate_1);
+		btnActivate_1.setWidth("50%");
 		
 		VerticalPanel verticalPanel_4 = new VerticalPanel();
 		decoratedTabPanel_1.add(verticalPanel_4, "Letter Substitution", false);
@@ -72,24 +94,24 @@ public class GameInProgressRoomPowerMenuView {
 		Label lblSubstituteThis = new Label("Substitute This:");
 		grid.setWidget(0, 0, lblSubstituteThis);
 		
-		TextBox textBox = new TextBox();
-		textBox.setAlignment(TextAlignment.LEFT);
-		grid.setWidget(0, 1, textBox);
+		TextBox substituteThisTextBox = new TextBox();
+		substituteThisTextBox.setAlignment(TextAlignment.LEFT);
+		grid.setWidget(0, 1, substituteThisTextBox);
 		
 		Label lblForThis = new Label("For This:");
 		grid.setWidget(0, 2, lblForThis);
 		
-		TextBox textBox_1 = new TextBox();
-		grid.setWidget(0, 3, textBox_1);
+		TextBox substituteForThisTextBox = new TextBox();
+		grid.setWidget(0, 3, substituteForThisTextBox);
 		grid.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		grid.getCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		ToggleButton tglbtnUpText_1 = new ToggleButton("Arm");
-		tglbtnUpText_1.getDownFace().setHTML("Armed");
-		verticalPanel_4.add(tglbtnUpText_1);
-		tglbtnUpText_1.setWidth("10%");
-		verticalPanel_4.setCellWidth(tglbtnUpText_1, "100%");
-		verticalPanel_4.setCellHorizontalAlignment(tglbtnUpText_1, HasHorizontalAlignment.ALIGN_CENTER);
+		ToggleButton tglbtnArmLetterSubstitution = new ToggleButton("Arm");
+		tglbtnArmLetterSubstitution.getDownFace().setHTML("Armed");
+		verticalPanel_4.add(tglbtnArmLetterSubstitution);
+		tglbtnArmLetterSubstitution.setWidth("10%");
+		verticalPanel_4.setCellWidth(tglbtnArmLetterSubstitution, "100%");
+		verticalPanel_4.setCellHorizontalAlignment(tglbtnArmLetterSubstitution, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		VerticalPanel verticalPanel_5 = new VerticalPanel();
 		decoratedTabPanel_1.add(verticalPanel_5, "Letter Addition", false);
@@ -103,33 +125,33 @@ public class GameInProgressRoomPowerMenuView {
 		lblAddThis.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		grid_3.setWidget(0, 0, lblAddThis);
 		
-		TextBox textBox_5 = new TextBox();
-		grid_3.setWidget(0, 1, textBox_5);
+		TextBox letterAdditionAddThisTextBox = new TextBox();
+		grid_3.setWidget(0, 1, letterAdditionAddThisTextBox);
 		
 		Label lblEveryTime = new Label("After This:");
 		lblEveryTime.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		grid_3.setWidget(0, 2, lblEveryTime);
 		
-		TextBox textBox_6 = new TextBox();
-		grid_3.setWidget(0, 3, textBox_6);
+		TextBox letterAdditionAfterThisTextBox = new TextBox();
+		grid_3.setWidget(0, 3, letterAdditionAfterThisTextBox);
 		
-		ToggleButton tglbtnUpText_2 = new ToggleButton("Arm");
-		tglbtnUpText_2.getDownFace().setHTML("Armed");
-		verticalPanel_5.add(tglbtnUpText_2);
-		verticalPanel_5.setCellHorizontalAlignment(tglbtnUpText_2, HasHorizontalAlignment.ALIGN_CENTER);
-		tglbtnUpText_2.setWidth("10%");
+		ToggleButton tglbtnArmLetterAddition = new ToggleButton("Arm");
+		tglbtnArmLetterAddition.getDownFace().setHTML("Armed");
+		verticalPanel_5.add(tglbtnArmLetterAddition);
+		verticalPanel_5.setCellHorizontalAlignment(tglbtnArmLetterAddition, HasHorizontalAlignment.ALIGN_CENTER);
+		tglbtnArmLetterAddition.setWidth("10%");
 		
 		VerticalPanel verticalPanel_6 = new VerticalPanel();
 		verticalPanel_6.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		decoratedTabPanel_1.add(verticalPanel_6, "Scramble", false);
 		verticalPanel_6.setSize("100%", "100%");
 		
-		ToggleButton tglbtnArm = new ToggleButton("Arm");
-		tglbtnArm.getDownFace().setText("Armed");
-		verticalPanel_6.add(tglbtnArm);
-		tglbtnArm.setWidth("10%");
+		ToggleButton tglbtnArmScramble = new ToggleButton("Arm");
+		tglbtnArmScramble.getDownFace().setText("Armed");
+		verticalPanel_6.add(tglbtnArmScramble);
+		tglbtnArmScramble.setWidth("10%");
 		
-		DecoratedTabPanel decoratedTabPanel_2 = new DecoratedTabPanel();
+		StackPanel decoratedTabPanel_2 = new StackPanel();
 		decoratedTabPanel.add(decoratedTabPanel_2, "Defense", false);
 		decoratedTabPanel_2.setSize("100%", "100%");
 		
@@ -144,17 +166,18 @@ public class GameInProgressRoomPowerMenuView {
 		Label lblProtectThis = new Label("Protect This:");
 		lblProtectThis.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		grid_4.setWidget(0, 0, lblProtectThis);
-		lblProtectThis.setSize("168px", "51px");
+		grid_4.getCellFormatter().setHeight(0, 0, "51px");
+		lblProtectThis.setSize("168px", "");
 		
-		ListBox comboBox_1 = new ListBox();
-		grid_4.setWidget(0, 1, comboBox_1);
-		comboBox_1.setWidth("451px");
+		ListBox protectThisSubmissionComboBox = new ListBox();
+		grid_4.setWidget(0, 1, protectThisSubmissionComboBox);
+		protectThisSubmissionComboBox.setWidth("451px");
 		
-		ToggleButton tglbtnUpText_3 = new ToggleButton("Arm");
-		tglbtnUpText_3.getDownFace().setText("Armed");
-		verticalPanel_7.add(tglbtnUpText_3);
-		tglbtnUpText_3.setWidth("10%");
-		verticalPanel_7.setCellHorizontalAlignment(tglbtnUpText_3, HasHorizontalAlignment.ALIGN_CENTER);
+		ToggleButton tglbtnArmProtect = new ToggleButton("Arm");
+		tglbtnArmProtect.getDownFace().setText("Armed");
+		verticalPanel_7.add(tglbtnArmProtect);
+		tglbtnArmProtect.setWidth("10%");
+		verticalPanel_7.setCellHorizontalAlignment(tglbtnArmProtect, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		VerticalPanel verticalPanel_8 = new VerticalPanel();
 		decoratedTabPanel_2.add(verticalPanel_8, "Cleanse", false);
@@ -168,16 +191,16 @@ public class GameInProgressRoomPowerMenuView {
 		grid_5.setWidget(0, 0, lblNeutralizeTheAttack);
 		grid_5.getCellFormatter().setHeight(0, 0, "51px");
 		
-		ListBox comboBox_2 = new ListBox();
-		grid_5.setWidget(0, 1, comboBox_2);
-		comboBox_2.setWidth("367px");
+		ListBox cleanseSubmissionComboBox = new ListBox();
+		grid_5.setWidget(0, 1, cleanseSubmissionComboBox);
+		cleanseSubmissionComboBox.setWidth("367px");
 		
-		ToggleButton tglbtnArm_1 = new ToggleButton("Arm");
-		tglbtnArm_1.getDownFace().setHTML("Armed");
-		verticalPanel_8.add(tglbtnArm_1);
-		tglbtnArm_1.setWidth("10%");
-		verticalPanel_8.setCellHorizontalAlignment(tglbtnArm_1, HasHorizontalAlignment.ALIGN_CENTER);
-		verticalPanel_8.setCellWidth(tglbtnArm_1, "100%");
+		ToggleButton tglbtnArmCleanse = new ToggleButton("Arm");
+		tglbtnArmCleanse.getDownFace().setHTML("Armed");
+		verticalPanel_8.add(tglbtnArmCleanse);
+		tglbtnArmCleanse.setWidth("10%");
+		verticalPanel_8.setCellHorizontalAlignment(tglbtnArmCleanse, HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_8.setCellWidth(tglbtnArmCleanse, "100%");
 		
 		VerticalPanel verticalPanel_9 = new VerticalPanel();
 		decoratedTabPanel_2.add(verticalPanel_9, "Trap [Counter]", false);
@@ -193,67 +216,109 @@ public class GameInProgressRoomPowerMenuView {
 		grid_6.getCellFormatter().setHeight(0, 0, "51px");
 		lblTrapForThis.setHeight("");
 		
-		ListBox comboBox_3 = new ListBox();
-		grid_6.setWidget(0, 1, comboBox_3);
-		comboBox_3.setWidth("268px");
+		ListBox trapForThisAttackTypeComboBox = new ListBox();
+		grid_6.setWidget(0, 1, trapForThisAttackTypeComboBox);
+		trapForThisAttackTypeComboBox.setWidth("268px");
 		
-		ToggleButton tglbtnUpText_4 = new ToggleButton("Arm");
-		tglbtnUpText_4.getDownFace().setText("Armed");
-		verticalPanel_9.add(tglbtnUpText_4);
-		verticalPanel_9.setCellHorizontalAlignment(tglbtnUpText_4, HasHorizontalAlignment.ALIGN_CENTER);
-		tglbtnUpText_4.setSize("10%", "100%");
+		ToggleButton tglbtnArmTrap = new ToggleButton("Arm");
+		tglbtnArmTrap.getDownFace().setText("Armed");
+		verticalPanel_9.add(tglbtnArmTrap);
+		verticalPanel_9.setCellHorizontalAlignment(tglbtnArmTrap, HasHorizontalAlignment.ALIGN_CENTER);
+		tglbtnArmTrap.setSize("10%", "100%");
 		
-		Grid grid_1 = new Grid(4, 4);
-		grid_1.setBorderWidth(0);
-		verticalPanel.add(grid_1);
+		VerticalPanel verticalPanel_11 = new VerticalPanel();
+		decoratedTabPanel.add(verticalPanel_11, "Activate", false);
+		verticalPanel_11.setSize("100%", "100%");
+		
+		Grid grid_1 = new Grid(8, 3);
+		verticalPanel_11.add(grid_1);
 		grid_1.setSize("100%", "100%");
+		grid_1.setBorderWidth(0);
 		
-		Label lblName = new Label("Name:");
-		grid_1.setWidget(0, 0, lblName);
-		lblName.setWidth("132px");
+		Label lblRandomName = new Label("Random Name");
+		lblRandomName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(1, 1, lblRandomName);
+		lblRandomName.setWidth("100%");
 		
-		TextBox textBox_2 = new TextBox();
-		grid_1.setWidget(0, 1, textBox_2);
+		CheckBox checkBox = new CheckBox("");
+		grid_1.setWidget(1, 2, checkBox);
 		
-		Label lblWords = new Label("Message:");
-		grid_1.setWidget(0, 2, lblWords);
+		Label lblRandomMessage = new Label("Random Message");
+		grid_1.setWidget(2, 1, lblRandomMessage);
+		lblRandomMessage.setWidth("100%");
 		
-		TextBox textBox_3 = new TextBox();
-		grid_1.setWidget(0, 3, textBox_3);
+		CheckBox checkBox_1 = new CheckBox("");
+		grid_1.setWidget(2, 2, checkBox_1);
 		
-		Label lblCost = new Label("Cost:");
-		grid_1.setWidget(1, 1, lblCost);
+		Label lblName = new Label("Attack Name");
+		lblName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(3, 1, lblName);
+		lblName.setWidth("100%");
+		
+		TextBox nameTextBox = new TextBox();
+		grid_1.setWidget(3, 2, nameTextBox);
+		nameTextBox.setWidth("62%");
+		
+		Label lblWords = new Label("Message");
+		lblWords.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(4, 1, lblWords);
+		lblWords.setWidth("100%");
+		
+		TextBox messageTextBox = new TextBox();
+		grid_1.setWidget(4, 2, messageTextBox);
+		grid_1.getCellFormatter().setWidth(4, 2, "");
+		messageTextBox.setWidth("62%");
+		
+		Label lblCost = new Label("Total Cost");
+		lblCost.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(5, 1, lblCost);
+		lblCost.setWidth("100%");
 		
 		Label lblTotalCost = new Label("");
-		grid_1.setWidget(1, 2, lblTotalCost);
+		grid_1.setWidget(5, 2, lblTotalCost);
 		
-		Label lblTarget = new Label("Target:");
-		lblTarget.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		grid_1.setWidget(2, 1, lblTarget);
+		Label lblTarget = new Label("Target");
+		lblTarget.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(6, 1, lblTarget);
+		lblTarget.setWidth("100%");
 		
-		ListBox comboBox = new ListBox();
-		grid_1.setWidget(2, 2, comboBox);
-		comboBox.setWidth("100%");
-		grid_1.getCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_CENTER);
+		ListBox targetComboBox = new ListBox();
+		grid_1.setWidget(6, 2, targetComboBox);
+		targetComboBox.setWidth("246px");
+		grid_1.getCellFormatter().setHorizontalAlignment(5, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		VerticalPanel verticalPanel_2 = new VerticalPanel();
-		verticalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		grid_1.setWidget(3, 1, verticalPanel_2);
-		verticalPanel_2.setSize("100%", "100%");
+		Label lblPreview = new Label("Preview");
+		grid_1.setWidget(7, 1, lblPreview);
+		grid_1.getCellFormatter().setHeight(7, 1, "");
+		lblPreview.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblPreview.setSize("100%", "100%");
 		
-		Button btnNewButton_1 = new Button("Save");
-		btnNewButton_1.setStyleName("gwt-LoginAsNewUserButton");
-		verticalPanel_2.add(btnNewButton_1);
-		btnNewButton_1.setWidth("132px");
+		TextBox textBox = new TextBox();
+		grid_1.setWidget(7, 2, textBox);
+		textBox.setWidth("62%");
+		grid_1.getCellFormatter().setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		VerticalPanel verticalPanel_1 = new VerticalPanel();
-		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		grid_1.setWidget(3, 2, verticalPanel_1);
-		verticalPanel_1.setSize("100%", "100%");
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_11.add(horizontalPanel);
+		horizontalPanel.setSize("100%", "100%");
 		
-		Button btnNewButton = new Button("Activate");
-		btnNewButton.setStyleName("gwt-LoginAsNewUserButton");
-		verticalPanel_1.add(btnNewButton);
-		btnNewButton.setWidth("132px");
+		Button btnResetDisarm = new Button("Reset & Disarm");
+		horizontalPanel.add(btnResetDisarm);
+		btnResetDisarm.setStyleName("gwt-LoginAsNewUserButton");
+		
+		Button btnActivate = new Button("Activate");
+		horizontalPanel.add(btnActivate);
+		btnActivate.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+			}
+		});
+		btnActivate.setStyleName("gwt-LoginAsNewUserButton");
+		btnActivate.setWidth("132px");
+		
+		Button btnSave = new Button("Save");
+		horizontalPanel.add(btnSave);
+		btnSave.setStyleName("gwt-LoginAsNewUserButton");
+		btnSave.setWidth("132px");
 	}
 }
