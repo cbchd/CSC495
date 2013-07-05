@@ -116,7 +116,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 						+ message);
 	}
 
-	public void hostLobbyRoom(String roomName, String theme, String password, int numberOfPlayers) {
+	public void hostLobbyRoom(String roomName, String theme, String password,
+			int numberOfPlayers) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("User");
@@ -127,7 +128,10 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			engine.hostRoom(user, roomName, theme, password, numberOfPlayers);
 			logger.log(Level.FINEST, "Server " + user.username
 					+ " hosted a room with the name: " + roomName
-					+ " and the theme: " + theme + " and the with the password: " + password + " and with the maximum number of players at: " + numberOfPlayers);
+					+ " and the theme: " + theme
+					+ " and the with the password: " + password
+					+ " and with the maximum number of players at: "
+					+ numberOfPlayers);
 			Room hostedRoom = engine.lobbyRooms.get(roomName);
 			LobbyRoomHostedEvent roomsEvent = new LobbyRoomHostedEvent();
 			roomsEvent.setRoomName(hostedRoom.getRoomName());
@@ -173,10 +177,14 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		}
 		UserEnteredRoomEvent userEnteredRoomEvent = new UserEnteredRoomEvent();
 		userEnteredRoomEvent.setUsername(thisUser.getUsername());
-		addEvent(DomainFactory.getDomain(thisUser.getRoom().roomName), userEnteredRoomEvent);
-		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: " + thisUser.getRoom().getRoomName());
+		addEvent(DomainFactory.getDomain(thisUser.getRoom().roomName),
+				userEnteredRoomEvent);
+		logger.log(Level.FINEST,
+				"Server: Fired a UserEnteredRoomEvent for domain: "
+						+ thisUser.getRoom().getRoomName());
 		addEvent(DomainFactory.getDomain("Lobby"), userEnteredRoomEvent);
-		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: Lobby");
+		logger.log(Level.FINEST,
+				"Server: Fired a UserEnteredRoomEvent for domain: Lobby");
 	}
 
 	public LobbyRoomData getLobbyRoomInformation() {
@@ -249,7 +257,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		logger.log(Level.FINEST,
 				"Server: Fired Point Change Event for domain: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), pointChangeEvent);
-		logger.log(Level.FINEST, "Server: Fired Point Change Event for domain: Lobby");
+		logger.log(Level.FINEST,
+				"Server: Fired Point Change Event for domain: Lobby");
 		return;
 	}
 
@@ -268,7 +277,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 				"Server: Fired UpdateSubmissionTimerEvent for domain: "
 						+ roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), submissionTimerEvent);
-		logger.log(Level.FINEST, "Server: Fired UpdateSubmissionTimerEvent for domain: Lobby");
+		logger.log(Level.FINEST,
+				"Server: Fired UpdateSubmissionTimerEvent for domain: Lobby");
 	}
 
 	public void updateLobbyRoomChooserTimer(String roomName, int timer) {
@@ -284,7 +294,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		logger.log(Level.FINEST,
 				"Server: Fired UpdateChooserTimerEvent for domain: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), chooserTimerEvent);
-		logger.log(Level.FINEST, "Server: Fired UpdateChooserTimerEvent for domain: Lobby");
+		logger.log(Level.FINEST,
+				"Server: Fired UpdateChooserTimerEvent for domain: Lobby");
 	}
 
 	public void leaveRoom(String roomName) {
@@ -314,11 +325,15 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			// Remove room from room list
 			RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
 			addEvent(DomainFactory.getDomain(roomName), roomDisbandedEvent);
-			logger.log(Level.FINEST, "Server: Fired a RoomDisbandedEvent to notify users in the current disbanded room");
+			logger.log(
+					Level.FINEST,
+					"Server: Fired a RoomDisbandedEvent to notify users in the current disbanded room");
 			LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = new LobbyRoomDisbandedEvent();
 			lobbyRoomDisbandedEvent.setRoomName(roomName);
 			addEvent(DomainFactory.getDomain("Lobby"), lobbyRoomDisbandedEvent);
-			logger.log(Level.FINEST, "Server: Fired a LobbyRoomDisbandedEvent to notify users in the lobby of a room that can no longer be joined");
+			logger.log(
+					Level.FINEST,
+					"Server: Fired a LobbyRoomDisbandedEvent to notify users in the lobby of a room that can no longer be joined");
 		} else {
 			UserLeftRoomEvent userLeftEvent = new UserLeftRoomEvent();
 			userLeftEvent.username = foundUser.username;
@@ -686,14 +701,18 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		HttpSession session = request.getSession();
 		User usr = (User) session.getAttribute("User");
 		engine.setPassword(roomName, usr, password);
-		logger.log(Level.FINEST, "Server: Set the password for room: " + roomName + " to be: " + password);
+		logger.log(Level.FINEST, "Server: Set the password for room: "
+				+ roomName + " to be: " + password);
 		UpdatePasswordEvent passwordChangedEvent = new UpdatePasswordEvent();
 		passwordChangedEvent.setNewPassword(password);
 		passwordChangedEvent.setRoomName(roomName);
 		addEvent(DomainFactory.getDomain(roomName), passwordChangedEvent);
-		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for room: " + roomName);
+		logger.log(Level.FINEST,
+				"Server: Fired a LobbyRoomPasswordChangedEvent for room: "
+						+ roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), passwordChangedEvent);
-		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
+		logger.log(Level.FINEST,
+				"Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
 	}
 
 }

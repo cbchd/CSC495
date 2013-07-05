@@ -36,7 +36,7 @@ public class SpellCustomizationView extends Composite implements com.storytime.c
 	Button btnAddSpell = new Button("Add Spell");
 
 	public SpellCustomizationView() {
-		verticalPanel.setStyleName("SpellCustomizationPage");
+		//verticalPanel.setStyleName("SpellCustomizationPage");
 		initWidget(verticalPanel);
 		setPanelOrder();
 		setCharacteristics();

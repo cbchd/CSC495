@@ -1,11 +1,13 @@
-package com.storytime.client.skills.offense;
+package com.storytime.client.skill.offense;
 
-public class PhraseSubstitutionAttack extends WordAttack {
+public class LetterSubstitutionAttack extends WordAttack {
 
+	private static final long serialVersionUID = 1L;
 	private String submissionToLookAt = "";
 	private String phraseToLookFor = "";
 	private String phraseToSwapFor = "";
-
+	private String type = "LETTER_SUBSTITUTION_ATTACK";
+	
 	public String getSubmissionToLookAt() {
 		return submissionToLookAt;
 	}
@@ -28,5 +30,10 @@ public class PhraseSubstitutionAttack extends WordAttack {
 
 	public void setPhraseToSwapFor(String phraseToSwapFor) {
 		this.phraseToSwapFor = phraseToSwapFor;
+	}
+
+	@Override
+	public String getType() {
+		return type;
 	}
 }

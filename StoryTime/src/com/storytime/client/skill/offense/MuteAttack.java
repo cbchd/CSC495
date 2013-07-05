@@ -1,4 +1,4 @@
-package com.storytime.client.skills.offense;
+package com.storytime.client.skill.offense;
 
 public class MuteAttack {
 	
