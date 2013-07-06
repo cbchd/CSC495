@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -38,18 +39,6 @@ import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.DecoratedStackPanel;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.TabBar;
-import com.google.gwt.user.client.ui.DecoratedTabBar;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuItemSeparator;
-import com.google.gwt.user.client.ui.DecoratedTabPanel;
-import com.google.gwt.user.client.ui.Grid;
 
 public class GameInProgressRoomView extends Composite implements
 		com.storytime.client.presenters.GameInProgressRoomPresenter.Display {
@@ -103,8 +92,7 @@ public class GameInProgressRoomView extends Composite implements
 	VerticalPanel timePanel = new VerticalPanel();
 	HorizontalPanel phraseSubmissionPanelForSwap = new HorizontalPanel();
 	VerticalPanel phraseSubmissionRealPanel = new VerticalPanel();
-
-	private RootPanel rootPanel;
+	GameInProgressRoomPowerMenuView playsPopup = new GameInProgressRoomPowerMenuView();
 
 	Timer submitTimer = new Timer() {
 
@@ -174,6 +162,8 @@ public class GameInProgressRoomView extends Composite implements
 			this.cancel();
 		}
 	};
+	private final VerticalPanel verticalPanel = new VerticalPanel();
+	private final Button btnPlays = new Button("Plays");
 
 	public GameInProgressRoomView() {
 		// rootPanel = RootPanel.get();
@@ -249,6 +239,15 @@ public class GameInProgressRoomView extends Composite implements
 		chatSendBoxAndButtonPanel.add(sendToChatBox);
 
 		chatSendBoxAndButtonPanel.add(btnSendToChatButton);
+		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		usersAndChatLeftMiddlePanel.add(verticalPanel);
+		verticalPanel.setSize("100%", "100%");
+		
+		btnPlays.setStyleName("gwt-LoginAsNewUserButton");
+		
+		verticalPanel.add(btnPlays);
+		btnPlays.setWidth("70%");
 
 		bigMiddlePanel.add(swapHolderPanelAndSubmittedPhrases);
 
@@ -291,8 +290,7 @@ public class GameInProgressRoomView extends Composite implements
 		lblChat.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblChat.setSize("100%", "46px");
 		chatArea.setSize("94%", "125px");
-
-		chatSendBoxAndButtonPanel.setSize("100%", "100%");
+		chatSendBoxAndButtonPanel.setSize("100%", "45px");
 		sendToChatBox.setSize("91%", "21px");
 
 		btnSendToChatButton.setText("Send");
@@ -549,6 +547,22 @@ public class GameInProgressRoomView extends Composite implements
 								}
 							});
 				}
+			}
+		});
+	
+		btnPlays.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				
+				playsPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+
+					@Override
+					public void setPosition(int offsetWidth, int offsetHeight) {
+						playsPopup.setGlassEnabled(false);
+						playsPopup.center();
+					}
+
+				});
+				
 			}
 		});
 	}

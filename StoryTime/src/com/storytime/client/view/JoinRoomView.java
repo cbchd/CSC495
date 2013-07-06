@@ -58,7 +58,7 @@ public class JoinRoomView extends Composite implements
 	Column<JoinRoom, String> authorsTimeTextColumn;
 	Column<JoinRoom, String> passwordTextColumn;
 	Label lblCurrentRooms = new Label("Current Rooms");
-	final PasswordPopupView popup = new PasswordPopupView();
+	PasswordPopupView popup = new PasswordPopupView();
 
 	public JoinRoomView() {
 		if (DEBUG)

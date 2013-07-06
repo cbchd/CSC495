@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -14,26 +13,28 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.storytime.client.presenters.GameInProgressRoomPowerMenuPresenter;
 import com.storytime.client.skill.MultiSkill;
 import com.storytime.client.skill.Skill;
 import com.storytime.client.skill.offense.LetterAdditionAttack;
 
-public class GameInProgressRoomPowerMenuView extends Composite implements GameInProgressRoomPowerMenuPresenter.Display {
+public class GameInProgressRoomPowerMenuView extends PopupPanel {
 
+	boolean DEBUG = true;
+	
 	VerticalPanel verticalPanel = new VerticalPanel();
 	Label lblAttacksDefenses = new Label("Attacks & Defenses");
 	DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
 	StackPanel decoratedTabPanel_1 = new StackPanel();
 	VerticalPanel verticalPanel_4 = new VerticalPanel();
 	Grid grid = new Grid(1, 4);
-	
+
 	Label lblSubstituteThis = new Label("Substitute This:");
 	TextBox substituteThisTextBox = new TextBox();
 	Label lblForThis = new Label("For This:");
@@ -43,7 +44,7 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 	Button btnActivate_2 = new Button("Activate");
 	VerticalPanel verticalPanel_5 = new VerticalPanel();
 	Grid grid_3 = new Grid(1, 4);
-	
+
 	Label lblAddThis = new Label("Add This:");
 	TextBox letterAdditionAddThisTextBox = new TextBox();
 	Label lblEveryTime = new Label("After This:");
@@ -52,7 +53,7 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 	ToggleButton tglbtnArmLetterAddition = new ToggleButton("Arm");
 	Button btnActivateLetterAddition = new Button("Activate");
 	VerticalPanel verticalPanel_3 = new VerticalPanel();
-	
+
 	Grid grid_2 = new Grid(1, 2);
 	Label lblRemoveAll = new Label("Remove All:");
 	TextBox removalTextBox = new TextBox();
@@ -115,48 +116,63 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 	int currentRow = 0;
 	int currentColumn = 0;
 
+	int letterAdditionIndex = 0;
+	int letterRemovalIndex = 1;
+	int letterSubstitutionAttack = 2;
+	int muteAttack = 3;
+
 	public GameInProgressRoomPowerMenuView() {
-		initWidget(verticalPanel);
+		super(true);
+		if (DEBUG) System.out.println("Client: Trying to initialize the GameInProgressRoomPowerMenuPopup");
+		this.center();
+		setWidget(verticalPanel);
+		setGlassEnabled(false);
+		setAnimationEnabled(true);
+		populateCurrentArmedSkillGrid();
 		setPanelOrder();
 		setCharacteristics();
 		setHandlers();
-		verticalPanel.setStyleName("AttackAndDefendPage");
 		
+		//verticalPanel.setStyleName("AttackAndDefendPage");
+
 		verticalPanel.add(verticalPanel_1);
 		verticalPanel_1.setSize("100%", "152px");
-		
+
 		verticalPanel_1.add(overallArmedSkillsGrid);
 		overallArmedSkillsGrid.setSize("100%", "100%");
-		
+
 		overallArmedSkillsGrid.setWidget(0, 1, lblType);
-		
+
 		overallArmedSkillsGrid.setWidget(0, 3, lblCost_1);
 		lblTemptype.setStyleName("spell-page-label");
-		
+
 		overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
 		lblTempcost.setStyleName("spell-page-label");
-		
+
 		overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
 	}
-	
+
 	public void setPanelOrder() {
 		verticalPanel.add(lblAttacksDefenses);
 		verticalPanel.add(decoratedTabPanel);
 		decoratedTabPanel.add(decoratedTabPanel_1, "Offense", false);
 		verticalPanel_4.add(grid);
-		horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_1
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel_1.add(tglbtnArmLetterSubstitution);
 		horizontalPanel_1.add(btnActivate_2);
 		verticalPanel_4.add(horizontalPanel_1);
 		decoratedTabPanel_1.add(verticalPanel_5, "Letter Addition", false);
 		verticalPanel_5.add(grid_3);
-		horizontalPanel_3.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_3
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel_3.add(tglbtnArmLetterAddition);
 		verticalPanel_5.add(horizontalPanel_3);
 		horizontalPanel_3.add(btnActivateLetterAddition);
 		decoratedTabPanel_1.add(verticalPanel_3, "Letter Removal", false);
 		verticalPanel_3.add(grid_2);
-		horizontalPanel_2.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_2
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_3.add(horizontalPanel_2);
 		horizontalPanel_2.add(tglbtnArmLetterRemoval);
 		horizontalPanel_2.add(btnActivate_1);
@@ -172,43 +188,47 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 		verticalPanel_11.add(horizontalPanel);
 		horizontalPanel.add(btnResetDisarm);
 		horizontalPanel.add(btnActivate);
-		horizontalPanel_4.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_4
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		decoratedTabPanel_1.add(horizontalPanel_4, "Scramble", false);
 		horizontalPanel.add(btnSave);
 		horizontalPanel_4.add(tglbtnArmScramble);
-		horizontalPanel_5.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_5
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_7.add(horizontalPanel_5);
 		horizontalPanel_5.add(tglbtnArmProtect);
 		horizontalPanel_4.add(btnActivate_4);
 		horizontalPanel_5.add(btnActivate_5);
-		horizontalPanel_6.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_6
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_8.add(horizontalPanel_6);
 		horizontalPanel_6.add(tglbtnArmCleanse);
 		horizontalPanel_6.add(btnActivate_6);
-		horizontalPanel_7.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_7
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_9.add(horizontalPanel_7);
 		horizontalPanel_7.add(tglbtnArmTrap);
 		horizontalPanel_7.add(btnActivate_7);
 	}
-	
+
 	public void setCharacteristics() {
 		verticalPanel.setBorderWidth(0);
 		verticalPanel.setSize("748px", "456px");
 		lblAttacksDefenses
 				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblAttacksDefenses.setHeight("39px");
-		
+
 		decoratedTabPanel.setSize("100%", "196px");
 		decoratedTabPanel_1.setSize("100%", "100%");
 		horizontalPanel_4.setSize("100%", "100%");
-		
-				tglbtnArmScramble.getDownFace().setText("Armed");
-				tglbtnArmScramble.setWidth("40%");
-				
-						btnActivate_4.setStyleName("gwt-LoginAsNewUserButton");
-						btnActivate_4.setWidth("40%");
+
+		tglbtnArmScramble.getDownFace().setText("Armed");
+		tglbtnArmScramble.setWidth("40%");
+
+		btnActivate_4.setStyleName("gwt-LoginAsNewUserButton");
+		btnActivate_4.setWidth("40%");
 		decoratedTabPanel_1.add(verticalPanel_4, "Letter Substitution", false);
-		
+
 		verticalPanel_4.setSize("100%", "100%");
 		verticalPanel_4.setCellHorizontalAlignment(grid,
 				HasHorizontalAlignment.ALIGN_CENTER);
@@ -256,7 +276,7 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 		btnActivateLetterAddition.setWidth("40%");
 
 		verticalPanel_3.setSize("100%", "100%");
-//
+		//
 		verticalPanel_3.setCellVerticalAlignment(grid_2,
 				HasVerticalAlignment.ALIGN_MIDDLE);
 		grid_2.setSize("100%", "100%");
@@ -305,7 +325,7 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 		cleanseSubmissionComboBox.setWidth("367px");
 
 		verticalPanel_9.setSize("100%", "100%");
-//
+		//
 		grid_6.setSize("100%", "100%");
 
 		lblTrapForThis
@@ -418,6 +438,8 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 			public void onClick(ClickEvent event) {
 				if (tglbtnArmLetterAddition.isDown()) {
 					armLetterAddition();
+				} else  {
+					disarmLetterAddition();
 				}
 			}
 		});
@@ -425,30 +447,45 @@ public class GameInProgressRoomPowerMenuView extends Composite implements GameIn
 
 	private void armLetterAddition() {
 		System.out.println("Client: Arming the letter addition attack");
-		LetterAdditionAttack phraseAdditionAttack = new LetterAdditionAttack();
-		phraseAdditionAttack.setName(nameTextBox.getText());
-		phraseAdditionAttack.setAddThis(letterAdditionAddThisTextBox.getText());
-		phraseAdditionAttack.setAfterThis(letterAdditionAfterThisTextBox.getText());
-		multiSkill.skillList.add(phraseAdditionAttack);
-		addRow(phraseAdditionAttack);
+		LetterAdditionAttack letterAdditionAttack = new LetterAdditionAttack();
+		letterAdditionAttack.setName(nameTextBox.getText());
+		letterAdditionAttack.setAddThis(letterAdditionAddThisTextBox.getText());
+		letterAdditionAttack.setAfterThis(letterAdditionAfterThisTextBox
+				.getText());
+		multiSkill.skillList.add(letterAdditionIndex, letterAdditionAttack);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void disarmLetterAddition() {
+		System.out.println("Client: Disarming the letter addition attack");
+		multiSkill.skillList.remove(letterAdditionIndex);
+		populateCurrentArmedSkillGrid();
 	}
 	
-	private void addRow(Skill skill) {
-		currentColumn = 0;
-		Label type = new Label(skill.getType());
-		Label cost = new Label(skill.getCost() + "");
-		overallArmedSkillsGrid.setWidget(currentRow, currentColumn, type);
-		currentColumn++;
-		overallArmedSkillsGrid.setWidget(currentRow, currentColumn, cost);
-		currentRow++;
+	private void disarmLetterRemoval() {
+		System.out.println("Client: Disarming the letter removal attack");
+		multiSkill.skillList.remove(letterRemovalIndex);
+		populateCurrentArmedSkillGrid();
 	}
 	
-	private void clearSkillList() {
+	private void disarmSubstitutionAttack() {
+		System.out.println("Client: Disarming the letter substitution attack");
+		multiSkill.skillList.remove(letterSubstitutionAttack);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void populateCurrentArmedSkillGrid() {
+		currentRow = 0;
 		multiSkill.skillList.clear();
+		for (Skill skill : multiSkill.skillList) {
+			currentColumn = 0;
+			Label type = new Label(skill.getType());
+			Label cost = new Label(skill.getCost() + "");
+			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, type);
+			currentColumn++;
+			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, cost);
+			currentRow++;
+		}
 	}
-	
-	@Override
-	public Widget asWidget() {
-		return this;
-	}
+
 }

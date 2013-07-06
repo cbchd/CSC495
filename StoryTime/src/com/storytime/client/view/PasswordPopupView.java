@@ -46,6 +46,5 @@ public class PasswordPopupView extends PopupPanel {
 		
 		verticalPanel.add(lblIncorrectPassword);
 		this.center();
-		setGlassEnabled(true);
 	}
 }
