@@ -106,20 +106,21 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	ToggleButton tglbtnArmTrap = new ToggleButton("Arm");
 	Button btnActivate_7 = new Button("Activate");
 	private final VerticalPanel verticalPanel_1 = new VerticalPanel();
-	private final Grid overallArmedSkillsGrid = new Grid(2, 4);
+	private final Grid overallArmedSkillsGrid = new Grid(1, 2);
 	private final Label lblType = new Label("Type");
 	private final Label lblCost_1 = new Label("Cost");
 	private final Label lblTemptype = new Label("TempType");
 	private final Label lblTempcost = new Label("TempCost");
 	ArrayList<Label> labelsForCurrentArmedPowersDisplay = new ArrayList<Label>();
 	MultiSkill multiSkill = new MultiSkill();
-	int currentRow = 0;
+	int currentRow = 1;
 	int currentColumn = 0;
 
 	int letterAdditionIndex = 0;
 	int letterRemovalIndex = 1;
 	int letterSubstitutionAttack = 2;
 	int muteAttack = 3;
+	int totalNumberOfSkills = 10;
 
 	public GameInProgressRoomPowerMenuView() {
 		super(true);
@@ -141,15 +142,15 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		verticalPanel_1.add(overallArmedSkillsGrid);
 		overallArmedSkillsGrid.setSize("100%", "100%");
 
-		overallArmedSkillsGrid.setWidget(0, 1, lblType);
+		overallArmedSkillsGrid.setWidget(0, 0, lblType);
 
-		overallArmedSkillsGrid.setWidget(0, 3, lblCost_1);
-		lblTemptype.setStyleName("spell-page-label");
+		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
+		//lblTemptype.setStyleName("spell-page-label");
 
-		overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
-		lblTempcost.setStyleName("spell-page-label");
+		//overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
+		//lblTempcost.setStyleName("spell-page-label");
 
-		overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
+		//overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
 	}
 
 	public void setPanelOrder() {
@@ -475,12 +476,17 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	}
 
 	private void populateCurrentArmedSkillGrid() {
-		currentRow = 0;
-		multiSkill.skillList.clear();
+		currentRow = 1;
+		overallArmedSkillsGrid.clear();
+		overallArmedSkillsGrid.setWidget(0, 0, lblType);
+		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
 		for (Skill skill : multiSkill.skillList) {
 			currentColumn = 0;
 			Label type = new Label(skill.getType());
 			Label cost = new Label(skill.getCost() + "");
+			type.setStyleName("spell-page-label");
+			cost.setStyleName("spell-page-label");
+			overallArmedSkillsGrid.resizeRows(currentRow + 1);
 			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, type);
 			currentColumn++;
 			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, cost);
