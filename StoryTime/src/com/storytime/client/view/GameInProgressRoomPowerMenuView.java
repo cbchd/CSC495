@@ -19,22 +19,25 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.skill.MultiSkill;
 import com.storytime.client.skill.Skill;
+import com.storytime.client.skill.defense.CleanseDefense;
+import com.storytime.client.skill.defense.ProtectDefense;
+import com.storytime.client.skill.defense.TrapDefense;
 import com.storytime.client.skill.offense.LetterAdditionAttack;
+import com.storytime.client.skill.offense.LetterRemovalAttack;
+import com.storytime.client.skill.offense.LetterSubstitutionAttack;
 
 public class GameInProgressRoomPowerMenuView extends PopupPanel {
 
 	boolean DEBUG = true;
-	
+
 	VerticalPanel verticalPanel = new VerticalPanel();
 	Label lblAttacksDefenses = new Label("Attacks & Defenses");
 	DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
 	StackPanel decoratedTabPanel_1 = new StackPanel();
 	VerticalPanel verticalPanel_4 = new VerticalPanel();
 	Grid grid = new Grid(1, 4);
-
 	Label lblSubstituteThis = new Label("Substitute This:");
 	TextBox substituteThisTextBox = new TextBox();
 	Label lblForThis = new Label("For This:");
@@ -54,11 +57,16 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	Button btnActivateLetterAddition = new Button("Activate");
 	VerticalPanel verticalPanel_3 = new VerticalPanel();
 
+	ToggleButton tglbtnArmLetterRemoval = new ToggleButton("Arm");
+	ToggleButton tglbtnArmScramble = new ToggleButton("Arm");
+	ToggleButton tglbtnArmProtect = new ToggleButton("Arm");
+	ToggleButton tglbtnArmCleanse = new ToggleButton("Arm");
+	ToggleButton tglbtnArmTrap = new ToggleButton("Arm");
+
 	Grid grid_2 = new Grid(1, 2);
 	Label lblRemoveAll = new Label("Remove All:");
 	TextBox removalTextBox = new TextBox();
 	HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
-	ToggleButton tglbtnArmLetterRemoval = new ToggleButton("Arm");
 	Button btnActivate_1 = new Button("Activate");
 	StackPanel decoratedTabPanel_2 = new StackPanel();
 	VerticalPanel verticalPanel_7 = new VerticalPanel();
@@ -94,23 +102,18 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	Button btnActivate = new Button("Activate");
 	Button btnSave = new Button("Save");
 	HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
-	ToggleButton tglbtnArmScramble = new ToggleButton("Arm");
 	Button btnActivate_4 = new Button("Activate");
 	HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
-	ToggleButton tglbtnArmProtect = new ToggleButton("Arm");
 	Button btnActivate_5 = new Button("Activate");
 	HorizontalPanel horizontalPanel_6 = new HorizontalPanel();
-	ToggleButton tglbtnArmCleanse = new ToggleButton("Arm");
 	Button btnActivate_6 = new Button("Activate");
 	HorizontalPanel horizontalPanel_7 = new HorizontalPanel();
-	ToggleButton tglbtnArmTrap = new ToggleButton("Arm");
 	Button btnActivate_7 = new Button("Activate");
+
 	private final VerticalPanel verticalPanel_1 = new VerticalPanel();
 	private final Grid overallArmedSkillsGrid = new Grid(1, 2);
 	private final Label lblType = new Label("Type");
 	private final Label lblCost_1 = new Label("Cost");
-	private final Label lblTemptype = new Label("TempType");
-	private final Label lblTempcost = new Label("TempCost");
 	ArrayList<Label> labelsForCurrentArmedPowersDisplay = new ArrayList<Label>();
 	MultiSkill multiSkill = new MultiSkill();
 	int currentRow = 1;
@@ -118,13 +121,17 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 
 	int letterAdditionIndex = 0;
 	int letterRemovalIndex = 1;
-	int letterSubstitutionAttack = 2;
+	int letterSubstitutionIndex = 2;
 	int muteAttack = 3;
+	int protectDefenseIndex = 4;
+	int cleanseDefenseIndex = 5;
 	int totalNumberOfSkills = 10;
 
 	public GameInProgressRoomPowerMenuView() {
 		super(true);
-		if (DEBUG) System.out.println("Client: Trying to initialize the GameInProgressRoomPowerMenuPopup");
+		if (DEBUG)
+			System.out
+					.println("Client: Trying to initialize the GameInProgressRoomPowerMenuPopup");
 		this.center();
 		setWidget(verticalPanel);
 		setGlassEnabled(false);
@@ -133,8 +140,8 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		setPanelOrder();
 		setCharacteristics();
 		setHandlers();
-		
-		//verticalPanel.setStyleName("AttackAndDefendPage");
+
+		// verticalPanel.setStyleName("AttackAndDefendPage");
 
 		verticalPanel.add(verticalPanel_1);
 		verticalPanel_1.setSize("100%", "152px");
@@ -145,12 +152,12 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		overallArmedSkillsGrid.setWidget(0, 0, lblType);
 
 		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
-		//lblTemptype.setStyleName("spell-page-label");
+		// lblTemptype.setStyleName("spell-page-label");
 
-		//overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
-		//lblTempcost.setStyleName("spell-page-label");
+		// overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
+		// lblTempcost.setStyleName("spell-page-label");
 
-		//overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
+		// overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
 	}
 
 	public void setPanelOrder() {
@@ -439,39 +446,159 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 			public void onClick(ClickEvent event) {
 				if (tglbtnArmLetterAddition.isDown()) {
 					armLetterAddition();
-				} else  {
+				} else {
 					disarmLetterAddition();
 				}
 			}
 		});
+
+		tglbtnArmLetterRemoval.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if (tglbtnArmLetterRemoval.isDown()) {
+					armLetterRemoval();
+				} else {
+					disarmLetterRemoval();
+				}
+			}
+		});
+
+		tglbtnArmLetterSubstitution.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (tglbtnArmLetterSubstitution.isDown()) {
+					armLetterSubstitution();
+				} else {
+					disarmLetterSubstitution();
+				}
+			}
+
+		});
+
+		tglbtnArmProtect.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (tglbtnArmProtect.isDown()) {
+					if (protectThisSubmissionComboBox.getSelectedIndex() != -1) {
+						armProtectDefense();
+					}
+				} else {
+					disarmProtectDefense();
+				}
+			}
+
+		});
+
+		tglbtnArmCleanse.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				if (tglbtnArmCleanse.isDown()) {
+					if (cleanseSubmissionComboBox.getSelectedIndex() != -1) {
+						armCleanseDefense();
+					}
+				} else {
+					disarmCleanseDefense();
+				}
+			}
+
+		});
+
 	}
 
 	private void armLetterAddition() {
-		System.out.println("Client: Arming the letter addition attack");
+		if (DEBUG)
+			System.out.println("Client: Arming the letter addition attack");
 		LetterAdditionAttack letterAdditionAttack = new LetterAdditionAttack();
-		letterAdditionAttack.setName(nameTextBox.getText());
 		letterAdditionAttack.setAddThis(letterAdditionAddThisTextBox.getText());
 		letterAdditionAttack.setAfterThis(letterAdditionAfterThisTextBox
 				.getText());
-		multiSkill.skillList.add(letterAdditionIndex, letterAdditionAttack);
+		multiSkill.skillList.put(letterAdditionIndex, letterAdditionAttack);
 		populateCurrentArmedSkillGrid();
 	}
 
+	private void armLetterRemoval() {
+		if (DEBUG)
+			System.out.println("Client: Arming the letter removal attack");
+		LetterRemovalAttack letterRemovalAttack = new LetterRemovalAttack();
+		letterRemovalAttack.setPhraseToRemove(removalTextBox.getText());
+		multiSkill.skillList.put(letterRemovalIndex, letterRemovalAttack);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void armLetterSubstitution() {
+		if (DEBUG)
+			System.out.println("Client: Arming the letter substitution attack");
+		LetterSubstitutionAttack letterSubstitutionAttack = new LetterSubstitutionAttack();
+		letterSubstitutionAttack.setPhraseToSwapFor(substituteThisTextBox
+				.getText());
+		letterSubstitutionAttack.setPhraseToLookFor(substituteForThisTextBox
+				.getText());
+		multiSkill.skillList.put(letterSubstitutionIndex,
+				letterSubstitutionAttack);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void armProtectDefense() {
+		if (DEBUG)
+			System.out.println("Client: Arming the protection defense");
+		ProtectDefense protectDefense = new ProtectDefense();
+		String submissionToProtect = protectThisSubmissionComboBox
+				.getItemText(protectThisSubmissionComboBox.getSelectedIndex());
+		protectDefense.setSubmissionToProtect(submissionToProtect);
+		multiSkill.skillList.put(protectDefenseIndex, protectDefense);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void armTrapDefense() {
+		// NOT FINISHED
+		if (DEBUG)
+			System.out.println("Client: Arming the trap defense");
+		TrapDefense trapDefense = new TrapDefense();
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void armCleanseDefense() {
+		if (DEBUG)
+			System.out.println("Client: Arming the cleanse defense");
+		CleanseDefense cleanseDefense = new CleanseDefense();
+		cleanseDefense.setSubmissionToCleanse(cleanseSubmissionComboBox
+				.getItemText(cleanseSubmissionComboBox.getSelectedIndex()));
+		multiSkill.skillList.put(cleanseDefenseIndex, cleanseDefense);
+	}
+
 	private void disarmLetterAddition() {
-		System.out.println("Client: Disarming the letter addition attack");
+		if (DEBUG)
+			System.out.println("Client: Disarming the letter addition attack");
 		multiSkill.skillList.remove(letterAdditionIndex);
 		populateCurrentArmedSkillGrid();
 	}
-	
+
 	private void disarmLetterRemoval() {
-		System.out.println("Client: Disarming the letter removal attack");
+		if (DEBUG)
+			System.out.println("Client: Disarming the letter removal attack");
 		multiSkill.skillList.remove(letterRemovalIndex);
 		populateCurrentArmedSkillGrid();
 	}
-	
-	private void disarmSubstitutionAttack() {
+
+	private void disarmLetterSubstitution() {
 		System.out.println("Client: Disarming the letter substitution attack");
-		multiSkill.skillList.remove(letterSubstitutionAttack);
+		multiSkill.skillList.remove(letterSubstitutionIndex);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void disarmProtectDefense() {
+		if (DEBUG)
+			System.out.println("Client: Disarming the protection defense");
+		multiSkill.skillList.remove(protectDefenseIndex);
+		populateCurrentArmedSkillGrid();
+	}
+
+	private void disarmCleanseDefense() {
+		if (DEBUG)
+			System.out.println("Client: Disarming the cleanse defense");
+		multiSkill.skillList.remove(cleanseDefenseIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
@@ -480,13 +607,13 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		overallArmedSkillsGrid.clear();
 		overallArmedSkillsGrid.setWidget(0, 0, lblType);
 		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
-		for (Skill skill : multiSkill.skillList) {
+		for (Skill skill : multiSkill.skillList.values()) {
+			overallArmedSkillsGrid.resizeRows(currentRow + 1);
 			currentColumn = 0;
 			Label type = new Label(skill.getType());
 			Label cost = new Label(skill.getCost() + "");
 			type.setStyleName("spell-page-label");
 			cost.setStyleName("spell-page-label");
-			overallArmedSkillsGrid.resizeRows(currentRow + 1);
 			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, type);
 			currentColumn++;
 			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, cost);
