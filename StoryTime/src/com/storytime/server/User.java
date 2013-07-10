@@ -1,7 +1,5 @@
 package com.storytime.server;
 
-
-
 public class User {
 	String username = "";
 	String password = "";
@@ -11,15 +9,57 @@ public class User {
 	int score = 0;
 	Room room;
 	InGameRoom ingameRoom;
+
 	boolean timerElapsed = false;
 
 	StoryTimeEngine storyTimeEngine;
 
-	public User(String username, String password, StoryTimeEngine storyTimeEngine) {
+	public User(String username, String password,
+			StoryTimeEngine storyTimeEngine) {
 		this.username = username;
 		this.password = password;
 		this.storyTimeEngine = storyTimeEngine;
 		room = null;
+	}
+
+	public String getPhrase() {
+		return phrase;
+	}
+
+	public void setPhrase(String phrase) {
+		this.phrase = phrase;
+	}
+
+	public boolean isReadyToStart() {
+		return isReadyToStart;
+	}
+
+	public void setReadyToStart(boolean isReadyToStart) {
+		this.isReadyToStart = isReadyToStart;
+	}
+
+	public InGameRoom getIngameRoom() {
+		return ingameRoom;
+	}
+
+	public void setIngameRoom(InGameRoom ingameRoom) {
+		this.ingameRoom = ingameRoom;
+	}
+
+	public boolean isTimerElapsed() {
+		return timerElapsed;
+	}
+
+	public void setTimerElapsed(boolean timerElapsed) {
+		this.timerElapsed = timerElapsed;
+	}
+
+	public StoryTimeEngine getStoryTimeEngine() {
+		return storyTimeEngine;
+	}
+
+	public void setStoryTimeEngine(StoryTimeEngine storyTimeEngine) {
+		this.storyTimeEngine = storyTimeEngine;
 	}
 
 	public int getScore() {

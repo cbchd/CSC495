@@ -21,6 +21,7 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobbyroom.LobbyRoomData;
+import com.storytime.client.skillrelated.SkillHolder;
 
 @RemoteServiceRelativePath("StoryTimeService")
 public interface StoryTimeService extends RemoteService {
@@ -164,5 +165,7 @@ public interface StoryTimeService extends RemoteService {
 	public void setTimerElapsed();
 	
 	public void setPassword(String roomName, String password);
+	
+	public void activateSkills(SkillHolder skillHolder);
 
 }

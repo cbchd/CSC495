@@ -5,6 +5,7 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.lobby.LobbyInformation;
 import com.storytime.client.lobbyroom.LobbyRoomData;
+import com.storytime.client.skillrelated.SkillHolder;
 
 public interface StoryTimeServiceAsync {
 
@@ -57,5 +58,7 @@ public interface StoryTimeServiceAsync {
 	void getJoinableRoomsAndTheirInformation(AsyncCallback<JoinableRoomsInformation> callback);
 
 	void setPassword(String roomName, String password, AsyncCallback<Void> callback);
+
+	void activateSkills(SkillHolder skillHolder, AsyncCallback<Void> callback);
 
 }

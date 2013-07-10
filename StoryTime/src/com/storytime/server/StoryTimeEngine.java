@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import com.storytime.client.skill.offense.LetterAdditionAttack;
+import com.storytime.client.skill.offense.LetterSubstitutionAttack;
+
 public class StoryTimeEngine {
-	
+
+	boolean DEBUG = false;
+
 	ArrayList<String> lobbyChat;
 	HashMap<String, User> usersInLobby;
 	HashMap<String, User> onlineUsers;
@@ -147,5 +152,36 @@ public class StoryTimeEngine {
 			lobbyRoom.setPassword(password);
 		}
 	}
-	
+
+	public String activateLetterAdditon(User victim, LetterAdditionAttack additionAttack) {
+		String phraseToBeEdited = victim.getPhrase();
+		String phraseToLookFor = additionAttack.getAfterThis();
+		String phraseToAddIn = additionAttack.getAddThis();
+		String editedPhrase = "";
+
+		for (int x = 0; x < phraseToBeEdited.length(); x++) {
+			editedPhrase += phraseToBeEdited.charAt(x);
+			if (editedPhrase.length() >= phraseToLookFor.length()) {
+				String possibleCombo = phraseToBeEdited.substring(x - phraseToLookFor.length() + 1, x + 1);
+				if (DEBUG)
+					System.out.println("Comparing: '" + possibleCombo + "' to: " + phraseToLookFor);
+				if (possibleCombo.equalsIgnoreCase(phraseToLookFor)) {
+					if (DEBUG)
+						System.out.println("Found match: '" + possibleCombo + "' and '" + phraseToLookFor + "'");
+					editedPhrase += phraseToAddIn;
+					if (DEBUG)
+						System.out.println("Total string: " + editedPhrase);
+				}
+			}
+		}
+		return editedPhrase;
+	}
+
+	public String activateLetterSubstitution(User victim, LetterSubstitutionAttack substitutionAttack) {
+		String phraseToBeEdited = victim.getPhrase();
+		String phraseToLookFor = substitutionAttack.getPhraseToLookFor();
+		String phraseToSwapFor = substitutionAttack.getPhraseToSwapFor();
+		phraseToBeEdited = phraseToBeEdited.replaceAll(phraseToLookFor, phraseToSwapFor);
+		return phraseToBeEdited;
+	}
 }

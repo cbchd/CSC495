@@ -36,6 +36,9 @@ import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
 import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
+import com.storytime.client.skill.offense.LetterAdditionAttack;
+import com.storytime.client.skillrelated.Skill;
+import com.storytime.client.skillrelated.SkillHolder;
 
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
@@ -715,4 +718,22 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 				"Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
 	}
 
+	@Override
+	public void activateSkills(SkillHolder skillHolder) {
+		for (Skill skill : skillHolder.skillList.values()) {
+			
+		}
+	}
+	
+	private void activateLetterAdditionAttack(LetterAdditionAttack letterAdditionAttack) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("User");
+		InGameRoom gameRoom = user.getIngameRoom();
+		for (User usr : gameRoom.users) {
+			if (usr.getPhrase().equalsIgnoreCase(letterAdditionAttack.getPhraseToBeAttacked())) {
+				//usr.setPhrase(phrase)
+			}
+		}
+	}
 }

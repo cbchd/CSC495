@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
@@ -19,17 +20,24 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.storytime.client.skill.MultiSkill;
-import com.storytime.client.skill.Skill;
+import com.storytime.client.StoryTimeEntryMVP;
+import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.skill.defense.CleanseDefense;
 import com.storytime.client.skill.defense.ProtectDefense;
 import com.storytime.client.skill.defense.TrapDefense;
 import com.storytime.client.skill.offense.LetterAdditionAttack;
 import com.storytime.client.skill.offense.LetterRemovalAttack;
 import com.storytime.client.skill.offense.LetterSubstitutionAttack;
+import com.storytime.client.skillrelated.Skill;
+import com.storytime.client.skillrelated.SkillHolder;
+
+import de.novanic.eventservice.client.event.RemoteEventService;
 
 public class GameInProgressRoomPowerMenuView extends PopupPanel {
 
+	StoryTimeServiceAsync storyTimeService = StoryTimeEntryMVP.rpcService;
+	RemoteEventService theRemoteEventService = StoryTimeEntryMVP.theRemoteEventService;
+	
 	boolean DEBUG = true;
 
 	VerticalPanel verticalPanel = new VerticalPanel();
@@ -82,11 +90,11 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	Label lblTrapForThis = new Label("Trap For This Attack Type:");
 	ListBox trapForThisAttackTypeComboBox = new ListBox();
 	VerticalPanel verticalPanel_11 = new VerticalPanel();
-	Grid grid_1 = new Grid(8, 3);
+	Grid grid_1 = new Grid(7, 3);
 	Label lblRandomName = new Label("Random Name");
-	CheckBox checkBox = new CheckBox("");
+	CheckBox nameCheckBox = new CheckBox("");
 	Label lblRandomMessage = new Label("Random Message");
-	CheckBox checkBox_1 = new CheckBox("");
+	CheckBox messageCheckBox = new CheckBox("");
 	Label lblName = new Label("Attack Name");
 	TextBox nameTextBox = new TextBox();
 	Label lblWords = new Label("Message");
@@ -96,7 +104,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	Label lblTarget = new Label("Target");
 	ListBox targetComboBox = new ListBox();
 	Label lblPreview = new Label("Preview");
-	TextBox textBox = new TextBox();
+	TextBox previewTextBox = new TextBox();
 	HorizontalPanel horizontalPanel = new HorizontalPanel();
 	Button btnResetDisarm = new Button("Reset & Disarm");
 	Button btnActivate = new Button("Activate");
@@ -115,7 +123,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	private final Label lblType = new Label("Type");
 	private final Label lblCost_1 = new Label("Cost");
 	ArrayList<Label> labelsForCurrentArmedPowersDisplay = new ArrayList<Label>();
-	MultiSkill multiSkill = new MultiSkill();
+	SkillHolder activeSkills = new SkillHolder();
 	int currentRow = 1;
 	int currentColumn = 0;
 
@@ -133,31 +141,21 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 			System.out
 					.println("Client: Trying to initialize the GameInProgressRoomPowerMenuPopup");
 		this.center();
+		verticalPanel.setStyleName("GameInProgressRoomPowerMenuPage");
 		setWidget(verticalPanel);
-		setGlassEnabled(false);
-		setAnimationEnabled(true);
-		populateCurrentArmedSkillGrid();
+		// setGlassEnabled(false);
+		// setAnimationEnabled(true);
+		// populateCurrentArmedSkillGrid();
 		setPanelOrder();
 		setCharacteristics();
-		setHandlers();
-
-		// verticalPanel.setStyleName("AttackAndDefendPage");
+		// setHandlers();
 
 		verticalPanel.add(verticalPanel_1);
 		verticalPanel_1.setSize("100%", "152px");
-
 		verticalPanel_1.add(overallArmedSkillsGrid);
 		overallArmedSkillsGrid.setSize("100%", "100%");
-
 		overallArmedSkillsGrid.setWidget(0, 0, lblType);
-
 		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
-		// lblTemptype.setStyleName("spell-page-label");
-
-		// overallArmedSkillsGrid.setWidget(1, 1, lblTemptype);
-		// lblTempcost.setStyleName("spell-page-label");
-
-		// overallArmedSkillsGrid.setWidget(1, 3, lblTempcost);
 	}
 
 	public void setPanelOrder() {
@@ -193,6 +191,8 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		verticalPanel_9.add(grid_6);
 		decoratedTabPanel.add(verticalPanel_11, "Activate", false);
 		verticalPanel_11.add(grid_1);
+		horizontalPanel
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel_11.add(horizontalPanel);
 		horizontalPanel.add(btnResetDisarm);
 		horizontalPanel.add(btnActivate);
@@ -350,59 +350,58 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		grid_1.setSize("100%", "100%");
 		grid_1.setBorderWidth(0);
 
-		lblRandomName
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid_1.setWidget(1, 1, lblRandomName);
-		lblRandomName.setWidth("100%");
-
-		grid_1.setWidget(1, 2, checkBox);
-
-		grid_1.setWidget(2, 1, lblRandomMessage);
-		lblRandomMessage.setWidth("100%");
-
-		grid_1.setWidget(2, 2, checkBox_1);
-
-		lblName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid_1.setWidget(3, 1, lblName);
-		lblName.setWidth("100%");
-
-		grid_1.setWidget(3, 2, nameTextBox);
-		nameTextBox.setWidth("62%");
-
-		lblWords.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid_1.setWidget(4, 1, lblWords);
-		lblWords.setWidth("100%");
-
-		grid_1.setWidget(4, 2, messageTextBox);
-		grid_1.getCellFormatter().setWidth(4, 2, "");
-		messageTextBox.setWidth("62%");
-
-		lblCost.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid_1.setWidget(5, 1, lblCost);
-		lblCost.setWidth("100%");
-
-		grid_1.setWidget(5, 2, lblTotalCost);
-
 		lblTarget.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		grid_1.setWidget(6, 1, lblTarget);
+		grid_1.setWidget(0, 1, lblTarget);
 		lblTarget.setWidth("100%");
 
-		grid_1.setWidget(6, 2, targetComboBox);
+		grid_1.setWidget(0, 2, targetComboBox);
 		targetComboBox.setWidth("246px");
-		grid_1.getCellFormatter().setHorizontalAlignment(5, 1,
-				HasHorizontalAlignment.ALIGN_CENTER);
+		grid_1.getCellFormatter().setWidth(5, 2, "");
 
-		grid_1.setWidget(7, 1, lblPreview);
-		grid_1.getCellFormatter().setHeight(7, 1, "");
+		grid_1.setWidget(1, 1, lblPreview);
 		lblPreview.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblPreview.setSize("100%", "100%");
 
-		grid_1.setWidget(7, 2, textBox);
-		textBox.setWidth("62%");
-		grid_1.getCellFormatter().setHorizontalAlignment(2, 1,
+		grid_1.setWidget(1, 2, previewTextBox);
+		previewTextBox.setWidth("62%");
+
+		lblRandomName
+				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(2, 1, lblRandomName);
+		lblRandomName.setWidth("100%");
+
+		grid_1.setWidget(2, 2, nameCheckBox);
+
+		grid_1.setWidget(3, 1, lblRandomMessage);
+		lblRandomMessage.setWidth("100%");
+
+		grid_1.setWidget(3, 2, messageCheckBox);
+
+		lblName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(4, 1, lblName);
+		lblName.setWidth("100%");
+
+		grid_1.setWidget(4, 2, nameTextBox);
+		nameTextBox.setWidth("62%");
+
+		lblWords.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(5, 1, lblWords);
+		lblWords.setWidth("100%");
+		grid_1.getCellFormatter().setHorizontalAlignment(6, 1,
+				HasHorizontalAlignment.ALIGN_CENTER);
+
+		grid_1.setWidget(5, 2, messageTextBox);
+		messageTextBox.setWidth("62%");
+
+		lblCost.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		grid_1.setWidget(6, 1, lblCost);
+		lblCost.setWidth("100%");
+
+		grid_1.setWidget(6, 2, lblTotalCost);
+		lblTotalCost.setSize("100%", "100%");
+		grid_1.getCellFormatter().setHeight(1, 1, "");
+		grid_1.getCellFormatter().setHorizontalAlignment(3, 1,
 				HasHorizontalAlignment.ALIGN_RIGHT);
-		horizontalPanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		horizontalPanel.setSize("100%", "100%");
 		btnResetDisarm.setStyleName("gwt-LoginAsNewUserButton");
 
@@ -442,6 +441,21 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 	}
 
 	public void setHandlers() {
+		btnActivate.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				boolean hasASelection = false;
+				for (int x = 0; x < targetComboBox.getItemCount(); x++) {
+					if (targetComboBox.isItemSelected(x)) {
+						hasASelection = true;
+						break;
+					}
+				}
+				if (hasASelection) {
+					activateSkills();
+				}
+			}
+		});
+
 		tglbtnArmLetterAddition.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (tglbtnArmLetterAddition.isDown()) {
@@ -514,7 +528,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		letterAdditionAttack.setAddThis(letterAdditionAddThisTextBox.getText());
 		letterAdditionAttack.setAfterThis(letterAdditionAfterThisTextBox
 				.getText());
-		multiSkill.skillList.put(letterAdditionIndex, letterAdditionAttack);
+		activeSkills.skillList.put(letterAdditionIndex, letterAdditionAttack);
 		populateCurrentArmedSkillGrid();
 	}
 
@@ -523,7 +537,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 			System.out.println("Client: Arming the letter removal attack");
 		LetterRemovalAttack letterRemovalAttack = new LetterRemovalAttack();
 		letterRemovalAttack.setPhraseToRemove(removalTextBox.getText());
-		multiSkill.skillList.put(letterRemovalIndex, letterRemovalAttack);
+		activeSkills.skillList.put(letterRemovalIndex, letterRemovalAttack);
 		populateCurrentArmedSkillGrid();
 	}
 
@@ -535,7 +549,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 				.getText());
 		letterSubstitutionAttack.setPhraseToLookFor(substituteForThisTextBox
 				.getText());
-		multiSkill.skillList.put(letterSubstitutionIndex,
+		activeSkills.skillList.put(letterSubstitutionIndex,
 				letterSubstitutionAttack);
 		populateCurrentArmedSkillGrid();
 	}
@@ -547,7 +561,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		String submissionToProtect = protectThisSubmissionComboBox
 				.getItemText(protectThisSubmissionComboBox.getSelectedIndex());
 		protectDefense.setSubmissionToProtect(submissionToProtect);
-		multiSkill.skillList.put(protectDefenseIndex, protectDefense);
+		activeSkills.skillList.put(protectDefenseIndex, protectDefense);
 		populateCurrentArmedSkillGrid();
 	}
 
@@ -565,40 +579,40 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		CleanseDefense cleanseDefense = new CleanseDefense();
 		cleanseDefense.setSubmissionToCleanse(cleanseSubmissionComboBox
 				.getItemText(cleanseSubmissionComboBox.getSelectedIndex()));
-		multiSkill.skillList.put(cleanseDefenseIndex, cleanseDefense);
+		activeSkills.skillList.put(cleanseDefenseIndex, cleanseDefense);
 	}
 
 	private void disarmLetterAddition() {
 		if (DEBUG)
 			System.out.println("Client: Disarming the letter addition attack");
-		multiSkill.skillList.remove(letterAdditionIndex);
+		activeSkills.skillList.remove(letterAdditionIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
 	private void disarmLetterRemoval() {
 		if (DEBUG)
 			System.out.println("Client: Disarming the letter removal attack");
-		multiSkill.skillList.remove(letterRemovalIndex);
+		activeSkills.skillList.remove(letterRemovalIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
 	private void disarmLetterSubstitution() {
 		System.out.println("Client: Disarming the letter substitution attack");
-		multiSkill.skillList.remove(letterSubstitutionIndex);
+		activeSkills.skillList.remove(letterSubstitutionIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
 	private void disarmProtectDefense() {
 		if (DEBUG)
 			System.out.println("Client: Disarming the protection defense");
-		multiSkill.skillList.remove(protectDefenseIndex);
+		activeSkills.skillList.remove(protectDefenseIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
 	private void disarmCleanseDefense() {
 		if (DEBUG)
 			System.out.println("Client: Disarming the cleanse defense");
-		multiSkill.skillList.remove(cleanseDefenseIndex);
+		activeSkills.skillList.remove(cleanseDefenseIndex);
 		populateCurrentArmedSkillGrid();
 	}
 
@@ -607,7 +621,7 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 		overallArmedSkillsGrid.clear();
 		overallArmedSkillsGrid.setWidget(0, 0, lblType);
 		overallArmedSkillsGrid.setWidget(0, 1, lblCost_1);
-		for (Skill skill : multiSkill.skillList.values()) {
+		for (Skill skill : activeSkills.skillList.values()) {
 			overallArmedSkillsGrid.resizeRows(currentRow + 1);
 			currentColumn = 0;
 			Label type = new Label(skill.getType());
@@ -618,6 +632,38 @@ public class GameInProgressRoomPowerMenuView extends PopupPanel {
 			currentColumn++;
 			overallArmedSkillsGrid.setWidget(currentRow, currentColumn, cost);
 			currentRow++;
+		}
+	}
+
+	private void activateSkills() {
+		String target = targetComboBox.getItemText(targetComboBox
+				.getSelectedIndex());
+		String name = nameTextBox.getText();
+		String message = messageTextBox.getText();
+
+		if (!nameCheckBox.getValue()) {
+			if (!messageCheckBox.getValue()) {
+				if (DEBUG)
+					System.out
+							.println("Client: Trying to activate the skill with name: '"
+									+ name
+									+ "' and with message: '"
+									+ message
+									+ "' and target: " + target);
+				storyTimeService.activateSkills(activeSkills, new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG) System.out.println("Client: Failed while trying to tell the server to activate the skills in the GameInProgressRoomPowerMenuView");
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG) System.out.println("Client: Received confirmation from the server that the skillList was sent and the skills were activated");
+					}
+					
+				});
+			}
 		}
 	}
 
