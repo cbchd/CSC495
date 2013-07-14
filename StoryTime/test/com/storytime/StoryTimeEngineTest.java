@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.storytime.client.skill.offense.LetterAdditionAttack;
+import com.storytime.client.skill.offense.LetterRemovalAttack;
 import com.storytime.client.skill.offense.LetterSubstitutionAttack;
 import com.storytime.server.Room;
 import com.storytime.server.StoryTimeEngine;
@@ -25,7 +26,6 @@ public class StoryTimeEngineTest {
 		String password = "1234";
 		engine = new StoryTimeEngine();
 		engine.loginUser(username, password);
-		int numberOfUsers = 1;
 		User foundUser = engine.getOnlineUsers().get(username);
 		assertEquals(foundUser.getUsername(), username);
 		assertEquals(foundUser.getPassword(), password);
@@ -82,7 +82,7 @@ public class StoryTimeEngineTest {
 		Room foundRoom = engine.getLobbyRooms().get(roomName);
 		assertNotNull(foundRoom.getUsers().get(username2));
 	}
-	
+
 	@Test
 	public void testActivateLetterAddition() {
 		engine = new StoryTimeEngine();
@@ -90,19 +90,17 @@ public class StoryTimeEngineTest {
 		String phrase = "Yolo yolo yolo yolo yolo";
 		String comboToLookFor = "yolo";
 		String comboToAddAfter = "r";
-		tom.setPhrase(phrase);
+		tom.getPhrasesPerRound().add(phrase);
 		LetterAdditionAttack letterAdditionAttack = new LetterAdditionAttack();
 		letterAdditionAttack.setAddThis(comboToAddAfter);
 		letterAdditionAttack.setAfterThis(comboToLookFor);
-		String editedPhrase = engine.activateLetterAdditon(tom,
-				letterAdditionAttack);
-//		System.out.println("The untouched phrase is: " + phrase
-//				+ "\n The combination to look for is: " + comboToLookFor
-//				+ "\n The combo to add after is: " + comboToAddAfter
-//				+ "\n The finished phrase is: " + editedPhrase);
+		String editedPhrase = engine.activateLetterAdditon(tom, letterAdditionAttack);
+		System.out.println("-------------------------------");
+		System.out.println("The untouched phrase is: " + phrase + "\n The combination to look for is: " + comboToLookFor + "\n The combo to add after is: "
+				+ comboToAddAfter + "\n The finished phrase is: " + editedPhrase);
 		assertEquals("Yolor yolor yolor yolor yolor", editedPhrase);
 	}
-	
+
 	@Test
 	public void testActivateLetterSubstitution() {
 		engine = new StoryTimeEngine();
@@ -110,39 +108,30 @@ public class StoryTimeEngineTest {
 		String phrase = "Tom slipped on a banana peel";
 		String comboToLookFor = "Tom";
 		String comboToSwapFor = "Santa Claus";
+		String expectedPhrase = "Santa Claus slipped on a banana peel";
 		LetterSubstitutionAttack substitutionAttack = new LetterSubstitutionAttack();
-		tom.setPhrase(phrase);
+		tom.getPhrasesPerRound().add(phrase);
 		substitutionAttack.setPhraseToLookFor(comboToLookFor);
 		substitutionAttack.setPhraseToSwapFor(comboToSwapFor);
 		String editedPhrase = engine.activateLetterSubstitution(tom, substitutionAttack);
 		System.out.println("Normal phrase: " + phrase);
 		System.out.println("Edited: " + editedPhrase);
+		assertEquals(editedPhrase, expectedPhrase);
 	}
-	
-	// /**Tests to make sure a user can join a hosted room
-	// *
-	// */
-	// @Test
-	// public void testLeaveRoom() {
-	// engine = new StoryTimeEngine();
-	// String username1 = "Tom";
-	// String password1 = "1234";
-	// String username2 = "Jerry";
-	// String password2 = "4321";
-	// String roomName = "Dragons";
-	// String theme = "D&D";
-	//
-	// engine.loginUser(username1, password1);
-	// engine.loginUser(username2, password2);
-	//
-	// User foundUser1 = engine.getOnlineUsers().get(username1);
-	// User foundUser2 = engine.getOnlineUsers().get(username2);
-	//
-	// engine.hostRoom(foundUser1, roomName, theme);
-	// engine.joinRoom(foundUser2, roomName);
-	// engine.
-	//
-	// Room foundRoom = engine.getLobbyRooms().get(roomName);
-	// assertNotNull(foundRoom.getUsers().get(username2));
-	// }
+
+	@Test
+	public void testActivateLetterRemoval() {
+		engine = new StoryTimeEngine();
+		User victim = new User("Tom", "1", engine);
+		LetterRemovalAttack removalAttack = new LetterRemovalAttack();
+		removalAttack.setPhraseToRemove("Hello ");
+		victim.getPhrasesPerRound().add("Hello Tom");
+		String editedPhrase = engine.activateLetterRemoval(victim, removalAttack);
+		System.out.println("---------------------------");
+		System.out.println("Letter Removal Attack Test");
+		System.out.println("Original phrase: " + victim.getPhrasesPerRound().get(engine.getIndexOfNewestPhraseFromHistory(victim)));
+		System.out.println("To be removed: " + removalAttack.getPhraseToRemove());
+		System.out.println("Edited phrase: " + editedPhrase);
+		assertEquals(editedPhrase, "Tom");
+	}
 }

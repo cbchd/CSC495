@@ -44,8 +44,7 @@ import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.service.RemoteEventServiceServlet;
 
-public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
-		StoryTimeService {
+public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements StoryTimeService {
 
 	private static final long serialVersionUID = 1L;
 	StoryTimeEngine engine;
@@ -77,15 +76,11 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			UpdateLobbyUsersEvent usersEvent = new UpdateLobbyUsersEvent();
 			usersEvent.setUsername(username);
 			addEvent(usersEvent.getDomain(), usersEvent);
-			logger.log(Level.FINEST, "Server: " + username
-					+ " logged into the game with password: " + password);
-			logger.log(Level.FINEST,
-					"Server: Fired Update Lobby Users Event for user: "
-							+ username);
+			logger.log(Level.FINEST, "Server: " + username + " logged into the game with password: " + password);
+			logger.log(Level.FINEST, "Server: Fired Update Lobby Users Event for user: " + username);
 			User user = engine.onlineUsers.get(username);
 			user.location = "Lobby";
-			logger.log(Level.FINEST, "Server: Set " + user.username
-					+ "'s location to: " + user.location);
+			logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 			return true;
 		} else {
 			return false;
@@ -114,13 +109,10 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		engine.lobbyChat.add(userMessage);
 		messageEvent.message = userMessage;
 		addEvent(UpdateLobbyMessagesEvent.domain, messageEvent);
-		logger.log(Level.FINEST,
-				"Server: Lobby Message Event sent to clients to update for message: "
-						+ message);
+		logger.log(Level.FINEST, "Server: Lobby Message Event sent to clients to update for message: " + message);
 	}
 
-	public void hostLobbyRoom(String roomName, String theme, String password,
-			int numberOfPlayers) {
+	public void hostLobbyRoom(String roomName, String theme, String password, int numberOfPlayers) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("User");
@@ -129,12 +121,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		if (user != null) {
 			foundUser = true;
 			engine.hostRoom(user, roomName, theme, password, numberOfPlayers);
-			logger.log(Level.FINEST, "Server " + user.username
-					+ " hosted a room with the name: " + roomName
-					+ " and the theme: " + theme
-					+ " and the with the password: " + password
-					+ " and with the maximum number of players at: "
-					+ numberOfPlayers);
+			logger.log(Level.FINEST, "Server " + user.username + " hosted a room with the name: " + roomName + " and the theme: " + theme
+					+ " and the with the password: " + password + " and with the maximum number of players at: " + numberOfPlayers);
 			Room hostedRoom = engine.lobbyRooms.get(roomName);
 			LobbyRoomHostedEvent roomsEvent = new LobbyRoomHostedEvent();
 			roomsEvent.setRoomName(hostedRoom.getRoomName());
@@ -145,16 +133,12 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			roomsEvent.setAuthorsTime(hostedRoom.getAuthorsTime());
 			roomsEvent.setMastersTime(hostedRoom.getMastersTime());
 			addEvent(LobbyRoomHostedEvent.domain, roomsEvent);
-			logger.log(Level.FINEST,
-					"Server: Fired LobbyRoomHostedEvent for room: " + roomName);
+			logger.log(Level.FINEST, "Server: Fired LobbyRoomHostedEvent for room: " + roomName);
 			user.location = "LobbyRoom";
-			logger.log(Level.FINEST, "Server: Set " + user.username
-					+ "'s location to: " + user.location);
+			logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 		}
 		if (!foundUser)
-			logger.log(Level.FINER, "Server: Couldn't find user: "
-					+ user.username
-					+ " in the lobby user list. (Host Room Method)");
+			logger.log(Level.FINER, "Server: Couldn't find user: " + user.username + " in the lobby user list. (Host Room Method)");
 	}
 
 	public void joinRoom(String roomName) {
@@ -164,30 +148,21 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		User thisUser = engine.onlineUsers.get(user.username);
 		boolean loginStatus = engine.joinRoom(thisUser, roomName);
 		if (loginStatus) {
-			logger.log(Level.FINEST, "Server: " + user.username
-					+ "joined the room: " + roomName);
+			logger.log(Level.FINEST, "Server: " + user.username + "joined the room: " + roomName);
 			thisUser.location = "LobbyRoom";
-			logger.log(Level.FINEST, "Server: Set " + user.username
-					+ "'s location to: " + user.location);
+			logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 		}
 		if (!loginStatus) {
-			logger.log(Level.WARNING, "Server: " + user.username
-					+ " tried to join the room: " + roomName
-					+ ", which doesn't exist");
+			logger.log(Level.WARNING, "Server: " + user.username + " tried to join the room: " + roomName + ", which doesn't exist");
 			thisUser.location = "Lobby";
-			logger.log(Level.FINEST, "Server: Set " + user.username
-					+ "'s location to: " + user.location);
+			logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 		}
 		UserEnteredRoomEvent userEnteredRoomEvent = new UserEnteredRoomEvent();
 		userEnteredRoomEvent.setUsername(thisUser.getUsername());
-		addEvent(DomainFactory.getDomain(thisUser.getRoom().roomName),
-				userEnteredRoomEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired a UserEnteredRoomEvent for domain: "
-						+ thisUser.getRoom().getRoomName());
+		addEvent(DomainFactory.getDomain(thisUser.getRoom().roomName), userEnteredRoomEvent);
+		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: " + thisUser.getRoom().getRoomName());
 		addEvent(DomainFactory.getDomain("Lobby"), userEnteredRoomEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired a UserEnteredRoomEvent for domain: Lobby");
+		logger.log(Level.FINEST, "Server: Fired a UserEnteredRoomEvent for domain: Lobby");
 	}
 
 	public LobbyRoomData getLobbyRoomInformation() {
@@ -202,21 +177,12 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			foundUser = true;
 		}
 		if (!foundUser) {
-			logger.log(
-					Level.WARNING,
-					"Server: "
-							+ user.username
-							+ " could not get his/her lobby room information because this user is not logged in");
+			logger.log(Level.WARNING, "Server: " + user.username + " could not get his/her lobby room information because this user is not logged in");
 		}
 		if (room == null) {
-			logger.log(
-					Level.WARNING,
-					"Server: "
-							+ user.username
-							+ " has no room so this client should not be calling getLobbyRoomInformation");
+			logger.log(Level.WARNING, "Server: " + user.username + " has no room so this client should not be calling getLobbyRoomInformation");
 		} else {
-			logger.log(Level.FINEST, "Server: Got " + user.username
-					+ "'s room: " + room.roomName);
+			logger.log(Level.FINEST, "Server: Got " + user.username + "'s room: " + room.roomName);
 		}
 		LobbyRoomData roomInfo = new LobbyRoomData();
 		roomInfo.setPointCap(room.getPointLimit());
@@ -226,79 +192,58 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		roomInfo.setMastersTimer(room.getMastersTime());
 		roomInfo.setHostsName(room.getHost().getUsername());
 		roomInfo.setPassword(room.getPassword());
-		logger.log(Level.FINEST,
-				"Server: Adding users to the list of room information to be sent to "
-						+ user.username);
+		logger.log(Level.FINEST, "Server: Adding users to the list of room information to be sent to " + user.username);
 		for (String usrname : room.users.keySet()) {
 			// Add the relevant users to the room info to be sent
 			roomInfo.users.add(usrname);
-			logger.log(Level.FINEST, "Server: Added user: " + usrname
-					+ " to the roomInfo list to be sent");
+			logger.log(Level.FINEST, "Server: Added user: " + usrname + " to the roomInfo list to be sent");
 		}
 		roomInfo.inGame = room.inGame;
 		roomInfo.messages = room.roomChat;
 		// set a new domain
 		roomInfo.domain = DomainFactory.getDomain(room.roomName);
-		logger.log(
-				Level.FINEST,
-				"Server: "
-						+ user.username
-						+ " has been sent the information pertaining to his/her current lobby room: "
-						+ room.roomName);
+		logger.log(Level.FINEST, "Server: " + user.username + " has been sent the information pertaining to his/her current lobby room: " + room.roomName);
 		return roomInfo;
 	}
 
 	public void updateLobbyRoomPointLimit(String roomName, int pointCap) {
 		Room r = engine.getLobbyRooms().get(roomName);
 		r.pointLimit = pointCap;
-		logger.log(Level.FINEST, "Server: Set " + r.roomName
-				+ "'s pointCap to " + r.pointLimit);
+		logger.log(Level.FINEST, "Server: Set " + r.roomName + "'s pointCap to " + r.pointLimit);
 		UpdatePointLimitEvent pointChangeEvent = new UpdatePointLimitEvent();
 		pointChangeEvent.setPointLimit(r.getPointLimit());
 		pointChangeEvent.setRoomName(roomName);
 		addEvent(DomainFactory.getDomain(roomName), pointChangeEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired Point Change Event for domain: " + roomName);
+		logger.log(Level.FINEST, "Server: Fired Point Change Event for domain: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), pointChangeEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired Point Change Event for domain: Lobby");
+		logger.log(Level.FINEST, "Server: Fired Point Change Event for domain: Lobby");
 		return;
 	}
 
 	public void updateLobbyRoomTimer(String roomName, int timer) {
-		logger.log(Level.FINEST,
-				"Server: Got an UpdateSubmissionTimerEvent for room: "
-						+ roomName + " and updated submissionTimer value to: "
-						+ timer);
+		logger.log(Level.FINEST, "Server: Got an UpdateSubmissionTimerEvent for room: " + roomName + " and updated submissionTimer value to: " + timer);
 		Room r = engine.getLobbyRooms().get(roomName);
 		r.authorsTime = timer;
 		UpdateAuthorsTimerEvent submissionTimerEvent = new UpdateAuthorsTimerEvent();
 		submissionTimerEvent.authorsTimer = timer;
 		submissionTimerEvent.roomName = roomName;
 		addEvent(DomainFactory.getDomain(roomName), submissionTimerEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired UpdateSubmissionTimerEvent for domain: "
-						+ roomName);
+		logger.log(Level.FINEST, "Server: Fired UpdateSubmissionTimerEvent for domain: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), submissionTimerEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired UpdateSubmissionTimerEvent for domain: Lobby");
+		logger.log(Level.FINEST, "Server: Fired UpdateSubmissionTimerEvent for domain: Lobby");
 	}
 
 	public void updateLobbyRoomChooserTimer(String roomName, int timer) {
-		logger.log(Level.FINEST,
-				"Server: Got an UpdateChooserTimerEvent for room: " + roomName
-						+ " and updated chooserTimer value to: " + timer);
+		logger.log(Level.FINEST, "Server: Got an UpdateChooserTimerEvent for room: " + roomName + " and updated chooserTimer value to: " + timer);
 		Room room = engine.getLobbyRooms().get(roomName);
 		room.mastersTime = timer;
 		UpdateMastersTimerEvent chooserTimerEvent = new UpdateMastersTimerEvent();
 		chooserTimerEvent.mastersTime = timer;
 		chooserTimerEvent.roomName = roomName;
 		addEvent(DomainFactory.getDomain(roomName), chooserTimerEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired UpdateChooserTimerEvent for domain: " + roomName);
+		logger.log(Level.FINEST, "Server: Fired UpdateChooserTimerEvent for domain: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), chooserTimerEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired UpdateChooserTimerEvent for domain: Lobby");
+		logger.log(Level.FINEST, "Server: Fired UpdateChooserTimerEvent for domain: Lobby");
 	}
 
 	public void leaveRoom(String roomName) {
@@ -322,33 +267,25 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			// Disband room
 			engine.lobbyRooms.remove(usersRoom.roomName);
 			foundUser.room = null;
-			logger.log(Level.FINEST, "Server: User " + usr.username
-					+ " was the host of " + roomName
-					+ " and has left the room, so it has been disbanded");
+			logger.log(Level.FINEST, "Server: User " + usr.username + " was the host of " + roomName + " and has left the room, so it has been disbanded");
 			// Remove room from room list
 			RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
 			addEvent(DomainFactory.getDomain(roomName), roomDisbandedEvent);
-			logger.log(
-					Level.FINEST,
-					"Server: Fired a RoomDisbandedEvent to notify users in the current disbanded room");
+			logger.log(Level.FINEST, "Server: Fired a RoomDisbandedEvent to notify users in the current disbanded room");
 			LobbyRoomDisbandedEvent lobbyRoomDisbandedEvent = new LobbyRoomDisbandedEvent();
 			lobbyRoomDisbandedEvent.setRoomName(roomName);
 			addEvent(DomainFactory.getDomain("Lobby"), lobbyRoomDisbandedEvent);
-			logger.log(
-					Level.FINEST,
-					"Server: Fired a LobbyRoomDisbandedEvent to notify users in the lobby of a room that can no longer be joined");
+			logger.log(Level.FINEST, "Server: Fired a LobbyRoomDisbandedEvent to notify users in the lobby of a room that can no longer be joined");
 		} else {
 			UserLeftRoomEvent userLeftEvent = new UserLeftRoomEvent();
 			userLeftEvent.username = foundUser.username;
 			addEvent(DomainFactory.getDomain(roomName), userLeftEvent);
 			// Remove user from the room
 			usersRoom.users.remove(foundUser.username);
-			logger.log(Level.FINEST,
-					"Server: Fired User Left Event for the domain " + roomName);
+			logger.log(Level.FINEST, "Server: Fired User Left Event for the domain " + roomName);
 		}
 		foundUser.location = "Lobby";
-		logger.log(Level.FINEST, "Server: Set the location for user: "
-				+ foundUser.username + " to be: " + foundUser.location);
+		logger.log(Level.FINEST, "Server: Set the location for user: " + foundUser.username + " to be: " + foundUser.location);
 	}
 
 	public void sendRoomChatMessage(String roomName, String message) {
@@ -361,8 +298,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 
 		UpdateRoomChatWindowEvent chatWindowEvent = new UpdateRoomChatWindowEvent();
 		chatWindowEvent.message = usr.username + ": " + message;
-		logger.log(Level.FINEST, "Server: Recieved message '" + message
-				+ "' for dispersal");
+		logger.log(Level.FINEST, "Server: Recieved message '" + message + "' for dispersal");
 		addEvent(DomainFactory.getDomain(roomName), chatWindowEvent);
 		logger.log(Level.FINEST, "Server: Fired UpdateRoomChatWindowEvent");
 	}
@@ -371,10 +307,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		// Find the room
 		Room room = engine.getLobbyRooms().get(roomName);
 		room.inGame = true;
-		logger.log(Level.FINEST, "Server: Set the room: " + roomName
-				+ " to in-game");
-		logger.log(Level.FINEST, "Server: Trying to start a game for room: "
-				+ room.roomName);
+		logger.log(Level.FINEST, "Server: Set the room: " + roomName + " to in-game");
+		logger.log(Level.FINEST, "Server: Trying to start a game for room: " + room.roomName);
 		// Add the room's data to a new InGameRoom object
 		InGameRoom gameRoom = new InGameRoom();
 		gameRoom.domain = DomainFactory.getDomain(room.roomName);
@@ -397,15 +331,12 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		// Create an ingame room
 		engine.getGameRooms().put(gameRoom.domain.getName(), gameRoom);
 		engine.getLobbyRooms().remove(room.roomName);
-		logger.log(Level.INFO, "Started a game for room " + roomName
-				+ ", with attributes: " + gameRoom.domain + ", pointCap: "
-				+ gameRoom.pointCap + ", theme: " + gameRoom.theme
-				+ ", and submissionTimer: " + gameRoom.timer);
+		logger.log(Level.INFO, "Started a game for room " + roomName + ", with attributes: " + gameRoom.domain + ", pointCap: " + gameRoom.pointCap
+				+ ", theme: " + gameRoom.theme + ", and submissionTimer: " + gameRoom.timer);
 
 		// Fire off a game start event
 		addEvent(gameRoom.domain, new GameStartEvent());
-		logger.log(Level.FINEST, "Server: Fired Game Start Event for room: "
-				+ roomName);
+		logger.log(Level.FINEST, "Server: Fired Game Start Event for room: " + roomName);
 
 	}
 
@@ -417,10 +348,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		User usr = (User) session.getAttribute("User");
-		logger.log(
-				Level.FINEST,
-				"Server: Client requested notification of his/her username. Sending the client it's username: "
-						+ usr.username);
+		logger.log(Level.FINEST, "Server: Client requested notification of his/her username. Sending the client it's username: " + usr.username);
 		return usr.username;
 	}
 
@@ -429,34 +357,25 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		Domain domain = null;
 		InGameRoom foundGameRoom = engine.getGameRooms().get(roomName);
 		username = foundGameRoom.users.get(0).username;
-		logger.log(Level.FINEST,
-				"Server: Sent client the first phrase chooser: " + username
-						+ ", for room: " + roomName);
+		logger.log(Level.FINEST, "Server: Sent client the first phrase chooser: " + username + ", for room: " + roomName);
 		return username;
 	}
 
 	public void setReady(String username, String roomName) {
 		int numberOfReady = 0;
-		logger.log(Level.FINEST,
-				"Server: The current rooms that are in-game are as follows:");
+		logger.log(Level.FINEST, "Server: The current rooms that are in-game are as follows:");
 		InGameRoom ingameRoom = engine.getGameRooms().get(roomName);
 		logger.log(Level.FINEST, "Server: Room: " + ingameRoom.domain.getName());
-		logger.log(Level.FINEST, "Server: Found user's room " + roomName
-				+ " in the current list of in-game rooms");
+		logger.log(Level.FINEST, "Server: Found user's room " + roomName + " in the current list of in-game rooms");
 
 		for (User user : ingameRoom.users) {
 			logger.log(Level.FINEST, "Server: Contains user: " + user.username);
 			if (user.username.equalsIgnoreCase(username)) {
 				user.location = "GameRoom";
-				logger.log(Level.FINEST, "Server: Set " + user.username
-						+ "'s location to: " + user.location);
+				logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 				user.isReadyToStart = true;
 				numberOfReady++;
-				logger.log(
-						Level.FINEST,
-						"Server: "
-								+ username
-								+ " is now ready to begin the game (status is set to ready)");
+				logger.log(Level.FINEST, "Server: " + username + " is now ready to begin the game (status is set to ready)");
 			} else if (user.isReadyToStart) {
 				numberOfReady++;
 			}
@@ -467,14 +386,9 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 			User chooser = ingameRoom.users.get(0);
 			ingameRoom.chooser = chooser;
 			roundEvent.chooser = chooser.username;
-			logger.log(Level.FINEST,
-					"Server: Set the first rounds chooser for game room: "
-							+ ingameRoom.domain.getName() + ", to be: "
-							+ roundEvent.chooser);
+			logger.log(Level.FINEST, "Server: Set the first rounds chooser for game room: " + ingameRoom.domain.getName() + ", to be: " + roundEvent.chooser);
 			addEvent(ingameRoom.domain, roundEvent);
-			logger.log(Level.FINEST,
-					"Server: Fired Initial Round Start Event containing the name of the chooser: "
-							+ roundEvent.chooser);
+			logger.log(Level.FINEST, "Server: Fired Initial Round Start Event containing the name of the chooser: " + roundEvent.chooser);
 		}
 	}
 
@@ -487,25 +401,20 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 				int phrasesSubmittedCount = 0;
 				for (User user : r.users) {
 					if (user.username.equals(usr.username)) {
-						user.phrase = phrase;
+						// user.phrase = phrase; // TODO: Take out
+						user.getPhrasesPerRound().add(phrase);
 						PhraseSubmittedEvent phraseEvent = new PhraseSubmittedEvent();
 						phraseEvent.phrase = phrase;
 						addEvent(r.domain, phraseEvent);
-						logger.log(Level.FINEST,
-								"Server: Fired Phrase Submitted Event for phrase '"
-										+ phrase + "' submitted by: "
-										+ usr.username);
+						logger.log(Level.FINEST, "Server: Fired Phrase Submitted Event for phrase '" + phrase + "' submitted by: " + usr.username);
 						r.phrasesSubmitted++;
 					}
 				}
 			}
 			if (r.phrasesSubmitted == r.users.size()) {
 				addEvent(r.domain, new AllPhrasesSubmittedEvent());
-				logger.log(Level.FINEST, "Server: All users in the room: "
-						+ r.domain.getName()
-						+ " have submitted phrases for this round");
-				logger.log(Level.FINEST,
-						"Server: Fired All Phrases Submitted Event");
+				logger.log(Level.FINEST, "Server: All users in the room: " + r.domain.getName() + " have submitted phrases for this round");
+				logger.log(Level.FINEST, "Server: Fired All Phrases Submitted Event");
 				r.phrasesSubmitted = 0;
 			}
 			return;
@@ -536,15 +445,12 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		String messageWithUser = usr.username + ": " + message;
 
 		InGameRoom gameRoom = engine.gameRooms.get(roomName);
-		logger.log(Level.FINEST, "Server: Received message: '" + message
-				+ "', for  domain: " + gameRoom.domain.getName());
+		logger.log(Level.FINEST, "Server: Received message: '" + message + "', for  domain: " + gameRoom.domain.getName());
 		gameRoom.messages.add(messageWithUser);
 		UpdateGameRoomChatWindowEvent chatEvent = new UpdateGameRoomChatWindowEvent();
 		chatEvent.message = messageWithUser;
 		addEvent(gameRoom.domain, chatEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired UpdateGameRoomChatWindowEvent for domain: "
-						+ gameRoom.domain.getName());
+		logger.log(Level.FINEST, "Server: Fired UpdateGameRoomChatWindowEvent for domain: " + gameRoom.domain.getName());
 	}
 
 	public String getLocation() {
@@ -561,60 +467,38 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		User usr = (User) session.getAttribute("User");
 		User user = engine.onlineUsers.get(usr.username);
 		InGameRoom usersRoom = user.ingameRoom;
-		logger.log(Level.FINEST, "Server: Setting client: " + user.username
-				+ "'s timer as elapsed");
+		logger.log(Level.FINEST, "Server: Setting client: " + user.username + "'s timer as elapsed");
 		if (usersRoom.chooser.username.equalsIgnoreCase(user.username)) {
 			usersRoom.choosersTimerElapsed = true;
-			logger.log(Level.FINEST, "Server: Client: " + user.username
-					+ " is supposed to be the chooser for this round");
-			logger.log(Level.FINEST,
-					"Server: Choosing random phrase for room: "
-							+ usersRoom.domain.getName());
-			String randomlySelectedPhrase = engine
-					.chooseRandomPhrase(usersRoom);
-			if (!randomlySelectedPhrase.equalsIgnoreCase("")) {
+			logger.log(Level.FINEST, "Server: Client: " + user.username + " is supposed to be the chooser for this round");
+			logger.log(Level.FINEST, "Server: Choosing random phrase for room: " + usersRoom.domain.getName());
+			String randomlySelectedPhrase = engine.chooseRandomPhrase(usersRoom);
+			if (randomlySelectedPhrase != null && !randomlySelectedPhrase.equalsIgnoreCase("")) {
 				choosePhrase(randomlySelectedPhrase, usersRoom.domain.getName());
-				logger.log(Level.FINEST,
-						"Server: A randomly selected phrase was chosen: "
-								+ randomlySelectedPhrase);
+				logger.log(Level.FINEST, "Server: A randomly selected phrase was chosen: " + randomlySelectedPhrase);
 			} else {
-				logger.log(Level.FINEST,
-						"Server: There were no submissions for room: "
-								+ usersRoom.domain.getName()
-								+ " so a new round will begin");
-				logger.log(Level.FINEST,
-						"Server: Initiating the round close for room: "
-								+ usersRoom.domain.getName());
+				logger.log(Level.FINEST, "Server: There were no submissions for room: " + usersRoom.domain.getName() + " so a new round will begin");
+				logger.log(Level.FINEST, "Server: Initiating the round close for room: " + usersRoom.domain.getName());
 				fireRoundCloseEvent(usersRoom, randomlySelectedPhrase);
 				if (usersRoom.gameEnded) {
 					return;
 				}
-				logger.log(Level.FINEST,
-						"Server: Initiating a round start for room: "
-								+ usersRoom.domain.getName());
+				logger.log(Level.FINEST, "Server: Initiating a round start for room: " + usersRoom.domain.getName());
 				fireRoundStartEvent(usersRoom);
 			}
 		} else {
-			logger.log(Level.FINEST, "Server: The submitter: " + user.username
-					+ "'s submission timer has elapsed");
+			logger.log(Level.FINEST, "Server: The submitter: " + user.username + "'s submission timer has elapsed");
 			user.timerElapsed = true;
 			usersRoom.numberOfUsersWhoseTimersHaveElapsed++;
 		}
-		logger.log(Level.FINEST, "Server: Set " + user.username
-				+ "'s timer elapsed value to: " + user.timerElapsed);
-		if (usersRoom.numberOfUsersWhoseTimersHaveElapsed == usersRoom.users
-				.size() - 1) {
-			logger.log(
-					Level.FINEST,
+		logger.log(Level.FINEST, "Server: Set " + user.username + "'s timer elapsed value to: " + user.timerElapsed);
+		if (usersRoom.numberOfUsersWhoseTimersHaveElapsed == usersRoom.users.size() - 1) {
+			logger.log(Level.FINEST,
 					"Server: The timers for all the submitters for this round have elapsed and no phrases have been submitted for this round in room: "
 							+ usersRoom.domain.getName());
-			logger.log(Level.FINEST,
-					"Server: Initiating round close for room: "
-							+ usersRoom.domain.getName());
+			logger.log(Level.FINEST, "Server: Initiating round close for room: " + usersRoom.domain.getName());
 			fireRoundCloseEvent(usersRoom, "");
-			logger.log(Level.FINEST,
-					"Server: Initiating round start for room: "
-							+ usersRoom.domain.getName());
+			logger.log(Level.FINEST, "Server: Initiating round start for room: " + usersRoom.domain.getName());
 			fireRoundStartEvent(usersRoom);
 		}
 	}
@@ -624,25 +508,17 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		RoundCloseEvent roundCloseEvent = new RoundCloseEvent();
 		HashMap<String, Integer> pointList = new HashMap<String, Integer>();
 		for (User user : gameRoom.users) {
-			if (user.phrase.equalsIgnoreCase(phrase)
+			int currentPhraseIndex = engine.getIndexOfNewestPhraseFromHistory(user);
+			if (user.getPhrasesPerRound().size() != 0 && user.getPhrasesPerRound().get(currentPhraseIndex).equalsIgnoreCase(phrase)
 					&& !phrase.equalsIgnoreCase("")) {
 				user.score++;
-				logger.log(Level.FINEST, "Server: " + user.username
-						+ "'s word was chosen and his score is now "
-						+ user.score);
+				logger.log(Level.FINEST, "Server: " + user.username + "'s word was chosen and his score is now " + user.score);
 				if (user.score == gameRoom.pointCap) {
 					GameEndEvent gameEndEvent = new GameEndEvent();
 					gameEndEvent.winner = user.username;
 					addEvent(DomainFactory.getDomain(roomName), gameEndEvent);
-					logger.log(
-							Level.INFO,
-							"Server: User: "
-									+ user.username
-									+ " has hit the point limit and won the game for room: "
-									+ roomName);
-					logger.log(Level.FINEST,
-							"Server: Fired GameEndEvent containing the winners username: "
-									+ user.username);
+					logger.log(Level.INFO, "Server: User: " + user.username + " has hit the point limit and won the game for room: " + roomName);
+					logger.log(Level.FINEST, "Server: Fired GameEndEvent containing the winners username: " + user.username);
 					gameRoom.gameEnded = true;
 				}
 			}
@@ -650,21 +526,17 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		}
 		roundCloseEvent.pointList = pointList;
 		addEvent(DomainFactory.getDomain(roomName), roundCloseEvent);
-		logger.log(Level.FINEST, "Server: Fired Round Close Event for room: "
-				+ roomName);
+		logger.log(Level.FINEST, "Server: Fired Round Close Event for room: " + roomName);
 		if (gameRoom.gameEnded)
-			logger.log(Level.FINEST, "Server: The room: " + roomName
-					+ "'s game has ended");
+			logger.log(Level.FINEST, "Server: The room: " + roomName + "'s game has ended");
 		engine.refreshTimerElapsedValues(gameRoom);
 		engine.clearAllUsersSubmittedPhrases(roomName);
-		logger.log(Level.FINEST, "Server: Reset the phrases for room: "
-				+ roomName);
+		logger.log(Level.FINEST, "Server: Reset the phrases for room: " + roomName);
 	}
 
 	private void fireRoundStartEvent(InGameRoom gameRoom) {
 		engine.refreshTimerElapsedValues(gameRoom);
-		logger.log(Level.FINEST, "Server: Reset the timers for users in room: "
-				+ gameRoom.domain.getName());
+		logger.log(Level.FINEST, "Server: Reset the timers for users in room: " + gameRoom.domain.getName());
 		String roomName = gameRoom.domain.getName();
 		RoundStartEvent roundStartEvent = new RoundStartEvent();
 		// advance turn count
@@ -677,8 +549,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		roundStartEvent.chooser = chooser.username;
 		gameRoom.chooser = chooser;
 		addEvent(DomainFactory.getDomain(roomName), roundStartEvent);
-		logger.log(Level.FINEST, "Server: Fired Round Start Event for room: "
-				+ roomName);
+		logger.log(Level.FINEST, "Server: Fired Round Start Event for room: " + roomName);
 	}
 
 	@Override
@@ -704,36 +575,24 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements
 		HttpSession session = request.getSession();
 		User usr = (User) session.getAttribute("User");
 		engine.setPassword(roomName, usr, password);
-		logger.log(Level.FINEST, "Server: Set the password for room: "
-				+ roomName + " to be: " + password);
+		logger.log(Level.FINEST, "Server: Set the password for room: " + roomName + " to be: " + password);
 		UpdatePasswordEvent passwordChangedEvent = new UpdatePasswordEvent();
 		passwordChangedEvent.setNewPassword(password);
 		passwordChangedEvent.setRoomName(roomName);
 		addEvent(DomainFactory.getDomain(roomName), passwordChangedEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired a LobbyRoomPasswordChangedEvent for room: "
-						+ roomName);
+		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for room: " + roomName);
 		addEvent(DomainFactory.getDomain("Lobby"), passwordChangedEvent);
-		logger.log(Level.FINEST,
-				"Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
+		logger.log(Level.FINEST, "Server: Fired a LobbyRoomPasswordChangedEvent for the lobby");
 	}
 
 	@Override
 	public void activateSkills(SkillHolder skillHolder) {
-		for (Skill skill : skillHolder.skillList.values()) {
-			
-		}
-	}
-	
-	private void activateLetterAdditionAttack(LetterAdditionAttack letterAdditionAttack) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("User");
-		InGameRoom gameRoom = user.getIngameRoom();
-		for (User usr : gameRoom.users) {
-			if (usr.getPhrase().equalsIgnoreCase(letterAdditionAttack.getPhraseToBeAttacked())) {
-				//usr.setPhrase(phrase)
-			}
+		User someoneInTheRoom = (User) session.getAttribute("User");
+		// User victim = engine.getUserThatOwnsThisPhrase(, someoneInTheRoom)
+		for (Skill skill : skillHolder.skillList.values()) {
+
 		}
 	}
 }

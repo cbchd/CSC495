@@ -1,33 +1,34 @@
 package com.storytime.server;
 
+import java.util.ArrayList;
+
 public class User {
 	String username = "";
 	String password = "";
 	String location = "";
-	String phrase = "";
 	boolean isReadyToStart = false;
 	int score = 0;
 	Room room;
 	InGameRoom ingameRoom;
+	ArrayList<String> phraseHistory = new ArrayList<String>();
 
 	boolean timerElapsed = false;
 
 	StoryTimeEngine storyTimeEngine;
 
-	public User(String username, String password,
-			StoryTimeEngine storyTimeEngine) {
+	public User(String username, String password, StoryTimeEngine storyTimeEngine) {
 		this.username = username;
 		this.password = password;
 		this.storyTimeEngine = storyTimeEngine;
 		room = null;
 	}
 
-	public String getPhrase() {
-		return phrase;
+	public ArrayList<String> getPhrasesPerRound() {
+		return phraseHistory;
 	}
 
-	public void setPhrase(String phrase) {
-		this.phrase = phrase;
+	public void setPhrasesPerRound(ArrayList<String> phrasesPerRound) {
+		this.phraseHistory = phrasesPerRound;
 	}
 
 	public boolean isReadyToStart() {

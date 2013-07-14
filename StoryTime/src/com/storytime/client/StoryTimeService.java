@@ -154,6 +154,9 @@ public interface StoryTimeService extends RemoteService {
 	 */
 	public void sendGameRoomChatMessage(String roomName, String message);
 
+	/**
+	 * @return The last known location of the user who activates this method
+	 */
 	public String getLocation();
 
 	/**
@@ -164,8 +167,15 @@ public interface StoryTimeService extends RemoteService {
 	 */
 	public void setTimerElapsed();
 	
+	/**Sets the password for the room specified by the roomName parameter
+	 * @param roomName
+	 * @param password
+	 */
 	public void setPassword(String roomName, String password);
 	
+	/**Takes a SkillHolder object containing a list of skills. It then will go through and activate the skills present in the list, in the order in which they appear.
+	 * @param skillHolder
+	 */
 	public void activateSkills(SkillHolder skillHolder);
 
 }

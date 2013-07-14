@@ -40,8 +40,7 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
-public class GameInProgressRoomView extends Composite implements
-		com.storytime.client.presenters.GameInProgressRoomPresenter.Display {
+public class GameInProgressRoomView extends Composite implements com.storytime.client.presenters.GameInProgressRoomPresenter.Display {
 
 	boolean DEBUG = true;
 	GameData gameData = new GameData();
@@ -103,11 +102,8 @@ public class GameInProgressRoomView extends Composite implements
 				lblTime.setText("0");
 				if (okToDisableSubmitting) {
 					if (DEBUG)
-						System.out
-								.println("Client: "
-										+ gameData.thisUser
-										+ " has not submitted a word within the time limit of: "
-										+ gameData.submissionTimer + " seconds");
+						System.out.println("Client: " + gameData.thisUser + " has not submitted a word within the time limit of: " + gameData.submissionTimer
+								+ " seconds");
 					disableSubmitting();
 					if (DEBUG)
 						System.out.println("Client: Disabled submitting");
@@ -125,22 +121,16 @@ public class GameInProgressRoomView extends Composite implements
 		@Override
 		public void run() {
 			if (DEBUG)
-				System.out.println("Client: Chooser timer for client: "
-						+ gameData.thisUser + " is at: " + timeLeftChoose);
+				System.out.println("Client: Chooser timer for client: " + gameData.thisUser + " is at: " + timeLeftChoose);
 			if (DEBUG)
-				System.out.println("Client: The total choose time is: "
-						+ gameData.chooserTimer);
+				System.out.println("Client: The total choose time is: " + gameData.chooserTimer);
 
 			if (timeLeftChoose == 0) {
 				chooseTimer.cancel();
 				lblTime.setText("0");
 				if (okToDisableChoosing) {
 					if (DEBUG)
-						System.out
-								.println("Client: "
-										+ gameData.thisUser
-										+ " has not chosen a word within the time limit of: "
-										+ gameData.chooserTimer * 1000);
+						System.out.println("Client: " + gameData.thisUser + " has not chosen a word within the time limit of: " + gameData.chooserTimer * 1000);
 					disableChoosing();
 					if (DEBUG)
 						System.out.println("Client: Disabled choosing");
@@ -157,8 +147,7 @@ public class GameInProgressRoomView extends Composite implements
 		public void run() {
 			setReady();
 			if (DEBUG)
-				System.out
-						.println("Setting the client as ready.. after 5 seconds");
+				System.out.println("Setting the client as ready.. after 5 seconds");
 			this.cancel();
 		}
 	};
@@ -183,30 +172,24 @@ public class GameInProgressRoomView extends Composite implements
 		gameData.messages = new ArrayList<String>();
 		gameData.chooserTimer = LobbyRoomView.roomData.mastersTimer;
 		if (DEBUG)
-			System.out
-					.println("Client: Setting the game room's maximum point cap to: "
-							+ gameData.pointCap);
+			System.out.println("Client: Setting the game room's maximum point cap to: " + gameData.pointCap);
 		if (DEBUG)
-			System.out.println("Client: Domain for this in-game room is: "
-					+ gameData.domain.getName());
+			System.out.println("Client: Domain for this in-game room is: " + gameData.domain.getName());
 		for (String user : LobbyRoomView.roomData.users) {
 			// initialize the user's scores to 0
 			gameData.scoreList.put(user, 0);
 		}
 		if (DEBUG)
-			System.out
-					.println("Client: Trying to get and set this client's username and start the game");
+			System.out.println("Client: Trying to get and set this client's username and start the game");
 		getMyUsernameAndStart();
 	}
 
 	public void initialize() {
 		for (String user : gameData.users) {
 			if (user.equalsIgnoreCase(gameData.thisUser)) {
-				lblScoreBox.setText(Integer.toString(gameData.scoreList
-						.get(gameData.thisUser)));
+				lblScoreBox.setText(Integer.toString(gameData.scoreList.get(gameData.thisUser)));
 				if (DEBUG)
-					System.out.println("Client: Set his own score to: "
-							+ lblScoreBox.getText());
+					System.out.println("Client: Set his own score to: " + lblScoreBox.getText());
 			}
 			userListBox.addItem(user);
 		}
@@ -223,8 +206,7 @@ public class GameInProgressRoomView extends Composite implements
 		overallVerticalPanel.add(storyBox);
 		overallVerticalPanel.add(bigMiddlePanel);
 
-		usersAndChatLeftMiddlePanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		usersAndChatLeftMiddlePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		bigMiddlePanel.add(usersAndChatLeftMiddlePanel);
 
@@ -232,20 +214,19 @@ public class GameInProgressRoomView extends Composite implements
 		usersAndChatLeftMiddlePanel.add(userListBox);
 		usersAndChatLeftMiddlePanel.add(lblChat);
 		usersAndChatLeftMiddlePanel.add(chatArea);
-		chatSendBoxAndButtonPanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		chatSendBoxAndButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		usersAndChatLeftMiddlePanel.add(chatSendBoxAndButtonPanel);
 
 		chatSendBoxAndButtonPanel.add(sendToChatBox);
 
 		chatSendBoxAndButtonPanel.add(btnSendToChatButton);
 		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		
+
 		usersAndChatLeftMiddlePanel.add(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
-		
+
 		btnPlays.setStyleName("gwt-LoginAsNewUserButton");
-		
+
 		verticalPanel.add(btnPlays);
 		btnPlays.setWidth("70%");
 
@@ -269,8 +250,7 @@ public class GameInProgressRoomView extends Composite implements
 
 		userListBox.setVisibleItemCount(5);
 
-		overallVerticalPanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		overallVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		lblMaxPoints.setText(Integer.toString(gameData.pointCap));
 
@@ -297,30 +277,25 @@ public class GameInProgressRoomView extends Composite implements
 		btnSendToChatButton.setStyleName("gwt-LoginExistingButton");
 		btnSendToChatButton.setSize("90%", "30px");
 
-		swapHolderPanelAndSubmittedPhrases
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		swapHolderPanelAndSubmittedPhrases.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		swapHolderPanelAndSubmittedPhrases.setSize("100%", "403px");
 
-		lblSubmittedPhrases
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblSubmittedPhrases.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		lblSubmittedPhrases.setSize("100%", "19px");
 		phraseListBox.setSize("100%", "146px");
 		phraseListBox.setVisibleItemCount(5);
 
-		choosePanelForSwap
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		choosePanelForSwap.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		choosePanelForSwap.setSize("100%", "70px");
 
-		lblSelectAPhrase
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblSelectAPhrase.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		choosePanelForSwap.add(lblSelectAPhrase);
 		choosePanelForSwap.add(btnChoosePhrase);
 
 		overallVerticalPanel.add(labelsScoreChooserAndPointsPanel);
 
-		labelsScoreChooserAndPointsPanel
-				.add(underLabelsScoreChooserAndPointsPanel);
+		labelsScoreChooserAndPointsPanel.add(underLabelsScoreChooserAndPointsPanel);
 
 		underLabelsScoreChooserAndPointsPanel.add(label);
 
@@ -328,16 +303,14 @@ public class GameInProgressRoomView extends Composite implements
 		underLabelsScoreChooserAndPointsPanel.add(lblCurrentChooser);
 		lblCurrentChooser.setSize("224px", "27px");
 
-		lblCurrentChooser
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblCurrentChooser.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		underLabelsScoreChooserAndPointsPanel.add(lblPointsNeededTo);
 
 		scoresAndUsernamePanel.add(lblScoreBox);
 		scoresAndUsernamePanel.add(lblCurrentChooserName);
 		lblCurrentChooserName.setSize("545px", "27px");
-		lblCurrentChooserName
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		lblCurrentChooserName.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		scoresAndUsernamePanel.add(lblMaxPoints);
 		lblSelectAPhrase.setSize("100%", "27px");
@@ -352,8 +325,7 @@ public class GameInProgressRoomView extends Composite implements
 		label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		label.setSize("208px", "100%");
 
-		lblPointsNeededTo
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblPointsNeededTo.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblPointsNeededTo.setSize("100%", "100%");
 
 		scoresAndUsernamePanel.setSize("100%", "100%");
@@ -368,8 +340,7 @@ public class GameInProgressRoomView extends Composite implements
 		// rootPanel.add(phraseSubmissionRealPanel, 86, 697);
 		phraseSubmissionRealPanel.setSize("100%", "100%");
 
-		lblSubmitAPhrase
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		lblSubmitAPhrase.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		phraseSubmissionRealPanel.add(lblSubmitAPhrase);
 		phraseSubmissionRealPanel.add(phraseSubmissionPanelForSwap);
 
@@ -390,29 +361,26 @@ public class GameInProgressRoomView extends Composite implements
 		btnChoosePhrase.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				String chosenPhrase = null;
+				if (phraseListBox.getSelectedIndex() != -1) {
+					chosenPhrase = phraseListBox.getItemText(phraseListBox.getSelectedIndex());
+				}
+				if (chosenPhrase != null && !chosenPhrase.equalsIgnoreCase("")) {
+					storyTimeService.choosePhrase(chosenPhrase, gameData.domain.getName(), new AsyncCallback<Void>() {
 
-				final String chosenPhrase = phraseListBox
-						.getItemText(phraseListBox.getSelectedIndex());
-				if (!chosenPhrase.equalsIgnoreCase("")) {
-					storyTimeService.choosePhrase(chosenPhrase,
-							gameData.domain.getName(),
-							new AsyncCallback<Void>() {
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.printStackTrace();
+						}
 
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.printStackTrace();
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									if (DEBUG)
-										System.out
-												.println("Client: Got confirmation of phrase chosen call for the phrase: "
-														+ chosenPhrase);
-									disableChoosing();
-									chooseTimer.cancel();
-								}
-							});
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Got confirmation of phrase chosen call");
+							disableChoosing();
+							chooseTimer.cancel();
+						}
+					});
 				}
 			}
 		});
@@ -421,26 +389,22 @@ public class GameInProgressRoomView extends Composite implements
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					if (!phraseSubmitBox.getText().equalsIgnoreCase("")) {
-						storyTimeService.submitPhrase(
-								phraseSubmitBox.getText(),
-								gameData.domain.getName(),
-								new AsyncCallback<Void>() {
+						storyTimeService.submitPhrase(phraseSubmitBox.getText(), gameData.domain.getName(), new AsyncCallback<Void>() {
 
-									@Override
-									public void onFailure(Throwable caught) {
-										caught.printStackTrace();
-									}
+							@Override
+							public void onFailure(Throwable caught) {
+								caught.printStackTrace();
+							}
 
-									@Override
-									public void onSuccess(Void result) {
-										if (DEBUG)
-											System.out
-													.println("Client: Got confirmation of phrase submission");
-										phraseSubmitBox.setText("");
-										disableSubmitting();
-										submitTimer.cancel();
-									}
-								});
+							@Override
+							public void onSuccess(Void result) {
+								if (DEBUG)
+									System.out.println("Client: Got confirmation of phrase submission");
+								phraseSubmitBox.setText("");
+								disableSubmitting();
+								submitTimer.cancel();
+							}
+						});
 					}
 				}
 			}
@@ -449,25 +413,22 @@ public class GameInProgressRoomView extends Composite implements
 		btnSubmitPhrase.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (!phraseSubmitBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.submitPhrase(phraseSubmitBox.getText(),
-							gameData.domain.getName(),
-							new AsyncCallback<Void>() {
+					storyTimeService.submitPhrase(phraseSubmitBox.getText(), gameData.domain.getName(), new AsyncCallback<Void>() {
 
-								@Override
-								public void onFailure(Throwable caught) {
-									caught.printStackTrace();
-								}
+						@Override
+						public void onFailure(Throwable caught) {
+							caught.printStackTrace();
+						}
 
-								@Override
-								public void onSuccess(Void result) {
-									if (DEBUG)
-										System.out
-												.println("Client: Got confirmation of phrase submission");
-									phraseSubmitBox.setText("");
-									disableSubmitting();
-									submitTimer.cancel();
-								}
-							});
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Got confirmation of phrase submission");
+							phraseSubmitBox.setText("");
+							disableSubmitting();
+							submitTimer.cancel();
+						}
+					});
 				}
 			}
 		});
@@ -478,34 +439,23 @@ public class GameInProgressRoomView extends Composite implements
 					final String message = sendToChatBox.getText();
 					if (!message.equalsIgnoreCase("")) {
 						if (DEBUG)
-							System.out
-									.println("Client: Trying to send message: '"
-											+ message
-											+ "' to the server, for the domain: "
-											+ gameData.domain.getName());
-						storyTimeService.sendGameRoomChatMessage(
-								gameData.domain.getName(), message,
-								new AsyncCallback<Void>() {
+							System.out.println("Client: Trying to send message: '" + message + "' to the server, for the domain: " + gameData.domain.getName());
+						storyTimeService.sendGameRoomChatMessage(gameData.domain.getName(), message, new AsyncCallback<Void>() {
 
-									@Override
-									public void onFailure(Throwable caught) {
-										if (DEBUG)
-											System.out
-													.println("Client: Failed to send the in-game chat message: '"
-															+ message
-															+ "', to the server");
-									}
+							@Override
+							public void onFailure(Throwable caught) {
+								if (DEBUG)
+									System.out.println("Client: Failed to send the in-game chat message: '" + message + "', to the server");
+							}
 
-									@Override
-									public void onSuccess(Void result) {
-										sendToChatBox.setText("");
-										if (DEBUG)
-											System.out
-													.println("Client: Successfully sent the message: "
-															+ message);
-									}
+							@Override
+							public void onSuccess(Void result) {
+								sendToChatBox.setText("");
+								if (DEBUG)
+									System.out.println("Client: Successfully sent the message: " + message);
+							}
 
-								});
+						});
 					}
 				}
 			}
@@ -516,43 +466,31 @@ public class GameInProgressRoomView extends Composite implements
 				final String message = sendToChatBox.getText();
 				if (!message.equalsIgnoreCase("")) {
 					if (DEBUG)
-						System.out.println("Client: Trying to send message: '"
-								+ message + "' to the server, for the domain: "
-								+ gameData.domain.getName());
-					storyTimeService.sendGameRoomChatMessage(
-							gameData.domain.getName(), message,
-							new AsyncCallback<Void>() {
+						System.out.println("Client: Trying to send message: '" + message + "' to the server, for the domain: " + gameData.domain.getName());
+					storyTimeService.sendGameRoomChatMessage(gameData.domain.getName(), message, new AsyncCallback<Void>() {
 
-								@Override
-								public void onFailure(Throwable caught) {
-									if (DEBUG)
-										System.out
-												.println("Client: Failed to send the message '"
-														+ message
-														+ "' to the server, for the domain: "
-														+ gameData.domain
-																.getName());
-								}
+						@Override
+						public void onFailure(Throwable caught) {
+							if (DEBUG)
+								System.out.println("Client: Failed to send the message '" + message + "' to the server, for the domain: "
+										+ gameData.domain.getName());
+						}
 
-								@Override
-								public void onSuccess(Void result) {
-									sendToChatBox.setText("");
-									if (DEBUG)
-										System.out
-												.println("Client: Successfully sent the message: "
-														+ message
-														+ " to the server, for the domain: "
-														+ gameData.domain
-																.getName());
-								}
-							});
+						@Override
+						public void onSuccess(Void result) {
+							sendToChatBox.setText("");
+							if (DEBUG)
+								System.out.println("Client: Successfully sent the message: " + message + " to the server, for the domain: "
+										+ gameData.domain.getName());
+						}
+					});
 				}
 			}
 		});
-	
+
 		btnPlays.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				
+
 				playsPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 
 					@Override
@@ -562,49 +500,47 @@ public class GameInProgressRoomView extends Composite implements
 					}
 
 				});
-				
+
 			}
 		});
 	}
 
 	public void setRemoteEventHandlersAndHandleEvents() {
-		theRemoteEventService.addListener(gameData.domain,
-				new RemoteEventListener() {
+		theRemoteEventService.addListener(gameData.domain, new RemoteEventListener() {
 
-					@Override
-					public void apply(Event anEvent) {
-						if (anEvent instanceof UpdateGameRoomChatWindowEvent) {
-							UpdateGameRoomChatWindowEvent chatEvent = (UpdateGameRoomChatWindowEvent) anEvent;
-							onChatMessage(chatEvent.message);
+			@Override
+			public void apply(Event anEvent) {
+				if (anEvent instanceof UpdateGameRoomChatWindowEvent) {
+					UpdateGameRoomChatWindowEvent chatEvent = (UpdateGameRoomChatWindowEvent) anEvent;
+					onChatMessage(chatEvent.message);
 
-						} else if (anEvent instanceof RoundStartEvent) {
-							RoundStartEvent roundEvent = (RoundStartEvent) anEvent;
-							onRoundStart(roundEvent.chooser);
+				} else if (anEvent instanceof RoundStartEvent) {
+					RoundStartEvent roundEvent = (RoundStartEvent) anEvent;
+					onRoundStart(roundEvent.chooser);
 
-						} else if (anEvent instanceof PhraseSubmittedEvent) {
-							PhraseSubmittedEvent phraseEvent = (PhraseSubmittedEvent) anEvent;
-							onPhraseRecieved(phraseEvent.phrase);
+				} else if (anEvent instanceof PhraseSubmittedEvent) {
+					PhraseSubmittedEvent phraseEvent = (PhraseSubmittedEvent) anEvent;
+					onPhraseRecieved(phraseEvent.phrase);
 
-						} else if (anEvent instanceof AllPhrasesSubmittedEvent) {
-							if (DEBUG)
-								System.out
-										.println("Client: Recieved All Phrases Submitted Event");
-							Window.alert("All users have submitted phrases (broken)!");
+				} else if (anEvent instanceof AllPhrasesSubmittedEvent) {
+					if (DEBUG)
+						System.out.println("Client: Recieved All Phrases Submitted Event");
+					Window.alert("All users have submitted phrases (broken)!");
 
-						} else if (anEvent instanceof PhraseChosenEvent) {
-							PhraseChosenEvent phraseChosenEvent = (PhraseChosenEvent) anEvent;
-							onPhraseChosen(phraseChosenEvent.phraseChosen);
+				} else if (anEvent instanceof PhraseChosenEvent) {
+					PhraseChosenEvent phraseChosenEvent = (PhraseChosenEvent) anEvent;
+					onPhraseChosen(phraseChosenEvent.phraseChosen);
 
-						} else if (anEvent instanceof RoundCloseEvent) {
-							RoundCloseEvent roundCloseEvent = (RoundCloseEvent) anEvent;
-							onRoundClose(roundCloseEvent.pointList);
+				} else if (anEvent instanceof RoundCloseEvent) {
+					RoundCloseEvent roundCloseEvent = (RoundCloseEvent) anEvent;
+					onRoundClose(roundCloseEvent.pointList);
 
-						} else if (anEvent instanceof GameEndEvent) {
-							GameEndEvent gameEndEvent = (GameEndEvent) anEvent;
-							onGameEnd(gameEndEvent.winner);
-						}
-					}
-				});
+				} else if (anEvent instanceof GameEndEvent) {
+					GameEndEvent gameEndEvent = (GameEndEvent) anEvent;
+					onGameEnd(gameEndEvent.winner);
+				}
+			}
+		});
 	}
 
 	public void onRoundStart(String chooser) {
@@ -616,44 +552,34 @@ public class GameInProgressRoomView extends Composite implements
 		okToDisableChoosing = true;
 
 		if (DEBUG)
-			System.out.println("Client: Got current chooser: "
-					+ gameData.currentChooser);
+			System.out.println("Client: Got current chooser: " + gameData.currentChooser);
 		if (DEBUG)
-			System.out
-					.println("Client: This username stored in this user's gameData object is: "
-							+ gameData.thisUser);
+			System.out.println("Client: This username stored in this user's gameData object is: " + gameData.thisUser);
 		if (gameData.currentChooser.equalsIgnoreCase(gameData.thisUser)) {
 			if (DEBUG)
-				System.out.println("Client: This user (" + gameData.thisUser
-						+ ") is currently in charge of choosing");
+				System.out.println("Client: This user (" + gameData.thisUser + ") is currently in charge of choosing");
 			choosing = true;
 			lblCurrentChooserName.setText("ME!");
 			enableChoosing();
 			chooseTimer.scheduleRepeating(1000);
 			if (DEBUG)
-				System.out.println("Client: Set " + gameData.thisUser
-						+ "'s choose-timer for: " + gameData.chooserTimer
-						* 1000 + " milli-seconds");
+				System.out.println("Client: Set " + gameData.thisUser + "'s choose-timer for: " + gameData.chooserTimer * 1000 + " milli-seconds");
 		} else {
 			if (DEBUG)
-				System.out.println("Client: User: " + gameData.thisUser
-						+ " is a submitter for this round");
+				System.out.println("Client: User: " + gameData.thisUser + " is a submitter for this round");
 			phraseSubmitBox.setText("");
 			enableSubmitting();
 			// set the submitTimer
 			submitTimer.scheduleRepeating(1000);
 			if (DEBUG)
-				System.out.println("Client: Set " + gameData.thisUser
-						+ "'s submission-timer for: "
-						+ gameData.submissionTimer * 1000 + " milli-seconds");
+				System.out.println("Client: Set " + gameData.thisUser + "'s submission-timer for: " + gameData.submissionTimer * 1000 + " milli-seconds");
 		}
 	}
 
 	public void onPhraseRecieved(String phrase) {
 		phraseListBox.addItem(phrase);
 		if (DEBUG)
-			System.out.println("Client: Got Phrase Submitted Event for phrase "
-					+ phrase);
+			System.out.println("Client: Got Phrase Submitted Event for phrase " + phrase);
 	}
 
 	public void onPhraseChosen(String phraseChosen) {
@@ -667,8 +593,7 @@ public class GameInProgressRoomView extends Composite implements
 		okToDisableChoosing = false;
 		okToDisableSubmitting = false;
 		if (DEBUG)
-			System.out
-					.println("Client: Canceled the submission & chooser timers, since a phrase has been chosen");
+			System.out.println("Client: Canceled the submission & chooser timers, since a phrase has been chosen");
 	}
 
 	public void onRoundClose(HashMap<String, Integer> pointList) {
@@ -681,8 +606,7 @@ public class GameInProgressRoomView extends Composite implements
 				// score
 				lblScoreBox.setText("" + pointList.get(user));
 				if (DEBUG)
-					System.out.println("Updated user's current score to: "
-							+ pointList.get(user));
+					System.out.println("Updated user's current score to: " + pointList.get(user));
 			}
 			if (DEBUG)
 				System.out.print("Users in room: " + user);
@@ -703,9 +627,7 @@ public class GameInProgressRoomView extends Composite implements
 
 	public void onChatMessage(String message) {
 		if (DEBUG)
-			System.out
-					.println("Client: Got UpdateGameRoomChatWindowEvent with the message '"
-							+ message + "'");
+			System.out.println("Client: Got UpdateGameRoomChatWindowEvent with the message '" + message + "'");
 		if (chatArea.getText().equalsIgnoreCase("")) {
 			chatArea.setText(chatArea.getText() + message);
 		} else {
@@ -747,36 +669,29 @@ public class GameInProgressRoomView extends Composite implements
 	}
 
 	public void getAndSetStartGameChooser() {
-		storyTimeService.getStartGameChooser(gameData.domain.getName(),
-				new AsyncCallback<String>() {
+		storyTimeService.getStartGameChooser(gameData.domain.getName(), new AsyncCallback<String>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.printStackTrace();
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
 
-					@Override
-					public void onSuccess(String result) {
-						if (DEBUG)
-							gameData.currentChooser = result;
-						System.out
-								.println("Client: Got & set the first phrase chooser: "
-										+ result
-										+ " for user: "
-										+ gameData.currentChooser);
-						if (result.equalsIgnoreCase(gameData.thisUser)) {
-							choosing = true;
-						}
-						if (DEBUG)
-							System.out
-									.println("Client: Trying to initialize the game room view");
-						// load this view
-						initialize();
-						if (DEBUG)
-							System.out
-									.println("Client: Game room view initialized");
-					}
-				});
+			@Override
+			public void onSuccess(String result) {
+				if (DEBUG)
+					gameData.currentChooser = result;
+				System.out.println("Client: Got & set the first phrase chooser: " + result + " for user: " + gameData.currentChooser);
+				if (result.equalsIgnoreCase(gameData.thisUser)) {
+					choosing = true;
+				}
+				if (DEBUG)
+					System.out.println("Client: Trying to initialize the game room view");
+				// load this view
+				initialize();
+				if (DEBUG)
+					System.out.println("Client: Game room view initialized");
+			}
+		});
 	}
 
 	public void getMyUsernameAndStart() {
@@ -791,13 +706,11 @@ public class GameInProgressRoomView extends Composite implements
 			public void onSuccess(String result) {
 
 				if (DEBUG)
-					System.out.println("Client: Got my username: " + result
-							+ " and set gamedata.thisUser");
+					System.out.println("Client: Got my username: " + result + " and set gamedata.thisUser");
 				gameData.thisUser = result;
 
 				if (DEBUG)
-					System.out
-							.println("Client: Trying to get and the start-of-the-game chooser's name");
+					System.out.println("Client: Trying to get and the start-of-the-game chooser's name");
 				getAndSetStartGameChooser();
 			}
 		});
@@ -805,25 +718,21 @@ public class GameInProgressRoomView extends Composite implements
 
 	public void setReady() {
 		if (DEBUG)
-			System.out.println("Client: Sending the server: "
-					+ gameData.thisUser + " is ready, and resides in the "
-					+ gameData.domain.getName() + " room.");
-		storyTimeService.setReady(gameData.thisUser, gameData.domain.getName(),
-				new AsyncCallback<Void>() {
+			System.out.println("Client: Sending the server: " + gameData.thisUser + " is ready, and resides in the " + gameData.domain.getName() + " room.");
+		storyTimeService.setReady(gameData.thisUser, gameData.domain.getName(), new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.printStackTrace();
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out
-									.println("Client: Told the server that this client is ready");
-					}
+			@Override
+			public void onSuccess(Void result) {
+				if (DEBUG)
+					System.out.println("Client: Told the server that this client is ready");
+			}
 
-				});
+		});
 	}
 
 	public void timerHasElapsed() {
@@ -832,20 +741,14 @@ public class GameInProgressRoomView extends Composite implements
 			@Override
 			public void onFailure(Throwable caught) {
 				if (DEBUG)
-					System.out
-							.println("Client: Failed to tell the server that "
-									+ gameData.thisUser
-									+ "'s submitTimer has elapsed");
+					System.out.println("Client: Failed to tell the server that " + gameData.thisUser + "'s submitTimer has elapsed");
 				caught.printStackTrace();
 			}
 
 			@Override
 			public void onSuccess(Void result) {
 				if (DEBUG)
-					System.out
-							.println("Client: Successfully told the server that "
-									+ gameData.thisUser
-									+ "'s submitTimer has elapsed");
+					System.out.println("Client: Successfully told the server that " + gameData.thisUser + "'s submitTimer has elapsed");
 			}
 		});
 	}

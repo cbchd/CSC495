@@ -3,10 +3,17 @@ package com.storytime.server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.storytime.client.skill.offense.LetterAdditionAttack;
+import com.storytime.client.skill.offense.LetterRemovalAttack;
 import com.storytime.client.skill.offense.LetterSubstitutionAttack;
 
+/**
+ * @author Chad
+ *
+ */
 public class StoryTimeEngine {
 
 	boolean DEBUG = false;
@@ -16,6 +23,7 @@ public class StoryTimeEngine {
 	HashMap<String, User> onlineUsers;
 	HashMap<String, Room> lobbyRooms;
 	HashMap<String, InGameRoom> gameRooms;
+	private final Logger logger = Logger.getLogger("Engine");
 
 	public ArrayList<String> getLobbyChat() {
 		return lobbyChat;
@@ -116,19 +124,25 @@ public class StoryTimeEngine {
 		return r;
 	}
 
+	/**
+	 * @param gameRoom
+	 * @return The phrase that was chosen, or null (if there weren't any phrases to choose from)
+	 */
 	public String chooseRandomPhrase(InGameRoom gameRoom) {
 		ArrayList<String> phrases = new ArrayList<String>();
 		for (User user : gameRoom.users) {
-			if (!user.phrase.equalsIgnoreCase("")) {
-				phrases.add(user.phrase);
+			if (user.getPhrasesPerRound().size() != 0) {
+				phrases.add(user.getPhrasesPerRound().get(getIndexOfNewestPhraseFromHistory(user)));
 			}
 		}
-		if (phrases.size() == 0) {
-			phrases.add("");
-		} else {
+		if (phrases.size() != 0) {
 			Collections.shuffle(phrases);
+			return phrases.get(0);
+		} else {
+			logger.log(Level.SEVERE, "Server: A random phrase could not be chosen for room: " + gameRoom.getDomain().getName()
+					+ " because there were no phrases to choose from (error)");
+			return null;
 		}
-		return phrases.get(0);
 	}
 
 	public void refreshTimerElapsedValues(InGameRoom gameRoom) {
@@ -142,7 +156,7 @@ public class StoryTimeEngine {
 	public void clearAllUsersSubmittedPhrases(String roomName) {
 		InGameRoom gameRoom = gameRooms.get(roomName);
 		for (User user : gameRoom.users) {
-			user.phrase = "";
+			user.getPhrasesPerRound().clear();
 		}
 	}
 
@@ -153,8 +167,15 @@ public class StoryTimeEngine {
 		}
 	}
 
+	/**Activates the LetterAdditionAttack on the specified user. Edits and adds a new phrase to the user's phrase list for this round. The edited
+	 * phrase will serve as this user's current phrase.
+	 * @param victim The user under attack
+	 * @param additionAttack The LetterAdditionAttack that contains the attack information
+	 * @return The user's current phrase, after it has been subject to this attack
+	 */
 	public String activateLetterAdditon(User victim, LetterAdditionAttack additionAttack) {
-		String phraseToBeEdited = victim.getPhrase();
+		int newestPhraseFromHistory = getIndexOfNewestPhraseFromHistory(victim);
+		String phraseToBeEdited = victim.getPhrasesPerRound().get(newestPhraseFromHistory);
 		String phraseToLookFor = additionAttack.getAfterThis();
 		String phraseToAddIn = additionAttack.getAddThis();
 		String editedPhrase = "";
@@ -174,14 +195,46 @@ public class StoryTimeEngine {
 				}
 			}
 		}
+		victim.getPhrasesPerRound().add(editedPhrase);
 		return editedPhrase;
 	}
 
 	public String activateLetterSubstitution(User victim, LetterSubstitutionAttack substitutionAttack) {
-		String phraseToBeEdited = victim.getPhrase();
+		int newestPhraseFromHistory = getIndexOfNewestPhraseFromHistory(victim);
+		String phraseToBeEdited = victim.getPhrasesPerRound().get(newestPhraseFromHistory);
 		String phraseToLookFor = substitutionAttack.getPhraseToLookFor();
 		String phraseToSwapFor = substitutionAttack.getPhraseToSwapFor();
-		phraseToBeEdited = phraseToBeEdited.replaceAll(phraseToLookFor, phraseToSwapFor);
-		return phraseToBeEdited;
+		String editedPhrase = phraseToBeEdited.replaceAll(phraseToLookFor, phraseToSwapFor);
+		victim.getPhrasesPerRound().add(editedPhrase);
+		return editedPhrase;
+	}
+
+	public String activateLetterRemoval(User victim, LetterRemovalAttack removalAttack) {
+		int newestPhraseFromHistory = getIndexOfNewestPhraseFromHistory(victim);
+		String phraseToBeEdited = victim.getPhrasesPerRound().get(newestPhraseFromHistory);
+		String phraseToRemove = removalAttack.getPhraseToRemove();
+		String editedPhrase = phraseToBeEdited.replace(phraseToRemove, "");
+		victim.getPhrasesPerRound().add(editedPhrase);
+		return editedPhrase;
+	}
+
+	public User getUserThatOwnsThisPhrase(String phrase, User somePersonInTheRoom) {
+		for (User user : somePersonInTheRoom.getIngameRoom().getUsers()) {
+			int newestPhraseFromHistoryIndex = user.getPhrasesPerRound().size() - 1;
+			if (user.getPhrasesPerRound().get(newestPhraseFromHistoryIndex).equalsIgnoreCase(phrase)) {
+				return user;
+			}
+		}
+		logger.log(Level.FINEST, "Engine: No user was found to have a phrase that matched: " + phrase);
+		return null;
+	}
+
+	public Integer getIndexOfNewestPhraseFromHistory(User user) {
+		int newestPhraseFromHistoryIndex = user.getPhrasesPerRound().size() - 1;
+		if (newestPhraseFromHistoryIndex == -1) {
+			return 0;
+		} else {
+			return newestPhraseFromHistoryIndex;
+		}
 	}
 }
