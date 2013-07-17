@@ -1,0 +1,2 @@
+serviceClass: com.storytime.client.StoryTimeService
+path: 2EB51DBD3465AFB18141656BB3697C82.gwt.rpc

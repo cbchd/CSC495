@@ -71,7 +71,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	Label lblTimeLeft = new Label("Time Left");
 	Label lblTime = new Label("");
 	Label lblSubmitAPhrase = new Label("Your Phrase");
-	int timeLeftChoose = gameData.chooserTimer;
+	int timeLeftChoose = gameData.mastersTimer;
 	int timeLeftSubmission = gameData.submissionTimer;
 	boolean okToDisableChoosing = true;
 	boolean okToDisableSubmitting = true;
@@ -123,14 +123,14 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			if (DEBUG)
 				System.out.println("Client: Chooser timer for client: " + gameData.thisUser + " is at: " + timeLeftChoose);
 			if (DEBUG)
-				System.out.println("Client: The total choose time is: " + gameData.chooserTimer);
+				System.out.println("Client: The total choose time is: " + gameData.mastersTimer);
 
 			if (timeLeftChoose == 0) {
 				chooseTimer.cancel();
 				lblTime.setText("0");
 				if (okToDisableChoosing) {
 					if (DEBUG)
-						System.out.println("Client: " + gameData.thisUser + " has not chosen a word within the time limit of: " + gameData.chooserTimer * 1000);
+						System.out.println("Client: " + gameData.thisUser + " has not chosen a word within the time limit of: " + gameData.mastersTimer * 1000);
 					disableChoosing();
 					if (DEBUG)
 						System.out.println("Client: Disabled choosing");
@@ -155,7 +155,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	private final Button btnPlays = new Button("Plays");
 
 	public GameInProgressRoomView() {
-		// rootPanel = RootPanel.get();
+		// RootPanel rootPanel = RootPanel.get();
 		// rootPanel.add(overallVerticalPanel);
 		// initialize();
 		// enableChoosing();
@@ -164,13 +164,13 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		initWidget(overallVerticalPanel);
 		if (DEBUG)
 			System.out.println("Initializing the game room");
-		gameData.domain = LobbyRoomView.roomData.domain;
-		gameData.pointCap = LobbyRoomView.roomData.pointCap;
-		gameData.users = LobbyRoomView.roomData.users;
-		gameData.submissionTimer = LobbyRoomView.roomData.authorsTimer;
-		gameData.theme = LobbyRoomView.roomData.theme;
+		gameData.domain = LobbyRoomView.roomData.getDomain();
+		gameData.pointCap = LobbyRoomView.roomData.getPointCap();
+		gameData.users = LobbyRoomView.roomData.getUsers();
+		gameData.submissionTimer = LobbyRoomView.roomData.getAuthorsTimer();
+		gameData.mastersTimer = LobbyRoomView.roomData.getMastersTimer();
+		gameData.theme = LobbyRoomView.roomData.getTheme();
 		gameData.messages = new ArrayList<String>();
-		gameData.chooserTimer = LobbyRoomView.roomData.mastersTimer;
 		if (DEBUG)
 			System.out.println("Client: Setting the game room's maximum point cap to: " + gameData.pointCap);
 		if (DEBUG)
@@ -213,6 +213,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		usersAndChatLeftMiddlePanel.add(lblUsers_1);
 		usersAndChatLeftMiddlePanel.add(userListBox);
 		usersAndChatLeftMiddlePanel.add(lblChat);
+		chatArea.setStyleName("chat-TextArea");
 		usersAndChatLeftMiddlePanel.add(chatArea);
 		chatSendBoxAndButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		usersAndChatLeftMiddlePanel.add(chatSendBoxAndButtonPanel);
@@ -563,7 +564,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			enableChoosing();
 			chooseTimer.scheduleRepeating(1000);
 			if (DEBUG)
-				System.out.println("Client: Set " + gameData.thisUser + "'s choose-timer for: " + gameData.chooserTimer * 1000 + " milli-seconds");
+				System.out.println("Client: Set " + gameData.thisUser + "'s choose-timer for: " + gameData.mastersTimer * 1000 + " milli-seconds");
 		} else {
 			if (DEBUG)
 				System.out.println("Client: User: " + gameData.thisUser + " is a submitter for this round");
@@ -642,7 +643,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		swapHolderPanelAndSubmittedPhrases.remove(timePanel);
 		swapHolderPanelAndSubmittedPhrases.add(choosePanelForSwap);
 		swapHolderPanelAndSubmittedPhrases.add(timePanel);
-		timeLeftChoose = gameData.chooserTimer;
+		timeLeftChoose = gameData.mastersTimer;
 	}
 
 	public void enableSubmitting() {

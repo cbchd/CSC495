@@ -314,7 +314,8 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		gameRoom.domain = DomainFactory.getDomain(room.roomName);
 		gameRoom.pointCap = room.pointLimit;
 		gameRoom.theme = room.theme;
-		gameRoom.timer = room.authorsTime;
+		gameRoom.authorTimer = room.authorsTime;
+		gameRoom.mastersTimer = room.mastersTime;
 
 		for (User user : room.users.values()) {
 			gameRoom.users.add(user);
@@ -332,12 +333,11 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		engine.getGameRooms().put(gameRoom.domain.getName(), gameRoom);
 		engine.getLobbyRooms().remove(room.roomName);
 		logger.log(Level.INFO, "Started a game for room " + roomName + ", with attributes: " + gameRoom.domain + ", pointCap: " + gameRoom.pointCap
-				+ ", theme: " + gameRoom.theme + ", and submissionTimer: " + gameRoom.timer);
+				+ ", theme: " + gameRoom.theme + ", submissionTimer: " + gameRoom.authorTimer + ", and mastersTimer: " + gameRoom.mastersTimer);
 
 		// Fire off a game start event
 		addEvent(gameRoom.domain, new GameStartEvent());
 		logger.log(Level.FINEST, "Server: Fired Game Start Event for room: " + roomName);
-
 	}
 
 	public GameData getGameData(String roomName) {

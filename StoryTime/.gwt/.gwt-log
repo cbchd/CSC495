@@ -9942,3 +9942,590 @@ Compiling...
    Compilation completed in 0.00 seconds
 Removing invalidated units
 Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 0 cached/archived units.  Used 0 / 2718 units from cache.
+Compiling...
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   50% complete (ETR: 6 seconds)
+   60% complete (ETR: 4 seconds)
+   70% complete (ETR: 3 seconds)
+   80% complete (ETR: 2 seconds)
+   90% complete (ETR: 1 seconds)
+   100% complete (ETR: 0 seconds)
+   Compilation completed in 57.31 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 2718 cached/archived units.  Used 2718 / 2718 units from cache.
+Compiling...
+   Compilation completed in 0.00 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 2718 cached/archived units.  Used 2718 / 2718 units from cache.
+Compiling...
+   Compilation completed in 0.00 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 0 cached/archived units.  Used 0 / 2718 units from cache.
+Compiling...
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   40% complete (ETR: 7 seconds)
+   50% complete (ETR: 5 seconds)
+   60% complete (ETR: 4 seconds)
+   70% complete (ETR: 3 seconds)
+   80% complete (ETR: 2 seconds)
+   90% complete (ETR: 1 seconds)
+   100% complete (ETR: 0 seconds)
+   Compilation completed in 54.02 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 2718 cached/archived units.  Used 2718 / 2718 units from cache.
+Compiling...
+   Compilation completed in 0.00 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 2718 cached/archived units.  Used 2718 / 2718 units from cache.
+Compiling...
+   Compilation completed in 0.00 seconds
+Removing invalidated units
+Finding entry point classes
+Public resources found in...
+Translatable source found in...
+Found 0 cached/archived units.  Used 0 / 2892 units from cache.
+Compiling...
+   30% complete (ETR: 10 seconds)
+   30% complete (ETR: 10 seconds)
+   30% complete (ETR: 10 seconds)
+   30% complete (ETR: 10 seconds)
+   40% complete (ETR: 9 seconds)
+   50% complete (ETR: 7 seconds)
+   60% complete (ETR: 5 seconds)
+   70% complete (ETR: 4 seconds)
+   80% complete (ETR: 2 seconds)
+   90% complete (ETR: 1 seconds)
+   100% complete (ETR: 0 seconds)
+   Compilation completed in 21.40 seconds
+Validating units:
+   [ERROR] Errors in 'file:/C:/Users/Chad/git/CSC495/StoryTime/src/com/storytime/client/lobbyroom/UpdateLobbyRoomInformationEvent.java'
+      [ERROR] Line 16: No source code is available for type com.storytime.server.User; did you forget to inherit a required module?
+Removing invalidated units
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Invoking generator com.google.gwt.i18n.rebind.LocaleInfoGenerator
+      Processing interface com.google.gwt.i18n.client.constants.NumberConstantsImpl
+         Generating method body for notANumber()
+         Generating method body for currencyPattern()
+         Generating method body for decimalPattern()
+         Generating method body for decimalSeparator()
+         Generating method body for defCurrencyCode()
+         Generating method body for exponentialSymbol()
+         Generating method body for globalCurrencyPattern()
+         Generating method body for groupingSeparator()
+         Generating method body for infinity()
+         Generating method body for minusSign()
+         Generating method body for monetaryGroupingSeparator()
+         Generating method body for monetarySeparator()
+         Generating method body for percent()
+         Generating method body for percentPattern()
+         Generating method body for perMill()
+         Generating method body for plusSign()
+         Generating method body for scientificPattern()
+         Generating method body for simpleCurrencyPattern()
+         Generating method body for zeroDigit()
+   Adding '3' new generated units
+      Compiling...
+         Compilation completed in 0.04 seconds
+      Removing invalidated units
+Rebinding com.storytime.client.StoryTimeService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'com.storytime.client.StoryTimeService'
+         Analyzing 'com.storytime.client.StoryTimeService' for serializable types
+            Analyzing methods:
+               public abstract void choosePhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract com.storytime.client.gameroom.GameData getGameData(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getLocation()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getMyUsername()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getStartGameChooser(java.lang.String roomName)
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void hostLobbyRoom(java.lang.String roomName, java.lang.String theme, java.lang.String password, int numberOfPlayers)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String theme
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void joinRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void leaveRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.Boolean loginUser(java.lang.String username, java.lang.String password)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void sendGameRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendLobbyChatMessage(java.lang.String message)
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void setPassword(java.lang.String roomName, java.lang.String password)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void setReady(java.lang.String username, java.lang.String roomName)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void startGame(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void submitPhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomChooserTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomPointLimit(java.lang.String roomName, int pointCap)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '31' new generated units
+      Compiling...
+         Compilation completed in 0.34 seconds
+      Removing invalidated units
+Rebinding de.novanic.eventservice.client.event.service.EventService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'de.novanic.eventservice.client.event.service.EventService'
+         Analyzing 'de.novanic.eventservice.client.event.service.EventService' for serializable types
+            Analyzing methods:
+               public abstract void addEventUserSpecific(de.novanic.eventservice.client.event.Event anEvent)
+                  Parameter: de.novanic.eventservice.client.event.Event anEvent
+                     de.novanic.eventservice.client.event.Event is already a root type.
+               public abstract void deregisterEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract de.novanic.eventservice.client.event.filter.EventFilter getEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract boolean isUserRegistered(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void registerEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void unlisten(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void unlisten(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '48' new generated units
+      Compiling...
+         Compilation completed in 0.32 seconds
+      Removing invalidated units
+Public resources found in...
+Translatable source found in...
+Found 2891 cached/archived units.  Used 2891 / 2892 units from cache.
+Compiling...
+   Compilation completed in 0.08 seconds
+Validating units:
+   [ERROR] Errors in 'file:/C:/Users/Chad/git/CSC495/StoryTime/src/com/storytime/client/lobbyroom/UpdateLobbyRoomInformationEvent.java'
+      [ERROR] Line 16: No source code is available for type com.storytime.server.User; did you forget to inherit a required module?
+Removing invalidated units
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Invoking generator com.google.gwt.i18n.rebind.LocaleInfoGenerator
+      Processing interface com.google.gwt.i18n.client.constants.NumberConstantsImpl
+         Generating method body for notANumber()
+         Generating method body for currencyPattern()
+         Generating method body for decimalPattern()
+         Generating method body for decimalSeparator()
+         Generating method body for defCurrencyCode()
+         Generating method body for exponentialSymbol()
+         Generating method body for globalCurrencyPattern()
+         Generating method body for groupingSeparator()
+         Generating method body for infinity()
+         Generating method body for minusSign()
+         Generating method body for monetaryGroupingSeparator()
+         Generating method body for monetarySeparator()
+         Generating method body for percent()
+         Generating method body for percentPattern()
+         Generating method body for perMill()
+         Generating method body for plusSign()
+         Generating method body for scientificPattern()
+         Generating method body for simpleCurrencyPattern()
+         Generating method body for zeroDigit()
+   Adding '3' new generated units
+      Compiling...
+         Compilation completed in 0.00 seconds
+      Removing invalidated units
+Rebinding com.storytime.client.StoryTimeService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'com.storytime.client.StoryTimeService'
+         Analyzing 'com.storytime.client.StoryTimeService' for serializable types
+            Analyzing methods:
+               public abstract void choosePhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract com.storytime.client.gameroom.GameData getGameData(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getLocation()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getMyUsername()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getStartGameChooser(java.lang.String roomName)
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void hostLobbyRoom(java.lang.String roomName, java.lang.String theme, java.lang.String password, int numberOfPlayers)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String theme
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void joinRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void leaveRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.Boolean loginUser(java.lang.String username, java.lang.String password)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void sendGameRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendLobbyChatMessage(java.lang.String message)
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void setPassword(java.lang.String roomName, java.lang.String password)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void setReady(java.lang.String username, java.lang.String roomName)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void startGame(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void submitPhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomChooserTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomPointLimit(java.lang.String roomName, int pointCap)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '31' new generated units
+      Compiling...
+         Compilation completed in 0.00 seconds
+      Removing invalidated units
+Rebinding de.novanic.eventservice.client.event.service.EventService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'de.novanic.eventservice.client.event.service.EventService'
+         Analyzing 'de.novanic.eventservice.client.event.service.EventService' for serializable types
+            Analyzing methods:
+               public abstract void addEventUserSpecific(de.novanic.eventservice.client.event.Event anEvent)
+                  Parameter: de.novanic.eventservice.client.event.Event anEvent
+                     de.novanic.eventservice.client.event.Event is already a root type.
+               public abstract void deregisterEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract de.novanic.eventservice.client.event.filter.EventFilter getEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract boolean isUserRegistered(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void registerEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void unlisten(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void unlisten(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '48' new generated units
+      Compiling...
+         Compilation completed in 0.00 seconds
+      Removing invalidated units
+Public resources found in...
+Translatable source found in...
+Found 0 cached/archived units.  Used 0 / 2892 units from cache.
+Compiling...
+   30% complete (ETR: 11 seconds)
+   30% complete (ETR: 11 seconds)
+   30% complete (ETR: 11 seconds)
+   30% complete (ETR: 10 seconds)
+   40% complete (ETR: 9 seconds)
+   50% complete (ETR: 6 seconds)
+   60% complete (ETR: 6 seconds)
+   70% complete (ETR: 4 seconds)
+   80% complete (ETR: 2 seconds)
+   90% complete (ETR: 1 seconds)
+   100% complete (ETR: 0 seconds)
+   Compilation completed in 20.64 seconds
+Validating units:
+   [ERROR] Errors in 'file:/C:/Users/Chad/git/CSC495/StoryTime/src/com/storytime/client/lobbyroom/UpdateLobbyRoomInformationEvent.java'
+      [ERROR] Line 16: No source code is available for type com.storytime.server.User; did you forget to inherit a required module?
+Removing invalidated units
+Finding entry point classes
+Rebinding com.google.gwt.i18n.client.impl.LocaleInfoImpl
+   Invoking generator com.google.gwt.i18n.rebind.LocaleInfoGenerator
+      Processing interface com.google.gwt.i18n.client.constants.NumberConstantsImpl
+         Generating method body for notANumber()
+         Generating method body for currencyPattern()
+         Generating method body for decimalPattern()
+         Generating method body for decimalSeparator()
+         Generating method body for defCurrencyCode()
+         Generating method body for exponentialSymbol()
+         Generating method body for globalCurrencyPattern()
+         Generating method body for groupingSeparator()
+         Generating method body for infinity()
+         Generating method body for minusSign()
+         Generating method body for monetaryGroupingSeparator()
+         Generating method body for monetarySeparator()
+         Generating method body for percent()
+         Generating method body for percentPattern()
+         Generating method body for perMill()
+         Generating method body for plusSign()
+         Generating method body for scientificPattern()
+         Generating method body for simpleCurrencyPattern()
+         Generating method body for zeroDigit()
+   Adding '3' new generated units
+      Compiling...
+         Compilation completed in 0.04 seconds
+      Removing invalidated units
+Rebinding com.storytime.client.StoryTimeService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'com.storytime.client.StoryTimeService'
+         Analyzing 'com.storytime.client.StoryTimeService' for serializable types
+            Analyzing methods:
+               public abstract void choosePhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract com.storytime.client.gameroom.GameData getGameData(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getLocation()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getMyUsername()
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+               public abstract java.lang.String getStartGameChooser(java.lang.String roomName)
+                  Return type: java.lang.String
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void hostLobbyRoom(java.lang.String roomName, java.lang.String theme, java.lang.String password, int numberOfPlayers)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String theme
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void joinRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void leaveRoom(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract java.lang.Boolean loginUser(java.lang.String username, java.lang.String password)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void sendGameRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendLobbyChatMessage(java.lang.String message)
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void sendRoomChatMessage(java.lang.String roomName, java.lang.String message)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String message
+                     java.lang.String is already a root type.
+               public abstract void setPassword(java.lang.String roomName, java.lang.String password)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String password
+                     java.lang.String is already a root type.
+               public abstract void setReady(java.lang.String username, java.lang.String roomName)
+                  Parameter: java.lang.String username
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void startGame(java.lang.String roomName)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void submitPhrase(java.lang.String phrase, java.lang.String roomName)
+                  Parameter: java.lang.String phrase
+                     java.lang.String is already a root type.
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomChooserTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomPointLimit(java.lang.String roomName, int pointCap)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+               public abstract void updateLobbyRoomTimer(java.lang.String roomName, int timer)
+                  Parameter: java.lang.String roomName
+                     java.lang.String is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '31' new generated units
+      Compiling...
+         Compilation completed in 0.33 seconds
+      Removing invalidated units
+Rebinding de.novanic.eventservice.client.event.service.EventService
+   Invoking generator com.google.gwt.user.rebind.rpc.ServiceInterfaceProxyGenerator
+      Generating client proxy for remote service interface 'de.novanic.eventservice.client.event.service.EventService'
+         Analyzing 'de.novanic.eventservice.client.event.service.EventService' for serializable types
+            Analyzing methods:
+               public abstract void addEventUserSpecific(de.novanic.eventservice.client.event.Event anEvent)
+                  Parameter: de.novanic.eventservice.client.event.Event anEvent
+                     de.novanic.eventservice.client.event.Event is already a root type.
+               public abstract void deregisterEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract de.novanic.eventservice.client.event.filter.EventFilter getEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract boolean isUserRegistered(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void register(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void registerEventFilter(de.novanic.eventservice.client.event.domain.Domain aDomain, de.novanic.eventservice.client.event.filter.EventFilter anEventFilter)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+                  Parameter: de.novanic.eventservice.client.event.filter.EventFilter anEventFilter
+                     de.novanic.eventservice.client.event.filter.EventFilter is already a root type.
+               public abstract void unlisten(de.novanic.eventservice.client.event.domain.Domain aDomain)
+                  Parameter: de.novanic.eventservice.client.event.domain.Domain aDomain
+                     de.novanic.eventservice.client.event.domain.Domain is already a root type.
+               public abstract void unlisten(java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains)
+                  Parameter: java.util.Set<de.novanic.eventservice.client.event.domain.Domain> aDomains
+                     java.util.Set<de.novanic.eventservice.client.event.domain.Domain> is already a root type.
+         Using a shard size of 0 for TypeSerializerCreator createMethodMap
+   Adding '48' new generated units
+      Compiling...
+         Compilation completed in 0.41 seconds
+      Removing invalidated units

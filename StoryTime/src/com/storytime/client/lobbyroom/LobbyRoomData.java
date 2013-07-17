@@ -10,8 +10,16 @@ public class LobbyRoomData implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public String roomName = "";
 	public String theme = "";
-	public int pointCap = 5;
-	public int authorsTimer = 10;
+	public int pointCap = 0;
+	public int authorsTimer = 0;
+	public int mastersTimer = 0;
+	private String password = "";
+	public boolean inGame;
+	public ArrayList<String> users = new ArrayList<String>();
+	public String message = "";
+	public Domain domain;
+	public ArrayList<String> messages = new ArrayList<String>();
+	public String hostsName = "";
 	
 	public int getAuthorsTimer() {
 		return authorsTimer;
@@ -31,10 +39,6 @@ public class LobbyRoomData implements Serializable {
 	public void setMastersTimer(int mastersTimer) {
 		this.mastersTimer = mastersTimer;
 	}
-
-
-	public int mastersTimer = 15;
-	private String password = "";
 	
 	public String getPassword() {
 		return password;
@@ -133,15 +137,6 @@ public class LobbyRoomData implements Serializable {
 	public void setHostsName(String hostsName) {
 		this.hostsName = hostsName;
 	}
-
-
-	public boolean inGame;
-	public ArrayList<String> users = new ArrayList<String>();
-	public String message = "";
-	public Domain domain;
-	public ArrayList<String> messages = new ArrayList<String>();
-	public String hostsName = "";
-	
 
 	public LobbyRoomData() {
 	}

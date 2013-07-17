@@ -44,8 +44,7 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
-public class LobbyRoomView extends Composite implements
-		com.storytime.client.presenters.LobbyRoomPresenter.Display {
+public class LobbyRoomView extends Composite implements com.storytime.client.presenters.LobbyRoomPresenter.Display {
 
 	boolean DEBUG = true;
 
@@ -62,11 +61,9 @@ public class LobbyRoomView extends Composite implements
 	HorizontalPanel horizontalPanel = new HorizontalPanel();
 	Grid grid_1 = new Grid(4, 2);
 	Label lblPointLimit = new Label("Point Limit:");
-	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(
-			IntegerRenderer.instance());
+	ValueListBox<Integer> pointLimitBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	Label lblSubmissionTime = new Label("Author's Time:");
-	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(
-			IntegerRenderer.instance());
+	ValueListBox<Integer> submittersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	Grid grid = new Grid(1, 1);
 	ListBox comboBox = new ListBox();
 	Label lblUsers = new Label("Users");
@@ -83,8 +80,7 @@ public class LobbyRoomView extends Composite implements
 	Button btnStartGame = new Button("Start Game");
 	Label label_1 = new Label("");
 	Label lblChooseTime = new Label("Master's Time:");
-	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(
-			IntegerRenderer.instance());
+	ValueListBox<Integer> choosersTimeBox = new ValueListBox<Integer>(IntegerRenderer.instance());
 	private final Label lblPassword = new Label("Password:");
 	private final SimpleCheckBox passwordEnabledCheckBox = new SimpleCheckBox();
 	PasswordPopupView passwordPopup = new PasswordPopupView();
@@ -92,15 +88,13 @@ public class LobbyRoomView extends Composite implements
 	public LobbyRoomView() {
 		initWidget(mainHorizontalPanel);
 		if (DEBUG)
-			System.out
-					.println("Client: Trying to initialize the lobby room view");
+			System.out.println("Client: Trying to initialize the lobby room view");
 		chatWindow.setText("");
 		passwordEnabledCheckBox.setVisible(false);
 		lblPassword.setVisible(false);
 		initialize();
 		if (DEBUG)
-			System.out
-					.println("Client: The lobby room view has been initialized");
+			System.out.println("Client: The lobby room view has been initialized");
 	}
 
 	private void initialize() {
@@ -108,15 +102,12 @@ public class LobbyRoomView extends Composite implements
 		setPanelOrder();
 		setPanelCharacteristics();
 		if (DEBUG)
-			System.out
-					.println("Client: Set lobby room panel order & characteristics");
+			System.out.println("Client: Set lobby room panel order & characteristics");
 		if (DEBUG)
-			System.out
-					.println("Client: Trying to get the lobby room information from the server");
+			System.out.println("Client: Trying to get the lobby room information from the server");
 		getInitialLobbyRoomInformation();
 		if (DEBUG)
-			System.out
-					.println("Client: Got the lobby room information from the server");
+			System.out.println("Client: Got the lobby room information from the server");
 		populateLobbyRoomView();
 		setHandlers();
 	}
@@ -137,11 +128,9 @@ public class LobbyRoomView extends Composite implements
 		label_1.setSize("441px", "1px");
 		chatAndStartGameHolder.add(lblChat);
 		chatAndStartGameHolder.add(chatWindow);
-		textSendAndStartGamePanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		textSendAndStartGamePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		chatAndStartGameHolder.add(textSendAndStartGamePanel);
-		sendTextBoxAndButtonPanel
-				.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		sendTextBoxAndButtonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		textSendAndStartGamePanel.add(sendTextBoxAndButtonPanel);
 		sendTextBoxAndButtonPanel.add(chatTextBox);
 		sendTextBoxAndButtonPanel.add(btnSendToChat);
@@ -216,8 +205,7 @@ public class LobbyRoomView extends Composite implements
 		btnLeaveRoom.setSize("100%", "30px");
 		btnLeaveRoom.setStyleName("gwt-LoginExistingButton");
 
-		chatAndStartGameHolder
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		chatAndStartGameHolder.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		chatAndStartGameHolder.setSize("100%", "100%");
 
 		theme.setText(roomData.theme);
@@ -232,8 +220,7 @@ public class LobbyRoomView extends Composite implements
 		chatWindow.setText(total);
 		textSendAndStartGamePanel.setSize("90%", "100%");
 
-		sendTextBoxAndButtonPanel
-				.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		sendTextBoxAndButtonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		sendTextBoxAndButtonPanel.setSize("100%", "100%");
 
 		chatTextBox.setSize("100%", "20px");
@@ -265,7 +252,7 @@ public class LobbyRoomView extends Composite implements
 					setPassword();
 				}
 			}
-			
+
 		});
 		passwordPopup.btnEnter.addClickHandler(new ClickHandler() {
 
@@ -279,128 +266,102 @@ public class LobbyRoomView extends Composite implements
 		pointLimitBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Integer> event) {
-				storyTimeService.updateLobbyRoomPointLimit(roomData.roomName,
-						event.getValue(), new AsyncCallback<Void>() {
+				storyTimeService.updateLobbyRoomPointLimit(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-								if (DEBUG)
-									System.out
-											.println("Client: Error occurred changing the point value");
-							}
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out.println("Client: Error occurred changing the point value");
+					}
 
-							@Override
-							public void onSuccess(Void result) {
-								if (DEBUG)
-									System.out
-											.println("Client: Got confirmation of point change from server");
-							}
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Got confirmation of point change from server");
+					}
 
-						});
+				});
 			}
 		});
 
-		submittersTimeBox
-				.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+		submittersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			@Override
+			public void onValueChange(final ValueChangeEvent<Integer> event) {
+				// Get time per round TODO
+				storyTimeService.updateLobbyRoomTimer(roomData.roomName, event.getValue(), new AsyncCallback<Void>() {
+
 					@Override
-					public void onValueChange(
-							final ValueChangeEvent<Integer> event) {
-						// Get time per round TODO
-						storyTimeService.updateLobbyRoomTimer(
-								roomData.roomName, event.getValue(),
-								new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out.println("Client: Error occurred in sending server the new submissionTimer value: " + event.getValue());
+					}
 
-									@Override
-									public void onFailure(Throwable caught) {
-										if (DEBUG)
-											System.out
-													.println("Client: Error occurred in sending server the new submissionTimer value: "
-															+ event.getValue());
-									}
-
-									@Override
-									public void onSuccess(Void result) {
-										if (DEBUG)
-											System.out
-													.println("Client: Got confirmation of submissionTimer change from server");
-										choosersTimeBox.setValue(
-												submittersTimeBox.getValue() + 5,
-												true);
-									}
-								});
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Got confirmation of submissionTimer change from server");
+						choosersTimeBox.setValue(submittersTimeBox.getValue() + 5, true);
 					}
 				});
+			}
+		});
 
-		choosersTimeBox
-				.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-					public void onValueChange(ValueChangeEvent<Integer> event) {
-						storyTimeService.updateLobbyRoomChooserTimer(
-								roomData.roomName, choosersTimeBox.getValue(),
-								new AsyncCallback<Void>() {
+		choosersTimeBox.addValueChangeHandler(new ValueChangeHandler<Integer>() {
+			public void onValueChange(ValueChangeEvent<Integer> event) {
+				storyTimeService.updateLobbyRoomChooserTimer(roomData.roomName, choosersTimeBox.getValue(), new AsyncCallback<Void>() {
 
-									@Override
-									public void onFailure(Throwable caught) {
-										if (DEBUG)
-											System.out
-													.println("Client: Failed to tell server to update the chooser's time for room: "
-															+ roomData.roomName);
-									}
-
-									@Override
-									public void onSuccess(Void result) {
-										if (DEBUG)
-											System.out
-													.println("Client: Sent the server the new chooser's time for room: "
-															+ roomData.roomName);
-									}
-
-								});
+					@Override
+					public void onFailure(Throwable caught) {
+						if (DEBUG)
+							System.out.println("Client: Failed to tell server to update the chooser's time for room: " + roomData.roomName);
 					}
+
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Sent the server the new chooser's time for room: " + roomData.roomName);
+					}
+
 				});
+			}
+		});
 
 		btnLeaveRoom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				storyTimeService.leaveRoom(roomData.roomName,
-						new AsyncCallback<Void>() {
+				storyTimeService.leaveRoom(roomData.roomName, new AsyncCallback<Void>() {
 
-							@Override
-							public void onFailure(Throwable caught) {
-							}
+					@Override
+					public void onFailure(Throwable caught) {
+					}
 
-							@Override
-							public void onSuccess(Void result) {
-								if (DEBUG)
-									System.out
-											.println("Client: Confirmation received from server that this user has left the room: "
-													+ roomData.roomName);
-							}
-						});
+					@Override
+					public void onSuccess(Void result) {
+						if (DEBUG)
+							System.out.println("Client: Confirmation received from server that this user has left the room: " + roomData.roomName);
+					}
+				});
 			}
 		});
 
 		chatTextBox.addKeyDownHandler(new KeyDownHandler() {
 			public void onKeyDown(KeyDownEvent event) {
-				if ((event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-						&& !chatTextBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.sendRoomChatMessage(roomData.roomName,
-							chatTextBox.getText(), new AsyncCallback<Void>() {
+				if ((event.getNativeKeyCode() == KeyCodes.KEY_ENTER) && !chatTextBox.getText().equalsIgnoreCase("")) {
+					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
 
-								@Override
-								public void onFailure(Throwable caught) {
-									if (DEBUG)
-										System.out
-												.println("Client: Error occurred while sending text to the chat");
-								}
+						@Override
+						public void onFailure(Throwable caught) {
+							if (DEBUG)
+								System.out.println("Client: Error occurred while sending text to the chat");
+						}
 
-								@Override
-								public void onSuccess(Void result) {
-									if (DEBUG)
-										System.out
-												.println("Client: Successfully posted to chat window");
-									chatTextBox.setText("");
-								}
-							});
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Successfully posted to chat window");
+							chatTextBox.setText("");
+						}
+					});
 				}
 			}
 		});
@@ -410,23 +371,20 @@ public class LobbyRoomView extends Composite implements
 			public void onClick(ClickEvent event) {
 				// Send text to users in room
 				if (!chatTextBox.getText().equalsIgnoreCase("")) {
-					storyTimeService.sendRoomChatMessage(roomData.roomName,
-							chatTextBox.getText(), new AsyncCallback<Void>() {
+					storyTimeService.sendRoomChatMessage(roomData.roomName, chatTextBox.getText(), new AsyncCallback<Void>() {
 
-								@Override
-								public void onFailure(Throwable caught) {
-								}
+						@Override
+						public void onFailure(Throwable caught) {
+						}
 
-								@Override
-								public void onSuccess(Void result) {
-									if (DEBUG)
-										System.out
-												.println("Client: Sent message: "
-														+ chatTextBox.getText());
-									chatTextBox.setText("");
-								}
+						@Override
+						public void onSuccess(Void result) {
+							if (DEBUG)
+								System.out.println("Client: Sent message: " + chatTextBox.getText());
+							chatTextBox.setText("");
+						}
 
-							});
+					});
 				}
 			}
 		});
@@ -442,103 +400,88 @@ public class LobbyRoomView extends Composite implements
 
 	private void setRemoteEventListenersAndHandleEvents() {
 		if (DEBUG)
-			System.out
-					.println("Client: Trying to set the lobby room listeners for room "
-							+ roomData.roomName);
-		theRemoteEventService.addListener(
-				DomainFactory.getDomain(roomData.roomName),
-				new RemoteEventListener() {
+			System.out.println("Client: Trying to set the lobby room listeners for room " + roomData.roomName);
+		theRemoteEventService.addListener(DomainFactory.getDomain(roomData.roomName), new RemoteEventListener() {
 
-					public void apply(Event anEvent) {
-						if (anEvent instanceof UpdatePointLimitEvent) {
-							UpdatePointLimitEvent updatePointLimitEvent = (UpdatePointLimitEvent) anEvent;
-							onUpdatePointLimit(updatePointLimitEvent);
+			public void apply(Event anEvent) {
+				if (anEvent instanceof UpdatePointLimitEvent) {
+					UpdatePointLimitEvent updatePointLimitEvent = (UpdatePointLimitEvent) anEvent;
+					onUpdatePointLimit(updatePointLimitEvent);
 
-						} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
-							UpdateAuthorsTimerEvent updateAuthorsTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
-							onUpdateAuthorsTimer(updateAuthorsTimerEvent);
+				} else if (anEvent instanceof UpdateAuthorsTimerEvent) {
+					UpdateAuthorsTimerEvent updateAuthorsTimerEvent = (UpdateAuthorsTimerEvent) anEvent;
+					onUpdateAuthorsTimer(updateAuthorsTimerEvent);
 
-						} else if (anEvent instanceof UpdateMastersTimerEvent) {
-							UpdateMastersTimerEvent chooserTimerEvent = (UpdateMastersTimerEvent) anEvent;
-							onUpdateChooseTime(chooserTimerEvent.mastersTime);
+				} else if (anEvent instanceof UpdateMastersTimerEvent) {
+					UpdateMastersTimerEvent chooserTimerEvent = (UpdateMastersTimerEvent) anEvent;
+					onUpdateChooseTime(chooserTimerEvent.mastersTime);
 
-						} else if (anEvent instanceof UserLeftRoomEvent) {
-							UserLeftRoomEvent userLeftRoomEvent = (UserLeftRoomEvent) anEvent;
-							onUserLeftRoom(userLeftRoomEvent);
+				} else if (anEvent instanceof UserLeftRoomEvent) {
+					UserLeftRoomEvent userLeftRoomEvent = (UserLeftRoomEvent) anEvent;
+					onUserLeftRoom(userLeftRoomEvent);
 
-						} else if (anEvent instanceof UserEnteredRoomEvent) {
-							UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
-							onUserEnteredRoom(userEnteredRoomEvent);
+				} else if (anEvent instanceof UserEnteredRoomEvent) {
+					UserEnteredRoomEvent userEnteredRoomEvent = (UserEnteredRoomEvent) anEvent;
+					onUserEnteredRoom(userEnteredRoomEvent);
 
-						} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
-							UpdateRoomChatWindowEvent updateRoomChatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
-							onUpdateRoomChatWindow(updateRoomChatWindowEvent);
+				} else if (anEvent instanceof UpdateRoomChatWindowEvent) {
+					UpdateRoomChatWindowEvent updateRoomChatWindowEvent = (UpdateRoomChatWindowEvent) anEvent;
+					onUpdateRoomChatWindow(updateRoomChatWindowEvent);
 
-						} else if (anEvent instanceof RoomDisbandedEvent) {
-							RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
-							onRoomDisbanded(roomDisbandedEvent);
+				} else if (anEvent instanceof RoomDisbandedEvent) {
+					RoomDisbandedEvent roomDisbandedEvent = new RoomDisbandedEvent();
+					onRoomDisbanded(roomDisbandedEvent);
 
-						} else if (anEvent instanceof GameStartEvent) {
-							GameStartEvent gameStartEvent = new GameStartEvent();
-							onGameStart(gameStartEvent);
+				} else if (anEvent instanceof GameStartEvent) {
+					GameStartEvent gameStartEvent = new GameStartEvent();
+					onGameStart(gameStartEvent);
 
-						}
-					}
-				});
+				}
+			}
+		});
 		if (DEBUG)
 			System.out.println("Client: Lobby room listeners activated");
 	}
 
 	private void getInitialLobbyRoomInformation() {
-		storyTimeService
-				.getLobbyRoomInformation(new AsyncCallback<LobbyRoomData>() {
+		storyTimeService.getLobbyRoomInformation(new AsyncCallback<LobbyRoomData>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out
-									.println("Client: Error occurred while initializing the lobby room state");
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+				if (DEBUG)
+					System.out.println("Client: Error occurred while initializing the lobby room state");
+			}
 
-					@Override
-					public void onSuccess(LobbyRoomData result) {
-						roomData.pointCap = result.pointCap;
-						roomData.roomName = result.roomName;
-						roomData.theme = result.theme;
-						roomData.authorsTimer = result.authorsTimer;
-						roomData.users = result.users;
-						roomData.inGame = result.inGame;
-						roomData.domain = result.domain;
-						roomData.messages = result.messages;
-						roomData.hostsName = result.hostsName;
-						roomData.setPassword(result.getPassword());
-						System.out.println("Client: Got Data: PointCap: "
-								+ roomData.pointCap + ", Name: "
-								+ roomData.roomName + ", Theme: "
-								+ roomData.theme + ", " + "Timer: "
-								+ roomData.authorsTimer + ", Users: "
-								+ roomData.users.toString() + ", and Domain: "
-								+ roomData.domain.getName());
-						if (roomData.getHostsName().equalsIgnoreCase(username)) {
-							if (DEBUG)
-								System.out.println("Client: "
-										+ username
-										+ " is the host of room: "
-										+ roomData.getRoomName()
-										+ " so he is able to edit the room password");
-							passwordEnabledCheckBox.setVisible(true);
-							lblPassword.setVisible(true);
-							if (!roomData.getPassword().equalsIgnoreCase("")) {
-								passwordEnabledCheckBox.setValue(true);
-							}
-						}
-						populateLobbyRoomView();
-						if (DEBUG)
-							System.out
-									.println("Client: Set remote event listeners and populated the lobby with known data");
-						setRemoteEventListenersAndHandleEvents();
+			@Override
+			public void onSuccess(LobbyRoomData result) {
+				roomData.pointCap = result.pointCap;
+				roomData.roomName = result.roomName;
+				roomData.theme = result.theme;
+				roomData.authorsTimer = result.authorsTimer;
+				roomData.users = result.users;
+				roomData.inGame = result.inGame;
+				roomData.domain = result.domain;
+				roomData.messages = result.messages;
+				roomData.hostsName = result.hostsName;
+				roomData.setPassword(result.getPassword());
+				System.out.println("Client: Got Data: PointCap: " + roomData.pointCap + ", Name: " + roomData.roomName + ", Theme: " + roomData.theme + ", "
+						+ "Timer: " + roomData.authorsTimer + ", Users: " + roomData.users.toString() + ", and Domain: " + roomData.domain.getName());
+				if (roomData.getHostsName().equalsIgnoreCase(username)) {
+					if (DEBUG)
+						System.out.println("Client: " + username + " is the host of room: " + roomData.getRoomName()
+								+ " so he is able to edit the room password");
+					passwordEnabledCheckBox.setVisible(true);
+					lblPassword.setVisible(true);
+					if (!roomData.getPassword().equalsIgnoreCase("")) {
+						passwordEnabledCheckBox.setValue(true);
 					}
-				});
+				}
+				populateLobbyRoomView();
+				if (DEBUG)
+					System.out.println("Client: Set remote event listeners and populated the lobby with known data");
+				setRemoteEventListenersAndHandleEvents();
+			}
+		});
 	}
 
 	private void getAndSetMyUsername() {
@@ -547,8 +490,7 @@ public class LobbyRoomView extends Composite implements
 			@Override
 			public void onFailure(Throwable caught) {
 				if (DEBUG)
-					System.out
-							.println("Client: Failed to get this users username from the server");
+					System.out.println("Client: Failed to get this users username from the server");
 				caught.printStackTrace();
 			}
 
@@ -588,10 +530,9 @@ public class LobbyRoomView extends Composite implements
 
 	private void onUpdateChooseTime(int chooseTime) {
 		if (DEBUG)
-			System.out
-					.println("Client: Got an UpdateChooserTimerEvent for room: "
-							+ roomData.roomName);
+			System.out.println("Client: Got an UpdateChooserTimerEvent for room: " + roomData.roomName);
 		choosersTimeBox.setValue(chooseTime);
+		roomData.mastersTimer = chooseTime;
 		if (DEBUG)
 			System.out.println("Client: Set the choose time to: " + chooseTime);
 	}
@@ -603,8 +544,7 @@ public class LobbyRoomView extends Composite implements
 		roomData.pointCap = updatePointLimitEvent.getPointLimit();
 	}
 
-	private void onUpdateAuthorsTimer(
-			UpdateAuthorsTimerEvent updateAuthorsTimerEvent) {
+	private void onUpdateAuthorsTimer(UpdateAuthorsTimerEvent updateAuthorsTimerEvent) {
 		if (DEBUG)
 			System.out.println("Client: Got an Update Timer Remote Event");
 		submittersTimeBox.setValue(updateAuthorsTimerEvent.authorsTimer);
@@ -613,15 +553,12 @@ public class LobbyRoomView extends Composite implements
 
 	private void onUserLeftRoom(UserLeftRoomEvent userLeftRoomEvent) {
 		if (DEBUG)
-			System.out.println("Client: Got a UserLeftRoomEvent for user: "
-					+ userLeftRoomEvent.username);
+			System.out.println("Client: Got a UserLeftRoomEvent for user: " + userLeftRoomEvent.username);
 		int indexToBeRemoved = -1;
 		for (int x = 0; x < roomData.users.size(); x++) {
-			if (roomData.users.get(x).equalsIgnoreCase(
-					userLeftRoomEvent.username)) {
+			if (roomData.users.get(x).equalsIgnoreCase(userLeftRoomEvent.username)) {
 				if (DEBUG)
-					System.out.println("Client: Found user: "
-							+ userLeftRoomEvent.username + " in the user list");
+					System.out.println("Client: Found user: " + userLeftRoomEvent.username + " in the user list");
 				indexToBeRemoved = x;
 			}
 		}
@@ -629,13 +566,11 @@ public class LobbyRoomView extends Composite implements
 			roomData.users.remove(indexToBeRemoved);
 			populateUserList();
 			if (DEBUG)
-				System.out.println("Client: Removed "
-						+ userLeftRoomEvent.username + " from the user list");
+				System.out.println("Client: Removed " + userLeftRoomEvent.username + " from the user list");
 		}
 		if (userLeftRoomEvent.username.equalsIgnoreCase(username)) {
 			if (DEBUG)
-				System.out
-						.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
+				System.out.println("Client: This user was the user who requested to leave the room. Firing a LeaveRoomLocalEvent");
 			theRemoteEventService.removeListeners();
 			eventBus.fireEvent(new LeaveRoomLocalEvent());
 		}
@@ -644,18 +579,15 @@ public class LobbyRoomView extends Composite implements
 	private void onUserEnteredRoom(UserEnteredRoomEvent userEnteredRoomEvent) {
 		String username = userEnteredRoomEvent.getUsername();
 		if (DEBUG)
-			System.out.println("Client: Received UserEnteredRoomEvent ("
-					+ username + ") for room: " + roomData.roomName);
+			System.out.println("Client: Received UserEnteredRoomEvent (" + username + ") for room: " + roomData.roomName);
 		roomData.users.add(username);
 		populateUserList();
 	}
 
-	private void onUpdateRoomChatWindow(
-			UpdateRoomChatWindowEvent updateRoomChatWindowEvent) {
+	private void onUpdateRoomChatWindow(UpdateRoomChatWindowEvent updateRoomChatWindowEvent) {
 		roomData.messages.add(updateRoomChatWindowEvent.message);
 		if (DEBUG)
-			System.out.println("Client: Got message: "
-					+ updateRoomChatWindowEvent.message + ", from server");
+			System.out.println("Client: Got message: " + updateRoomChatWindowEvent.message + ", from server");
 
 		populateMessages();
 	}
@@ -663,22 +595,21 @@ public class LobbyRoomView extends Composite implements
 	private void onRoomDisbanded(RoomDisbandedEvent roomDisbandedEvent) {
 		theRemoteEventService.removeListeners();
 		if (DEBUG)
-			System.out
-					.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: "
-							+ roomData.roomName);
+			System.out.println("Client: Recieved Disband Room Event & Deactivated Listeners For Room: " + roomData.roomName);
 		if (DEBUG)
 			System.out.println("Client: Left Room: " + roomData.roomName);
 		eventBus.fireEvent(new LeaveRoomLocalEvent());
 	}
 
 	private void onGameStart(GameStartEvent gameStartEvent) {
+		roomData.setAuthorsTimer(submittersTimeBox.getValue());
+		roomData.setMastersTimer(choosersTimeBox.getValue());
+		roomData.setPointCap(pointLimitBox.getValue());
 		if (DEBUG)
-			System.out.println("Client: Got a game start event for room: "
-					+ roomData.roomName);
+			System.out.println("Client: Got a game start event for room: " + roomData.roomName);
 		theRemoteEventService.removeListeners();
 		if (DEBUG)
-			System.out
-					.println("Client: Deactivated lobby room listeners in preparation for starting the game");
+			System.out.println("Client: Deactivated lobby room listeners in preparation for starting the game");
 		StartGameLocalEvent startGameEvent = new StartGameLocalEvent();
 		if (DEBUG)
 			System.out.println("Client: Fired Local Event: Game Start Event");
@@ -686,44 +617,43 @@ public class LobbyRoomView extends Composite implements
 	}
 
 	private void startGame() {
-		storyTimeService.startGame(roomData.roomName,
-				new AsyncCallback<Void>() {
+		storyTimeService.startGame(roomData.roomName, new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						if (DEBUG)
-							System.out
-									.println("Client: Error in the start game call");
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+				if (DEBUG)
+					System.out.println("Client: Error in the start game call");
+			}
 
-					@Override
-					public void onSuccess(Void result) {
-						if (DEBUG)
-							System.out
-									.println("Client: Confirmation of started game recieved");
-					}
-				});
+			@Override
+			public void onSuccess(Void result) {
+				if (DEBUG)
+					System.out.println("Client: Confirmation of started game recieved");
+			}
+		});
 	}
-	
+
 	private void setPassword() {
 		String password = passwordPopup.textBox.getText();
 		storyTimeService.setPassword(roomData.getRoomName(), password, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if (DEBUG) System.out.println("Client: Failed to tell the server to change the password for room: " + roomData.getRoomName());
+				if (DEBUG)
+					System.out.println("Client: Failed to tell the server to change the password for room: " + roomData.getRoomName());
 			}
 
 			@Override
 			public void onSuccess(Void result) {
-				if (DEBUG) System.out.println("Client: Successfully told server to change the password for room: " + roomData.getRoomName());
+				if (DEBUG)
+					System.out.println("Client: Successfully told server to change the password for room: " + roomData.getRoomName());
 				passwordPopup.textBox.setText("");
 				passwordPopup.hide();
 			}
-			
+
 		});
 	}
-	
+
 	public Widget asWidget() {
 		return this;
 	}

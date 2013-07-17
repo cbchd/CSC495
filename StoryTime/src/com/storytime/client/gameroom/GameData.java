@@ -11,7 +11,7 @@ public class GameData implements Serializable {
     public String theme;
     public int pointCap = 0;
     public int submissionTimer = 0;
-    public int chooserTimer = 0;
+    public int mastersTimer = 0;
     public boolean inGame;
     public ArrayList<String> users;
     public String message;

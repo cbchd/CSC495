@@ -9,28 +9,12 @@ public class InGameRoom {
     private static final long serialVersionUID = 1L;
     public String theme;
     public int pointCap = 0;
-    public int timer = 0;
+    public int authorTimer = 0;
+    public int mastersTimer = 0;
     public boolean inGame;
     public ArrayList<User> users;
     public String message;
     public Domain domain;
-    public ArrayList<String> messages;
-    public HashMap<User, Integer> scoreList;
-    public int turnCounter = 0;
-    public int phrasesSubmitted = 0;
-    public ArrayList<String> story;
-    public boolean gameEnded = false;
-    public User chooser;
-    boolean choosersTimerElapsed = false;
-    public int numberOfUsersWhoseTimersHaveElapsed = 0;
-	
-    public InGameRoom() {
-	users = new ArrayList<User>();
-	messages = new ArrayList<String>();
-	scoreList = new HashMap<User, Integer>();
-	story = new ArrayList<String>();
-    }
-    
     public String getTheme() {
 		return theme;
 	}
@@ -47,12 +31,20 @@ public class InGameRoom {
 		this.pointCap = pointCap;
 	}
 
-	public int getTimer() {
-		return timer;
+	public int getAuthorTimer() {
+		return authorTimer;
 	}
 
-	public void setTimer(int timer) {
-		this.timer = timer;
+	public void setAuthorTimer(int authorTimer) {
+		this.authorTimer = authorTimer;
+	}
+
+	public int getMastersTimer() {
+		return mastersTimer;
+	}
+
+	public void setMastersTimer(int mastersTimer) {
+		this.mastersTimer = mastersTimer;
 	}
 
 	public boolean isInGame() {
@@ -159,9 +151,21 @@ public class InGameRoom {
 		this.numberOfUsersWhoseTimersHaveElapsed = numberOfUsersWhoseTimersHaveElapsed;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
+	public ArrayList<String> messages;
+    public HashMap<User, Integer> scoreList;
+    public int turnCounter = 0;
+    public int phrasesSubmitted = 0;
+    public ArrayList<String> story;
+    public boolean gameEnded = false;
+    public User chooser;
+    boolean choosersTimerElapsed = false;
+    public int numberOfUsersWhoseTimersHaveElapsed = 0;
 	
+    public InGameRoom() {
+	users = new ArrayList<User>();
+	messages = new ArrayList<String>();
+	scoreList = new HashMap<User, Integer>();
+	story = new ArrayList<String>();
+    }
+
 }
