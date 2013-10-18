@@ -12,7 +12,7 @@ import com.storytime.client.skill.offense.LetterSubstitutionAttack;
 
 /**
  * @author Chad
- *
+ * 
  */
 public class StoryTimeEngine {
 
@@ -24,6 +24,7 @@ public class StoryTimeEngine {
 	HashMap<String, Room> lobbyRooms;
 	HashMap<String, InGameRoom> gameRooms;
 	private final Logger logger = Logger.getLogger("Engine");
+	ScoreComparator<Integer> scoreComparator = new ScoreComparator<Integer>();
 
 	public ArrayList<String> getLobbyChat() {
 		return lobbyChat;
@@ -126,7 +127,8 @@ public class StoryTimeEngine {
 
 	/**
 	 * @param gameRoom
-	 * @return The phrase that was chosen, or null (if there weren't any phrases to choose from)
+	 * @return The phrase that was chosen, or null (if there weren't any phrases
+	 *         to choose from)
 	 */
 	public String chooseRandomPhrase(InGameRoom gameRoom) {
 		ArrayList<String> phrases = new ArrayList<String>();
@@ -167,11 +169,17 @@ public class StoryTimeEngine {
 		}
 	}
 
-	/**Activates the LetterAdditionAttack on the specified user. Edits and adds a new phrase to the user's phrase list for this round. The edited
-	 * phrase will serve as this user's current phrase.
-	 * @param victim The user under attack
-	 * @param additionAttack The LetterAdditionAttack that contains the attack information
-	 * @return The user's current phrase, after it has been subject to this attack
+	/**
+	 * Activates the LetterAdditionAttack on the specified user. Edits and adds
+	 * a new phrase to the user's phrase list for this round. The edited phrase
+	 * will serve as this user's current phrase.
+	 * 
+	 * @param victim
+	 *            The user under attack
+	 * @param additionAttack
+	 *            The LetterAdditionAttack that contains the attack information
+	 * @return The user's current phrase, after it has been subject to this
+	 *         attack
 	 */
 	public String activateLetterAdditon(User victim, LetterAdditionAttack additionAttack) {
 		int newestPhraseFromHistory = getIndexOfNewestPhraseFromHistory(victim);
@@ -236,5 +244,33 @@ public class StoryTimeEngine {
 		} else {
 			return newestPhraseFromHistoryIndex;
 		}
+	}
+
+	/**
+	 * Sets the user's respective places after a given round. The user with the
+	 * highest score will be in first place, and the user with the lowest score
+	 * will be in last place. Users whose scores are identical, will be treated
+	 * in the order that they appear in the list.
+	 * 
+	 * @param inGameRoom
+	 * @return HashMap<String, Integer>, where the string is the user's
+	 *         username, and the integer is the score for that particular user
+	 */
+	public HashMap<String, Integer> setUserPlacesAtTheEndOfRound(InGameRoom inGameRoom) {
+		HashMap<Integer, User> scores = new HashMap<Integer, User>();
+		ArrayList<Integer> scoreList = new ArrayList<Integer>();
+		for (User user : inGameRoom.getUsers()) {
+			scores.put(user.getScore(), user);
+			scoreList.add(user.getScore());
+		}
+		Collections.sort(scoreList, scoreComparator);
+		for (int x = 0; x < scoreList.size(); x++) {
+			scores.get(scoreList.get(x)).setPlace(x);
+		}
+		HashMap<String, Integer> placesList = new HashMap<String, Integer>();
+		for (User user : inGameRoom.getUsers()) {
+			placesList.put(user.getUsername(), user.getPlace());
+		}
+		return placesList;
 	}
 }

@@ -6,8 +6,17 @@ public class User {
 	String username = "";
 	String password = "";
 	String location = "";
+	public int getPlace() {
+		return place;
+	}
+
+	public void setPlace(int place) {
+		this.place = place;
+	}
+
 	boolean isReadyToStart = false;
 	int score = 0;
+	int place = 0;
 	Room room;
 	InGameRoom ingameRoom;
 	ArrayList<String> phraseHistory = new ArrayList<String>();

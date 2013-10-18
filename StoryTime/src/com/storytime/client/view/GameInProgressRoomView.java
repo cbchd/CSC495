@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -32,6 +31,7 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.gameroom.GameEndEvent;
 import com.storytime.client.gameroom.PhraseChosenEvent;
 import com.storytime.client.gameroom.PhraseSubmittedEvent;
+import com.storytime.client.gameroom.UpdatePlaceEvent;
 import com.storytime.client.gameroom.RoundCloseEvent;
 import com.storytime.client.gameroom.RoundStartEvent;
 import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
@@ -153,6 +153,8 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	};
 	private final VerticalPanel verticalPanel = new VerticalPanel();
 	private final Button btnPlays = new Button("Plays");
+	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
+	private final Label lblPlace = new Label("Place: 0");
 
 	public GameInProgressRoomView() {
 		// RootPanel rootPanel = RootPanel.get();
@@ -201,8 +203,9 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	}
 
 	public void setPanelOrder() {
-
-		overallVerticalPanel.add(lblTitle_1);
+		
+		overallVerticalPanel.add(horizontalPanel);
+		horizontalPanel.setSize("100%", "46px");
 		overallVerticalPanel.add(storyBox);
 		overallVerticalPanel.add(bigMiddlePanel);
 
@@ -256,9 +259,13 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		lblMaxPoints.setText(Integer.toString(gameData.pointCap));
 
 		overallVerticalPanel.setSize("900px", "633px");
+		horizontalPanel.add(lblTitle_1);
 
-		lblTitle_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblTitle_1.setSize("100%", "46px");
+		lblTitle_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		lblTitle_1.setSize("479px", "46px");
+		
+		horizontalPanel.add(lblPlace);
+		lblPlace.setSize("100%", "100%");
 		storyBox.setSize("899px", "156px");
 		bigMiddlePanel.setSize("100%", "346px");
 
@@ -539,6 +546,9 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 				} else if (anEvent instanceof GameEndEvent) {
 					GameEndEvent gameEndEvent = (GameEndEvent) anEvent;
 					onGameEnd(gameEndEvent.winner);
+				} else if (anEvent instanceof UpdatePlaceEvent) {
+					UpdatePlaceEvent placeChangeEvent = (UpdatePlaceEvent) anEvent;
+					onPlaceChange(placeChangeEvent.getPlacesList());
 				}
 			}
 		});
@@ -637,6 +647,11 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		chatArea.setCursorPos(chatArea.getText().length());
 	}
 
+	public void onPlaceChange(HashMap<String, Integer> placeList) {
+		if (DEBUG) System.out.println("Client: Got UpdatePlaceEvent for user: " + gameData.thisUser);
+		lblPlace.setText("Place: " + (placeList.get(gameData.thisUser) + 1));
+	}
+	
 	public void enableChoosing() {
 		swapHolderPanelAndSubmittedPhrases.remove(phraseSubmissionPanelForSwap);
 		swapHolderPanelAndSubmittedPhrases.remove(choosePanelForSwap);

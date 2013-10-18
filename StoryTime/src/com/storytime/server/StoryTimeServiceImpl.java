@@ -15,6 +15,7 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.gameroom.GameEndEvent;
 import com.storytime.client.gameroom.PhraseChosenEvent;
 import com.storytime.client.gameroom.PhraseSubmittedEvent;
+import com.storytime.client.gameroom.UpdatePlaceEvent;
 import com.storytime.client.gameroom.RoundCloseEvent;
 import com.storytime.client.gameroom.RoundStartEvent;
 import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
@@ -36,7 +37,6 @@ import com.storytime.client.lobbyroom.UpdatePointLimitEvent;
 import com.storytime.client.lobbyroom.UpdateRoomChatWindowEvent;
 import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
-import com.storytime.client.skill.offense.LetterAdditionAttack;
 import com.storytime.client.skillrelated.Skill;
 import com.storytime.client.skillrelated.SkillHolder;
 
@@ -532,6 +532,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		engine.refreshTimerElapsedValues(gameRoom);
 		engine.clearAllUsersSubmittedPhrases(roomName);
 		logger.log(Level.FINEST, "Server: Reset the phrases for room: " + roomName);
+		firePlaceChangeEvent(gameRoom);
 	}
 
 	private void fireRoundStartEvent(InGameRoom gameRoom) {
@@ -550,6 +551,14 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		gameRoom.chooser = chooser;
 		addEvent(DomainFactory.getDomain(roomName), roundStartEvent);
 		logger.log(Level.FINEST, "Server: Fired Round Start Event for room: " + roomName);
+	}
+
+	private void firePlaceChangeEvent(InGameRoom gameRoom) {
+		UpdatePlaceEvent updatePlaceEvent = new UpdatePlaceEvent();
+		HashMap<String, Integer> placesList = engine.setUserPlacesAtTheEndOfRound(gameRoom);
+		updatePlaceEvent.setPlacesList(placesList);
+		addEvent(gameRoom.domain, updatePlaceEvent);
+		logger.log(Level.FINEST, "Server: Fired Place Change Event for room: " + gameRoom.domain.getName());
 	}
 
 	@Override
