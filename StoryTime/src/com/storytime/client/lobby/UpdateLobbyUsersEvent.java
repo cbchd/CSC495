@@ -9,6 +9,7 @@ public class UpdateLobbyUsersEvent implements Event {
     private static final long serialVersionUID = 1L;
     String username = "";
     Domain domain = DomainFactory.getDomain("Lobby");
+    
     public String getUsername() {
         return username;
     }

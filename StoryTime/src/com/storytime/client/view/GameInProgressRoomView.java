@@ -2,6 +2,7 @@ package com.storytime.client.view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -38,6 +39,7 @@ import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 public class GameInProgressRoomView extends Composite implements com.storytime.client.presenters.GameInProgressRoomPresenter.Display {
@@ -162,6 +164,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		// initialize();
 		// enableChoosing();
 		// enableSubmitting();
+		theRemoteEventService.removeListeners();
 		overallVerticalPanel.setStyleName("GameInProgressPage");
 		initWidget(overallVerticalPanel);
 		if (DEBUG)
@@ -187,13 +190,18 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	}
 
 	public void initialize() {
+		deactivateExtraneousListeners();
 		for (String user : gameData.users) {
 			if (user.equalsIgnoreCase(gameData.thisUser)) {
 				lblScoreBox.setText(Integer.toString(gameData.scoreList.get(gameData.thisUser)));
 				if (DEBUG)
 					System.out.println("Client: Set his own score to: " + lblScoreBox.getText());
 			}
-			userListBox.addItem(user);
+			if (user.length() > 25) {
+				userListBox.addItem(user.substring(0, 25));
+			} else {
+				userListBox.addItem(user);
+			}
 		}
 		setPanelOrder();
 		setCharacteristics();
@@ -203,7 +211,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	}
 
 	public void setPanelOrder() {
-		
+
 		overallVerticalPanel.add(horizontalPanel);
 		horizontalPanel.setSize("100%", "46px");
 		overallVerticalPanel.add(storyBox);
@@ -263,7 +271,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 
 		lblTitle_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		lblTitle_1.setSize("479px", "46px");
-		
+
 		horizontalPanel.add(lblPlace);
 		lblPlace.setSize("100%", "100%");
 		storyBox.setSize("899px", "156px");
@@ -289,8 +297,8 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		swapHolderPanelAndSubmittedPhrases.setSize("100%", "403px");
 
 		lblSubmittedPhrases.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblSubmittedPhrases.setSize("100%", "19px");
-		phraseListBox.setSize("100%", "146px");
+		lblSubmittedPhrases.setSize("100%", "37px");
+		phraseListBox.setSize("100%", "155px");
 		phraseListBox.setVisibleItemCount(5);
 
 		choosePanelForSwap.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -598,6 +606,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			System.out.println("Client: Recieved Phrase Chosen Event");
 		gameData.story += phraseChosen;
 		storyBox.setText(gameData.story);
+		storyBox.setCursorPos(storyBox.getText().length());
 		phraseListBox.clear();
 		chooseTimer.cancel();
 		submitTimer.cancel();
@@ -648,10 +657,11 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	}
 
 	public void onPlaceChange(HashMap<String, Integer> placeList) {
-		if (DEBUG) System.out.println("Client: Got UpdatePlaceEvent for user: " + gameData.thisUser);
+		if (DEBUG)
+			System.out.println("Client: Got UpdatePlaceEvent for user: " + gameData.thisUser);
 		lblPlace.setText("Place: " + (placeList.get(gameData.thisUser) + 1));
 	}
-	
+
 	public void enableChoosing() {
 		swapHolderPanelAndSubmittedPhrases.remove(phraseSubmissionPanelForSwap);
 		swapHolderPanelAndSubmittedPhrases.remove(choosePanelForSwap);
@@ -668,6 +678,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		swapHolderPanelAndSubmittedPhrases.add(phraseSubmissionPanelForSwap);
 		swapHolderPanelAndSubmittedPhrases.add(timePanel);
 		timeLeftSubmission = gameData.submissionTimer;
+		phraseSubmitBox.setFocus(true);
 	}
 
 	public void disableChoosing() {
@@ -771,5 +782,12 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 
 	public Widget asWidget() {
 		return this;
+	}
+
+	public void deactivateExtraneousListeners() {
+		Set<Domain> domains = theRemoteEventService.getActiveDomains();
+		for (Domain domain : domains) {
+			theRemoteEventService.removeListeners(domain);
+		}
 	}
 }

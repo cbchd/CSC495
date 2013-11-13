@@ -1,5 +1,7 @@
 package com.storytime.client.view;
 
+import java.util.Set;
+
 import com.allen_sauer.gwt.voices.client.Sound;
 import com.allen_sauer.gwt.voices.client.SoundController;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -18,6 +20,9 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.storytime.client.StoryTimeEntryMVP;
+
+import de.novanic.eventservice.client.event.domain.Domain;
 
 public class LoginView extends Composite implements com.storytime.client.presenters.LoginPresenter.Display {
 
@@ -190,5 +195,12 @@ public class LoginView extends Composite implements com.storytime.client.present
 				sound.play();
 			}
 		});
+	}
+
+	public void deactivateExtraneousListeners() {
+		Set<Domain> domains = StoryTimeEntryMVP.theRemoteEventService.getActiveDomains();
+		for (Domain domain : domains) {
+			StoryTimeEntryMVP.theRemoteEventService.removeListeners(domain);
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package com.storytime.client.view;
 
+import java.util.Set;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -41,6 +43,7 @@ import com.storytime.client.lobbyroom.UserLeftRoomEvent;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
@@ -86,6 +89,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 	PasswordPopupView passwordPopup = new PasswordPopupView();
 
 	public LobbyRoomView() {
+		deactivateExtraneousListeners();
 		initWidget(mainHorizontalPanel);
 		if (DEBUG)
 			System.out.println("Client: Trying to initialize the lobby room view");
@@ -175,6 +179,7 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		pointLimitBox.setValue(55);
 		pointLimitBox.setValue(60);
 
+		submittersTimeBox.setValue(80);
 		submittersTimeBox.setValue(5);
 		submittersTimeBox.setValue(10);
 		submittersTimeBox.setValue(15);
@@ -183,8 +188,11 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 		submittersTimeBox.setValue(30);
 		submittersTimeBox.setValue(35);
 		submittersTimeBox.setValue(40);
+		submittersTimeBox.setValue(80);
+		submittersTimeBox.setValue(120);
 
 		choosersTimeBox.setValue(submittersTimeBox.getValue() + 5);
+		choosersTimeBox.setValue(submittersTimeBox.getValue() + 20);
 
 		grid.setSize("5cm", "59px");
 		grid.setWidget(0, 0, comboBox);
@@ -510,8 +518,12 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 	private void populateUserList() {
 		userListBox.clear();
-		for (String users : roomData.users) {
-			userListBox.addItem(users);
+		for (String user : roomData.users) {
+			if (user.length() > 25) {
+				userListBox.addItem(user.substring(0, 25));
+			} else {
+				userListBox.addItem(user);
+			}
 		}
 	}
 
@@ -656,5 +668,12 @@ public class LobbyRoomView extends Composite implements com.storytime.client.pre
 
 	public Widget asWidget() {
 		return this;
+	}
+
+	public void deactivateExtraneousListeners() {
+		Set<Domain> domains = theRemoteEventService.getActiveDomains();
+		for (Domain domain : domains) {
+			theRemoteEventService.removeListeners(domain);
+		}
 	}
 }

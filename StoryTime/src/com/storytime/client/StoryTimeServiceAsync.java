@@ -11,6 +11,8 @@ public interface StoryTimeServiceAsync {
 
 	void startServer(AsyncCallback<Void> callback);
 
+	void logoutUser(AsyncCallback<Boolean> callback);
+	
 	void loginUser(String username, String password, AsyncCallback<Boolean> callback);
 
 	void getInitialLobbyInformation(AsyncCallback<LobbyInformation> callback);
@@ -60,5 +62,9 @@ public interface StoryTimeServiceAsync {
 	void setPassword(String roomName, String password, AsyncCallback<Void> callback);
 
 	void activateSkills(SkillHolder skillHolder, AsyncCallback<Void> callback);
+
+	void leaveLobby(AsyncCallback<Boolean> callback);
+
+	void enterLobby(AsyncCallback<Void> callback);
 
 }

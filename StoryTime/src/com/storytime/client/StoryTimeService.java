@@ -47,6 +47,8 @@ public interface StoryTimeService extends RemoteService {
 	 * @return true if login was successful
 	 */
 	public Boolean loginUser(String username, String password);
+	
+	public Boolean logoutUser();
 
 	/**
 	 * @return the initial state of the lobby (lobby related information pertinent to a user who has just gotten into the lobby)
@@ -178,4 +180,7 @@ public interface StoryTimeService extends RemoteService {
 	 */
 	public void activateSkills(SkillHolder skillHolder);
 
+	public boolean leaveLobby();
+
+	public void enterLobby();
 }

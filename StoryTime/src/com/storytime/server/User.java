@@ -1,11 +1,15 @@
 package com.storytime.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class User {
+public class User implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	String username = "";
 	String password = "";
 	String location = "";
+	
 	public int getPlace() {
 		return place;
 	}

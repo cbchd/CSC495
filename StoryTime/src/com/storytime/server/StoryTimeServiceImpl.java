@@ -15,15 +15,16 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.gameroom.GameEndEvent;
 import com.storytime.client.gameroom.PhraseChosenEvent;
 import com.storytime.client.gameroom.PhraseSubmittedEvent;
-import com.storytime.client.gameroom.UpdatePlaceEvent;
 import com.storytime.client.gameroom.RoundCloseEvent;
 import com.storytime.client.gameroom.RoundStartEvent;
 import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
+import com.storytime.client.gameroom.UpdatePlaceEvent;
 import com.storytime.client.joinroom.JoinRoom;
 import com.storytime.client.joinroom.JoinableRoomsInformation;
 import com.storytime.client.joinroom.LobbyRoomDisbandedEvent;
 import com.storytime.client.joinroom.LobbyRoomHostedEvent;
 import com.storytime.client.lobby.LobbyInformation;
+import com.storytime.client.lobby.LobbyUserLeftEvent;
 import com.storytime.client.lobby.UpdateLobbyEvent;
 import com.storytime.client.lobby.UpdateLobbyMessagesEvent;
 import com.storytime.client.lobby.UpdateLobbyUsersEvent;
@@ -67,18 +68,36 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		}
 	}
 
+	@Override
+	public Boolean logoutUser() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("User");
+		logger.log(Level.FINEST, "Server: Attempting to log-out " + user.getUsername());
+		boolean successfullLogOut = engine.logoutUser(user.getUsername(), user.getPassword());
+		if (successfullLogOut) {
+			LobbyUserLeftEvent userLeftEvent = new LobbyUserLeftEvent();
+			userLeftEvent.setUsernameOfUserWhoLeft(user.getUsername());
+			logger.log(Level.FINEST, ("Server: Successfully logged out user: + " + user.getUsername()));
+			addEvent(LobbyUserLeftEvent.domain, userLeftEvent);
+			logger.log(Level.FINEST, "Server: Fired User-Left-Event for the lobby domain, for the user: " + user.getUsername());
+			return true;
+		} else {
+			logger.log(Level.FINEST, "Server: User: " + user.getUsername() + " was unable to be logged out");
+			return false;
+		}
+	}
+
 	public Boolean loginUser(String username, String password) {
 		logger.log(Level.FINEST, "Server: Attempting to log in " + username);
 		if (engine.loginUser(username, password)) {
 			HttpServletRequest request = this.getThreadLocalRequest();
 			HttpSession session = request.getSession();
 			session.setAttribute("User", new User(username, password, null));
-			UpdateLobbyUsersEvent usersEvent = new UpdateLobbyUsersEvent();
-			usersEvent.setUsername(username);
-			addEvent(usersEvent.getDomain(), usersEvent);
 			logger.log(Level.FINEST, "Server: " + username + " logged into the game with password: " + password);
 			logger.log(Level.FINEST, "Server: Fired Update Lobby Users Event for user: " + username);
 			User user = engine.onlineUsers.get(username);
+			fireUserEnteredLobbyEvent(user);
 			user.location = "Lobby";
 			logger.log(Level.FINEST, "Server: Set " + user.username + "'s location to: " + user.location);
 			return true;
@@ -561,6 +580,18 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		logger.log(Level.FINEST, "Server: Fired Place Change Event for room: " + gameRoom.domain.getName());
 	}
 
+	private void fireUserEnteredLobbyEvent(User user) {
+		UpdateLobbyUsersEvent usersEvent = new UpdateLobbyUsersEvent();
+		usersEvent.setUsername(user.getUsername());
+		addEvent(usersEvent.getDomain(), usersEvent);
+	}
+
+	private void fireUserLeftLobbyEvent(User user) {
+		UserEnteredRoomEvent userEnteredRoomEvent = new UserEnteredRoomEvent();
+		userEnteredRoomEvent.setUsername(user.getUsername());
+		addEvent(DomainFactory.getDomain("Lobby"), userEnteredRoomEvent);
+	}
+
 	@Override
 	public JoinableRoomsInformation getJoinableRoomsAndTheirInformation() {
 		JoinableRoomsInformation joinableRoomsInformation = new JoinableRoomsInformation();
@@ -604,4 +635,31 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 
 		}
 	}
+
+	@Override
+	public boolean leaveLobby() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("User");
+		// This isn't what really happens, the server should push a new type of
+		// event because the user is just leaving the lobby
+		if (engine.leaveLobby(user)) {
+			System.out.println("Client: Fired userJoinedRoomEvent for user: " + user.getUsername()
+					+ " (this is only a temporary fix. This needs to be a new type of event)");
+			fireUserLeftLobbyEvent(user);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void enterLobby() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("User");
+		engine.enterLobby(user);
+		fireUserEnteredLobbyEvent(user);
+	}
+
 }

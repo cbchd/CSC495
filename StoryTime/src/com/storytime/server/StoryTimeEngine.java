@@ -78,6 +78,14 @@ public class StoryTimeEngine {
 
 	}
 
+	public Boolean logoutUser(String username, String password) {
+		if (onlineUsers.remove(username) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public HashMap<String, Room> getLobbyRooms() {
 		return lobbyRooms;
 	}
@@ -272,5 +280,27 @@ public class StoryTimeEngine {
 			placesList.put(user.getUsername(), user.getPlace());
 		}
 		return placesList;
+	}
+
+	public boolean leaveLobby(User user) {
+		User usr = usersInLobby.remove(user.getUsername());
+		user.setLocation("JustLeftLobby");
+		if (usr != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Adds the user to the lobby user list, if they are not already on it
+	 * 
+	 * @param user
+	 */
+	public void enterLobby(User user) {
+		if (usersInLobby.get(user.getUsername()) == null) {
+			usersInLobby.put(user.getUsername(), user);
+		}
+		user.setLocation("Lobby");
 	}
 }
