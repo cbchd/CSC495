@@ -77,6 +77,19 @@ public class LobbyView extends Composite implements com.storytime.client.present
 
 	public LobbyView() {
 		deactivateExtraneousListeners();
+		rpcService.enterLobby(new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("Failed to join the lobby room");
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				System.out.println("Successfully joined the lobby");
+			}
+			
+		});
 		initWidget(mainFlowPanel);
 		System.out.println("Client: Trying to initialize the lobby view");
 		initialize();
