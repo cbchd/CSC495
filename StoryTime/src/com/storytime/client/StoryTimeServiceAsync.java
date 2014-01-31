@@ -35,7 +35,7 @@ public interface StoryTimeServiceAsync {
 
 	void startGame(String roomName, AsyncCallback<Void> callback);
 
-	void getGameData(String roomName, AsyncCallback<GameData> callback);
+	void getGameData(AsyncCallback<GameData> callback);
 
 	void getMyUsername(AsyncCallback<String> callback);
 

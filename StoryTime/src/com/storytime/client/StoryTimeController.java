@@ -14,6 +14,7 @@ import com.storytime.client.changevieweventhandlers.JoinRoomWindowLocalEventHand
 import com.storytime.client.changevieweventhandlers.LeaveJoinRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LeaveRoomLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.LoginExistingUserLocalEventHandler;
+import com.storytime.client.changevieweventhandlers.LoginNewUserLocalEventHandler;
 import com.storytime.client.changevieweventhandlers.StartGameLocalEventHandler;
 import com.storytime.client.changeviewevents.CustomizeSpellsLocalEvent;
 import com.storytime.client.changeviewevents.HostRoomLocalEvent;
@@ -23,6 +24,7 @@ import com.storytime.client.changeviewevents.JoinRoomWindowLocalEvent;
 import com.storytime.client.changeviewevents.LeaveJoinRoomPageLocalEvent;
 import com.storytime.client.changeviewevents.LeaveRoomLocalEvent;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
+import com.storytime.client.changeviewevents.LoginNewUserLocalEvent;
 import com.storytime.client.changeviewevents.StartGameLocalEvent;
 import com.storytime.client.presenters.GameInProgressRoomPresenter;
 import com.storytime.client.presenters.HostRoomPresenter;
@@ -152,6 +154,19 @@ public class StoryTimeController implements Presenter, ValueChangeHandler<String
 				// Send the user to the lobby
 				History.newItem("Lobby");
 			}
+		});
+		eventBus.addHandler(LoginNewUserLocalEvent.TYPE, new LoginNewUserLocalEventHandler() {
+
+			@Override
+			public void onLoginNewUser() {
+				if (DEBUG)
+					System.out.println("Client: Set the handler for 'login new user button clicks'");
+				if (DEBUG)
+					System.out.println("Client: Set the new history token to be 'Lobby'");
+				// Send the user to the lobby
+				History.newItem("Lobby");
+			}
+			
 		});
 		eventBus.addHandler(HostRoomLocalEvent.TYPE, new HostRoomLocalEventHandler() {
 

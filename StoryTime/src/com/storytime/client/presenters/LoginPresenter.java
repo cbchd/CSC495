@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.storytime.client.StoryTimeServiceAsync;
 import com.storytime.client.changeviewevents.LoginExistingUserLocalEvent;
+import com.storytime.client.changeviewevents.LoginNewUserLocalEvent;
 
 public class LoginPresenter implements Presenter {
 	private final StoryTimeServiceAsync rpcService;
@@ -81,7 +82,39 @@ public class LoginPresenter implements Presenter {
 				}
 			}
 		});
+		display.getLoginNewUserButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				System.out.println("Client: Fired LoginExistingUserLocalEvent");
+				LoginNewUserLocalEvent newUserLoginEvent = new LoginNewUserLocalEvent();
+				final String username = display.getUsername();
+				final String password = display.getPassword();
+				if (!username.equals("") && !password.equals("")) {
+					newUserLoginEvent.setUsername(display.getUsername());
+					newUserLoginEvent.setPassword(display.getPassword());
+					rpcService.loginUser(username, password, new AsyncCallback<Boolean>() {
 
+						@Override
+						public void onFailure(Throwable caught) {
+							System.out.println("Client: Failed to log in the new user: " + username);
+						}
+
+						@Override
+						public void onSuccess(Boolean result) {
+							System.out.println("Client: Server authentication reply: " + result);
+							if (result) {
+								eventBus.fireEvent(new LoginNewUserLocalEvent());
+							} else {
+								System.out.println("Client: Please enter valid login credentials");
+							}
+						}
+
+					});
+				} else {
+					System.out.println("Client: Username or password was blank");
+				}
+			}
+		});
 	}
 
 }

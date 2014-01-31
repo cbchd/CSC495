@@ -105,7 +105,7 @@ public class LoginView extends Composite implements com.storytime.client.present
 	}
 
 	public void initMainVerticalPanel() {
-		mainVerticalPanel.setStyleName("LoginPage");
+		//mainVerticalPanel.setStyleName("LoginPage");
 		mainVerticalPanel.setBorderWidth(10);
 		//mainVerticalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		//mainVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);

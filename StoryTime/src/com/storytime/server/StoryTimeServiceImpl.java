@@ -1,5 +1,6 @@
 package com.storytime.server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.ConsoleHandler;
@@ -40,6 +41,7 @@ import com.storytime.client.lobbyroom.UserEnteredRoomEvent;
 import com.storytime.client.lobbyroom.UserLeftRoomEvent;
 import com.storytime.client.skillrelated.Skill;
 import com.storytime.client.skillrelated.SkillHolder;
+import com.storytime.client.view.LobbyRoomView;
 
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
@@ -351,6 +353,9 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		// Create an ingame room
 		engine.getGameRooms().put(gameRoom.domain.getName(), gameRoom);
 		engine.getLobbyRooms().remove(room.roomName);
+		for (User user : gameRoom.getUsers()) {
+			user.setIngameRoom(gameRoom);
+		}
 		logger.log(Level.INFO, "Started a game for room " + roomName + ", with attributes: " + gameRoom.domain + ", pointCap: " + gameRoom.pointCap
 				+ ", theme: " + gameRoom.theme + ", submissionTimer: " + gameRoom.authorTimer + ", and mastersTimer: " + gameRoom.mastersTimer);
 
@@ -359,8 +364,32 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 		logger.log(Level.FINEST, "Server: Fired Game Start Event for room: " + roomName);
 	}
 
-	public GameData getGameData(String roomName) {
-		return null;
+	public GameData getGameData() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		User usar = (User) session.getAttribute("User");
+		User usr = engine.onlineUsers.get(usar.getUsername());
+		InGameRoom room = engine.getGameRooms().get(usr.getIngameRoom().domain.getName());
+		GameData gameData = new GameData();
+		gameData.domain = room.getDomain();
+		gameData.pointCap = room.getPointCap();
+		for (User user : room.getUsers()) {
+			gameData.users.add(user.getUsername());
+		}
+		gameData.submissionTimer = room.getAuthorTimer();
+		gameData.mastersTimer = room.getMastersTimer();
+		gameData.theme = room.getTheme();
+		gameData.messages = room.getMessages();
+		String story = "";
+		for (String phrase : room.getStory()) {
+			story += phrase + " ";
+		}
+		gameData.story = story;
+		for (User user : room.getScoreList().keySet()) {
+			gameData.scoreList.put(user.getUsername(), room.getScoreList().get(user));
+		}
+		gameData.thisUser = usr.getUsername();
+		return gameData;
 	}
 
 	public String getMyUsername() {
@@ -452,6 +481,7 @@ public class StoryTimeServiceImpl extends RemoteEventServiceServlet implements S
 
 		fireRoundCloseEvent(r, phrase);
 		if (r.gameEnded)
+			//Send to database
 			return;
 
 		fireRoundStartEvent(r);

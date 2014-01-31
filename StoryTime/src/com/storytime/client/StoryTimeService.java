@@ -107,7 +107,7 @@ public interface StoryTimeService extends RemoteService {
 
 	public void startGame(String roomName);
 
-	public GameData getGameData(String roomName);
+	public GameData getGameData();
 
 	/**
 	 * @return username of the user who requested the information

@@ -6,12 +6,12 @@
 <module rename-to='storytime'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
-	
+
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->
 	<!-- any one of the following lines. -->
 	<inherits name="com.google.gwt.user.theme.dark.Dark" />
-	
+
 	<!-- <inherits name='com.sensei.themes.mytheme.Mytheme'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
@@ -19,7 +19,7 @@
 
 	<!-- Other module inherits -->
 	<inherits name="de.novanic.eventservice.GWTEventService" />
-	<inherits name='com.allen_sauer.gwt.voices.gwt-voices'/>
+	<inherits name='com.allen_sauer.gwt.voices.gwt-voices' />
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.storytime.client.StoryTimeEntryMVP' />

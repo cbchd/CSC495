@@ -1,6 +1,5 @@
 package com.storytime.client.view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -18,7 +17,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -32,10 +30,10 @@ import com.storytime.client.gameroom.GameData;
 import com.storytime.client.gameroom.GameEndEvent;
 import com.storytime.client.gameroom.PhraseChosenEvent;
 import com.storytime.client.gameroom.PhraseSubmittedEvent;
-import com.storytime.client.gameroom.UpdatePlaceEvent;
 import com.storytime.client.gameroom.RoundCloseEvent;
 import com.storytime.client.gameroom.RoundStartEvent;
 import com.storytime.client.gameroom.UpdateGameRoomChatWindowEvent;
+import com.storytime.client.gameroom.UpdatePlaceEvent;
 
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
@@ -61,7 +59,7 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	ListBox phraseListBox = new ListBox();
 	Label label = new Label("My Score");
 	Label lblCurrentChooserName = new Label("");
-	Label lblPointsNeededTo = new Label("Game Ends At");
+	Label lblPointsNeededTo = new Label("Max Score");
 	Label lblScoreBox = new Label("0");
 	Label lblCurrentChooser = new Label("Story Master");
 	Label lblMaxPoints = new Label("0");
@@ -154,39 +152,29 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		}
 	};
 	private final VerticalPanel verticalPanel = new VerticalPanel();
-	private final Button btnPlays = new Button("Plays");
+	// private final Button btnPlays = new Button("Plays");
 	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
 	private final Label lblPlace = new Label("Place: 0");
 
 	public GameInProgressRoomView() {
 		// RootPanel rootPanel = RootPanel.get();
 		// rootPanel.add(overallVerticalPanel);
-		// initialize();
-		// enableChoosing();
+		//initialize();
+		//enableChoosing();
 		// enableSubmitting();
 		theRemoteEventService.removeListeners();
 		overallVerticalPanel.setStyleName("GameInProgressPage");
 		initWidget(overallVerticalPanel);
 		if (DEBUG)
 			System.out.println("Initializing the game room");
-		gameData.domain = LobbyRoomView.roomData.getDomain();
-		gameData.pointCap = LobbyRoomView.roomData.getPointCap();
-		gameData.users = LobbyRoomView.roomData.getUsers();
-		gameData.submissionTimer = LobbyRoomView.roomData.getAuthorsTimer();
-		gameData.mastersTimer = LobbyRoomView.roomData.getMastersTimer();
-		gameData.theme = LobbyRoomView.roomData.getTheme();
-		gameData.messages = new ArrayList<String>();
-		if (DEBUG)
-			System.out.println("Client: Setting the game room's maximum point cap to: " + gameData.pointCap);
-		if (DEBUG)
-			System.out.println("Client: Domain for this in-game room is: " + gameData.domain.getName());
-		for (String user : LobbyRoomView.roomData.users) {
-			// initialize the user's scores to 0
-			gameData.scoreList.put(user, 0);
-		}
-		if (DEBUG)
-			System.out.println("Client: Trying to get and set this client's username and start the game");
-		getMyUsernameAndStart();
+		// gameData.domain = LobbyRoomView.roomData.getDomain();
+		// gameData.pointCap = LobbyRoomView.roomData.getPointCap();
+		// gameData.users = LobbyRoomView.roomData.getUsers();
+		// gameData.submissionTimer = LobbyRoomView.roomData.getAuthorsTimer();
+		// gameData.mastersTimer = LobbyRoomView.roomData.getMastersTimer();
+		// gameData.theme = LobbyRoomView.roomData.getTheme();
+		// gameData.messages = new ArrayList<String>();
+		getAndSetGameData();
 	}
 
 	public void initialize() {
@@ -237,10 +225,10 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		usersAndChatLeftMiddlePanel.add(verticalPanel);
 		verticalPanel.setSize("100%", "100%");
 
-		btnPlays.setStyleName("gwt-LoginAsNewUserButton");
+		// btnPlays.setStyleName("gwt-LoginAsNewUserButton");
 
-		verticalPanel.add(btnPlays);
-		btnPlays.setWidth("70%");
+		// verticalPanel.add(btnPlays);
+		// btnPlays.setWidth("70%");
 
 		bigMiddlePanel.add(swapHolderPanelAndSubmittedPhrases);
 
@@ -504,21 +492,22 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			}
 		});
 
-		btnPlays.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-
-				playsPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-
-					@Override
-					public void setPosition(int offsetWidth, int offsetHeight) {
-						playsPopup.setGlassEnabled(false);
-						playsPopup.center();
-					}
-
-				});
-
-			}
-		});
+		// btnPlays.addClickHandler(new ClickHandler() {
+		// public void onClick(ClickEvent event) {
+		//
+		// playsPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback()
+		// {
+		//
+		// @Override
+		// public void setPosition(int offsetWidth, int offsetHeight) {
+		// playsPopup.setGlassEnabled(false);
+		// playsPopup.center();
+		// }
+		//
+		// });
+		//
+		// }
+		// });
 	}
 
 	public void setRemoteEventHandlersAndHandleEvents() {
@@ -641,6 +630,12 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			System.out.println(winner + " has won the game!");
 		lblCurrentChooserName.setText("");
 		lblCurrentChooserName.setText(winner + " has won the game!!");
+		gameData.story += "\n Authors:";
+		for (String username : gameData.users) {
+			gameData.story += "\n " + username;
+		}
+		storyBox.setText(gameData.story);
+		storyBox.setCursorPos(storyBox.getText().length());
 		disableChoosing();
 		disableSubmitting();
 	}
@@ -789,5 +784,34 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		for (Domain domain : domains) {
 			theRemoteEventService.removeListeners(domain);
 		}
+	}
+
+	public void getAndSetGameData() {
+		storyTimeService.getGameData(new AsyncCallback<GameData>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("Failed to retrieve game data");
+			}
+
+			@Override
+			public void onSuccess(GameData result) {
+				System.out.println("Got game data for room: " + result.domain.getName());
+				gameData = result;
+				//continue with init
+				if (DEBUG)
+					System.out.println("Client: Setting the game room's maximum point cap to: " + gameData.pointCap);
+				if (DEBUG)
+					System.out.println("Client: Domain for this in-game room is: " + gameData.domain.getName());
+				for (String user : LobbyRoomView.roomData.users) {
+					// initialize the user's scores to 0
+					gameData.scoreList.put(user, 0);
+				}
+				if (DEBUG)
+					System.out.println("Client: Trying to get and set this client's username and start the game");
+				getMyUsernameAndStart();
+			}
+
+		});
 	}
 }
