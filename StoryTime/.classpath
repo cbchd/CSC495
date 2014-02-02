@@ -4,12 +4,12 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry exported="true" kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Chad/Desktop/Game Design 495/EventService/eventservice-1.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Chad/Desktop/Game Design 495/EventService/eventservice-rpc-1.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Chad/Desktop/Game Design 495/EventService/gwteventservice-1.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="war/WEB-INF/lib/gwt-voices-2.0.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-voices-3.2.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Chad/Desktop/StoryMode Dependencies/mgwt-1.1.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/eventservice-1.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/eventservice-rpc-1.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwteventservice-1.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mgwt-1.1.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
