@@ -52,7 +52,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	Label lblTitle_1 = new Label("Story");
 	TextArea storyBox = new TextArea();
 	Label lblChat = new Label("Chat");
-	Label lblUsers_1 = new Label("Users");
 	TextArea chatArea = new TextArea();
 	TextBox sendToChatBox = new TextBox();
 	Button btnSendToChatButton = new Button("Send");
@@ -64,7 +63,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 	Label lblCurrentChooser = new Label("Story Master");
 	Label lblMaxPoints = new Label("0");
 	Button btnChoosePhrase = new Button("Choose");
-	ListBox userListBox = new ListBox();
 	Button btnSubmitPhrase = new Button("Submit");
 	TextBox phraseSubmitBox = new TextBox();
 	Label lblSubmit = new Label("Enter a Phrase");
@@ -151,7 +149,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 			this.cancel();
 		}
 	};
-	private final VerticalPanel verticalPanel = new VerticalPanel();
 	// private final Button btnPlays = new Button("Plays");
 	private final HorizontalPanel horizontalPanel = new HorizontalPanel();
 	private final Label lblPlace = new Label("Place: 0");
@@ -185,11 +182,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 				if (DEBUG)
 					System.out.println("Client: Set his own score to: " + lblScoreBox.getText());
 			}
-			if (user.length() > 25) {
-				userListBox.addItem(user.substring(0, 25));
-			} else {
-				userListBox.addItem(user);
-			}
 		}
 		setPanelOrder();
 		setCharacteristics();
@@ -208,9 +200,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		usersAndChatLeftMiddlePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		bigMiddlePanel.add(usersAndChatLeftMiddlePanel);
-
-		usersAndChatLeftMiddlePanel.add(lblUsers_1);
-		usersAndChatLeftMiddlePanel.add(userListBox);
 		usersAndChatLeftMiddlePanel.add(lblChat);
 		chatArea.setStyleName("chat-TextArea");
 		usersAndChatLeftMiddlePanel.add(chatArea);
@@ -220,10 +209,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		chatSendBoxAndButtonPanel.add(sendToChatBox);
 
 		chatSendBoxAndButtonPanel.add(btnSendToChatButton);
-		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-
-		usersAndChatLeftMiddlePanel.add(verticalPanel);
-		verticalPanel.setSize("100%", "100%");
 
 		// btnPlays.setStyleName("gwt-LoginAsNewUserButton");
 
@@ -248,8 +233,6 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 		storyBox.setAlignment(TextAlignment.LEFT);
 		storyBox.setTextAlignment(TextBoxBase.ALIGN_LEFT);
 
-		userListBox.setVisibleItemCount(5);
-
 		overallVerticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
 		lblMaxPoints.setText(Integer.toString(gameData.pointCap));
@@ -267,14 +250,10 @@ public class GameInProgressRoomView extends Composite implements com.storytime.c
 
 		usersAndChatLeftMiddlePanel.setSize("100%", "100%");
 
-		lblUsers_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblUsers_1.setSize("100%", "46px");
-		userListBox.setSize("95%", "146px");
-
 		lblChat.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		lblChat.setSize("100%", "46px");
-		chatArea.setSize("94%", "125px");
-		chatSendBoxAndButtonPanel.setSize("100%", "45px");
+		lblChat.setSize("100%", "24px");
+		chatArea.setSize("94%", "224px");
+		chatSendBoxAndButtonPanel.setSize("100%", "35px");
 		sendToChatBox.setSize("91%", "21px");
 
 		btnSendToChatButton.setText("Send");
